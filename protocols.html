@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>RadiologyOS – Конструктор КТ головного мозку</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f4f7fb;
+padding:30px;
+max-width:900px;
+margin:auto;
+}
+
+h1{color:#1565c0;}
+
+select,textarea,button{
+width:100%;
+padding:12px;
+margin:10px 0;
+font-size:16px;
+}
+
+textarea{
+height:250px;
+}
+
+button{
+background:#1565c0;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0d47a1;
+}
+</style>
+</head>
+
+<body>
+
+<h1>RadiologyOS</h1>
+
+<h2>Конструктор КТ головного мозку</h2>
+
+<label>Виберіть варіант:</label>
+
+<select id="variant">
+<option value="Норма">Норма</option>
+<option value="Ішемічний інсульт">Ішемічний інсульт</option>
+<option value="Внутрішньомозковий крововилив">Крововилив</option>
+<option value="Субдуральна гематома">Субдуральна гематома</option>
+</select>
+
+<button onclick="createProtocol()">Створити протокол</button>
+
+<textarea id="result"></textarea>
+
+<button onclick="copyText()">Копіювати</button>
+
+<script>
+
+function createProtocol(){
+
+let v=document.getElementById("variant").value;
+let text="";
+
+if(v=="Норма"){
+text=
+"КТ головного мозку.\n\nСерединні структури не зміщені.\nШлуночкова система не розширена.\nОсередкових патологічних змін не виявлено.\n\nВисновок: КТ-ознак гострої внутрішньочерепної патології не виявлено.";
+}
+
+if(v=="Ішемічний інсульт"){
+text=
+"КТ головного мозку.\n\nВізуалізується гіподенсивне вогнище.\n\nВисновок: КТ-ознаки ішемічного інсульту.";
+}
+
+if(v=="Внутрішньомозковий крововилив"){
+text=
+"КТ головного мозку.\n\nВізуалізується гіперденсивний осередок крововиливу.\n\nВисновок: Внутрішньомозковий крововилив.";
+}
+
+if(v=="Субдуральна гематома"){
+text=
+"КТ головного мозку.\n\nВізуалізується субдуральна гематома.\n\nВисновок: Субдуральна гематома.";
+}
+
+document.getElementById("result").value=text;
+
+}
+
+function copyText(){
+
+navigator.clipboard.writeText(document.getElementById("result").value);
+
+alert("Скопійовано!");
+
+}
+
+</script>
+
+</body>
+</html>
