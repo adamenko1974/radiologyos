@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RadiologyOS</title>
+  <meta
+    name="description"
+    content="RadiologyOS — цифрова платформа для роботи відділення променевої діагностики."
+  />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #172033;
+    }
+
+    header {
+      padding: 24px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      border-bottom: 1px solid #e3e8ef;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1456d9;
+    }
+
+    .badge {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #e8f0ff;
+      color: #1456d9;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    main {
+      min-height: calc(100vh - 150px);
+      display: grid;
+      place-items: center;
+      padding: 60px 8%;
+    }
+
+    .hero {
+      max-width: 900px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      font-size: clamp(42px, 7vw, 78px);
+      line-height: 1.05;
+    }
+
+    .accent {
+      color: #1456d9;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 0 auto 36px;
+      font-size: 21px;
+      line-height: 1.6;
+      color: #556070;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 15px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: #1456d9;
+      color: white;
+    }
+
+    .secondary {
+      background: white;
+      color: #172033;
+      border: 1px solid #d6dde8;
+    }
+
+    .modules {
+      margin-top: 60px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      padding: 22px;
+      background: white;
+      border: 1px solid #e1e6ee;
+      border-radius: 14px;
+      text-align: left;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+    }
+
+    .card p {
+      margin: 0;
+      color: #667085;
+      line-height: 1.5;
+    }
+
+    footer {
+      padding: 24px;
+      text-align: center;
+      color: #77808f;
+    }
+
+    @media (max-width: 800px) {
+      .modules {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        padding: 18px 6%;
+      }
+
+      main {
+        padding: 45px 6%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">RadiologyOS</div>
+    <div class="badge">Система в розробці</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>
+        Операційна система для
+        <span class="accent">променевої діагностики</span>
+      </h1>
+
+      <p class="subtitle">
+        RadiologyOS об'єднає роботу відділення, пацієнтів, дослідження,
+        графіки, звіти, фінанси, конструктор протоколів та AI-помічника
+        рентгенолога в одній платформі.
+      </p>
+
+      <div class="buttons">
+        <a class="button primary" href="#">Розпочати роботу</a>
+        <a class="button secondary" href="#">Про проєкт</a>
+      </div>
+
+      <div class="modules">
+        <div class="card">
+          <h3>CRM</h3>
+          <p>Пацієнти, записи, графіки та керування дослідженнями.</p>
+        </div>
+
+        <div class="card">
+          <h3>Протоколи</h3>
+          <p>Конструктор структурованих описів КТ, МРТ і рентгенографії.</p>
+        </div>
+
+        <div class="card">
+          <h3>AI-помічник</h3>
+          <p>Підготовка, перевірка та стандартизація рентгенологічних висновків.</p>
+        </div>
+
+        <div class="card">
+          <h3>Аналітика</h3>
+          <p>Навантаження, фінанси, продуктивність і звітність відділення.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 RadiologyOS. Усі права захищені.
+  </footer>
+</body>
+</html>
