@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Завдання — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .add-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 28px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 220px 220px;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .column {
+      padding: 18px;
+      background: #e9eef5;
+      border-radius: 14px;
+      min-height: 420px;
+    }
+
+    .column-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .column-header h2 {
+      font-size: 18px;
+    }
+
+    .count {
+      min-width: 28px;
+      padding: 5px 8px;
+      border-radius: 20px;
+      background: #ffffff;
+      color: #667085;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .task-card {
+      margin-bottom: 13px;
+      padding: 17px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 11px;
+      box-shadow: 0 5px 18px rgba(23, 32, 51, 0.05);
+    }
+
+    .task-card h3 {
+      margin-bottom: 8px;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .task-card p {
+      margin-bottom: 13px;
+      color: #667085;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 13px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .priority-high {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .priority-medium {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .priority-low {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .person {
+      background: #eef5ff;
+      color: #1267d6;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .task-actions button {
+      flex: 1;
+      padding: 9px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .move-button {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .delete-button {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 560px;
+      padding: 26px;
+      background: #ffffff;
+      border-radius: 14px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .secondary,
+    .primary {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .secondary {
+      background: #edf2f7;
+      color: #344054;
+    }
+
+    .primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    @media (max-width: 1100px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .board {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar,
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Завдання та контроль виконання
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="bookings-admin.html">Заявки</a></li>
+        <li><a href="archive.html">Архів</a></li>
+        <li><a href="ai.html">AI Assistant</a></li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="analytics.html">Аналітика</a></li>
+        <li><a href="reports.html">Звіти</a></li>
+        <li><a href="finance.html">Фінанси</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="schedule.html">Графік роботи</a></li>
+        <li><a href="tasks.html" class="active">Завдання</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+        <li><a href="inventory.html">Склад</a></li>
+        <li><a href="quality.html">Якість</a></li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Завдання відділення</h1>
+          <p>Розподіл роботи та контроль виконання доручень</p>
+        </div>
+
+        <button class="add-button" onclick="openModal()">
+          + Нове завдання
+        </button>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Усього завдань</span>
+          <strong id="totalTasks">6</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Нові</span>
+          <strong id="newTasks">2</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>У роботі</span>
+          <strong id="progressTasks">2</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Виконано</span>
+          <strong id="doneTasks">2</strong>
+        </div>
+
+      </section>
+
+      <div class="toolbar">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Пошук завдання..."
+          oninput="filterTasks()"
+        >
+
+        <select id="personFilter" onchange="filterTasks()">
+          <option value="">Усі відповідальні</option>
+          <option value="Адаменко Д.М.">Адаменко Д.М.</option>
+          <option value="Клімов Л.В.">Клімов Л.В.</option>
+          <option value="Адміністратор">Адміністратор</option>
+          <option value="Черговий лаборант">Черговий лаборант</option>
+        </select>
+
+        <select id="priorityFilter" onchange="filterTasks()">
+          <option value="">Усі пріоритети</option>
+          <option value="Високий">Високий</option>
+          <option value="Середній">Середній</option>
+          <option value="Низький">Низький</option>
+        </select>
+
+      </div>
+
+      <section class="board">
+
+        <div class="column" data-column="new">
+
+          <div class="column-header">
+            <h2>Нові</h2>
+            <span class="count" id="newCount">2</span>
+          </div>
+
+          <div class="task-list" id="newColumn">
+
+            <article
+              class="task-card"
+              data-person="Клімов Л.В."
+              data-priority="Високий"
+            >
+              <h3>Перевірити запас контрастної речовини</h3>
+
+              <p>
+                Звірити фактичний залишок із журналом та термінами придатності.
+              </p>
+
+              <div class="task-meta">
+                <span class="badge priority-high">Високий</span>
+                <span class="badge person">Клімов Л.В.</span>
+              </div>
+
+              <div class="task-actions">
+                <button class="move-button" onclick="moveTask(this)">
+                  У роботу
+                </button>
+
+                <button class="delete-button" onclick="deleteTask(this)">
+                  Видалити
+                </button>
+              </div>
+            </article>
+
+            <article
+              class="task-card"
+              data-person="Адміністратор"
+              data-priority="Середній"
+            >
+              <h3>Оновити список послуг і цін</h3>
+
+              <p>
+                Перевірити актуальність тарифів на сайті та сторінці запису.
+              </p>
+
+              <div class="task-meta">
+                <span class="badge priority-medium">Середній</span>
+                <span class="badge person">Адміністратор</span>
+              </div>
+
+              <div class="task-actions">
+                <button class="move-button" onclick="moveTask(this)">
+                  У роботу
+                </button>
+
+                <button class="delete-button" onclick="deleteTask(this)">
+                  Видалити
+                </button>
+              </div>
+            </article>
+
+          </div>
+        </div>
+
+        <div class="column" data-column="progress">
+
+          <div class="column-header">
+            <h2>У роботі</h2>
+            <span class="count" id="progressCount">2</span>
+          </div>
+
+          <div class="task-list" id="progressColumn">
+
+            <article
+              class="task-card"
+              data-person="Адаменко Д.М."
+              data-priority="Високий"
+            >
+              <h3>Перевірити протоколи КТ головного мозку</h3>
+
+              <p>
+                Оцінити повноту описів і виправити шаблони висновків.
+              </p>
+
+              <div class="task-meta">
+                <span class="badge priority-high">Високий</span>
+                <span class="badge person">Адаменко Д.М.</span>
+              </div>
+
+              <div class="task-actions">
+                <button class="move-button" onclick="moveTask(this)">
+                  Виконано
+                </button>
+
+                <button class="delete-button" onclick="deleteTask(this)">
+                  Видалити
+                </button>
+              </div>
+            </article>
+
+            <article
+              class="task-card"
+              data-person="Черговий лаборант"
+              data-priority="Середній"
+            >
+              <h3>Перевірити передачу DICOM до Orthanc</h3>
+
+              <p>
+                Виконати тестове дослідження та перевірити появу серії в архіві.
+              </p>
+
+              <div class="task-meta">
+                <span class="badge priority-medium">Середній</span>
+                <span class="badge person">Черговий лаборант</span>
+              </div>
+
+              <div class="task-actions">
+                <button class="move-button" onclick="moveTask(this)">
+                  Виконано
+                </button>
+
+                <button class="delete-button" onclick="deleteTask(this)">
+                  Видалити
+                </button>
+              </div>
+            </article>
+
+          </div>
+        </div>
+
+        <div class="column" data-column="done">
+
+          <div class="column-header">
+            <h2>Виконано</h2>
+            <span class="count" id="doneCount">2</span>
+          </div>
+
+          <div class="task-list" id="doneColumn">
+
+            <article
+              class="task-card"
+              data-person="Адміністратор"
+              data-priority="Низький"
+            >
+              <h3>Оновити контакти відділення</h3>
+
+              <p>
+                Контактну інформацію перевірено та внесено на сайт.
+              </p>
+
+              <div class="task-meta">
+                <span class="badge priority-low">Низький</span>
+                <span class="badge person">Адміністратор</span>
+              </div>
+
+              <div class="task-actions">
+                <button class="move-button" onclick="restoreTask(this)">
+                  Повернути
+                </button>
+
+                <button class="delete-button" onclick="deleteTask(this)">
+                  Видалити
+                </button>
+              </div>
+            </article>
+
+            <article
+              class="task-card"
+              data-person="Клімов Л.В."
+              data-priority="Середній"
+            >
+              <h3>Перевірити журнал КТ за місяць</h3>
+
+              <p>
+                Кількість досліджень звірено з електронним реєстром.
+              </p>
+
+              <div class="task-meta">
+                <span class="badge priority-medium">Середній</span>
+                <span class="badge person">Клімов Л.В.</span>
+              </div>
+
+              <div class="task-actions">
+                <button class="move-button" onclick="restoreTask(this)">
+                  Повернути
+                </button>
+
+                <button class="delete-button" onclick="deleteTask(this)">
+                  Видалити
+                </button>
+              </div>
+            </article>
+
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="modal" id="taskModal">
+
+    <div class="modal-box">
+
+      <h2>Нове завдання</h2>
+
+      <div class="field">
+        <label for="taskTitle">Назва</label>
+        <input id="taskTitle" type="text">
+      </div>
+
+      <div class="field">
+        <label for="taskDescription">Опис</label>
+        <textarea id="taskDescription"></textarea>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="taskPerson">Відповідальний</label>
+
+          <select id="taskPerson">
+            <option>Адаменко Д.М.</option>
+            <option>Клімов Л.В.</option>
+            <option>Адміністратор</option>
+            <option>Черговий лаборант</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="taskPriority">Пріоритет</label>
+
+          <select id="taskPriority">
+            <option>Високий</option>
+            <option selected>Середній</option>
+            <option>Низький</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="secondary" onclick="closeModal()">
+          Скасувати
+        </button>
+
+        <button class="primary" onclick="addTask()">
+          Зберегти
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function priorityClass(priority) {
+      if (priority === "Високий") return "priority-high";
+      if (priority === "Низький") return "priority-low";
+
+      return "priority-medium";
+    }
+
+    function openModal() {
+      document.getElementById("taskModal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("taskModal").classList.remove("open");
+    }
+
+    function addTask() {
+      const title =
+        document.getElementById("taskTitle").value.trim();
+
+      const description =
+        document.getElementById("taskDescription").value.trim();
+
+      const person =
+        document.getElementById("taskPerson").value;
+
+      const priority =
+        document.getElementById("taskPriority").value;
+
+      if (!title) {
+        alert("Вкажіть назву завдання.");
+        return;
+      }
+
+      const card = document.createElement("article");
+
+      card.className = "task-card";
+      card.dataset.person = person;
+      card.dataset.priority = priority;
+
+      card.innerHTML = `
+        <h3>${title}</h3>
+
+        <p>${description || "Опис не вказано."}</p>
+
+        <div class="task-meta">
+          <span class="badge ${priorityClass(priority)}">
+            ${priority}
+          </span>
+
+          <span class="badge person">
+            ${person}
+          </span>
+        </div>
+
+        <div class="task-actions">
+          <button class="move-button" onclick="moveTask(this)">
+            У роботу
+          </button>
+
+          <button class="delete-button" onclick="deleteTask(this)">
+            Видалити
+          </button>
+        </div>
+      `;
+
+      document.getElementById("newColumn").prepend(card);
+
+      document.getElementById("taskTitle").value = "";
+      document.getElementById("taskDescription").value = "";
+
+      updateStatistics();
+      closeModal();
+    }
+
+    function moveTask(button) {
+      const card = button.closest(".task-card");
+      const column = card.closest(".column").dataset.column;
+
+      if (column === "new") {
+        document.getElementById("progressColumn").prepend(card);
+        button.textContent = "Виконано";
+      } else if (column === "progress") {
+        document.getElementById("doneColumn").prepend(card);
+        button.textContent = "Повернути";
+        button.setAttribute("onclick", "restoreTask(this)");
+      }
+
+      updateStatistics();
+      filterTasks();
+    }
+
+    function restoreTask(button) {
+      const card = button.closest(".task-card");
+
+      document.getElementById("progressColumn").prepend(card);
+
+      button.textContent = "Виконано";
+      button.setAttribute("onclick", "moveTask(this)");
+
+      updateStatistics();
+      filterTasks();
+    }
+
+    function deleteTask(button) {
+      const confirmed = confirm("Видалити це завдання?");
+
+      if (!confirmed) return;
+
+      button.closest(".task-card").remove();
+
+      updateStatistics();
+    }
+
+    function filterTasks() {
+      const search =
+        document.getElementById("searchInput").value.toLowerCase();
+
+      const person =
+        document.getElementById("personFilter").value;
+
+      const priority =
+         document.getElementById("priorityFilter").value;
+
+      document.querySelectorAll(".task-card").forEach((card) => {
+        const matchesSearch =
+          card.textContent.toLowerCase().includes(search);
+
+        const matchesPerson =
+          !person || card.dataset.person === person;
+
+        const matchesPriority =
+          !priority || card.dataset.priority === priority;
+
+        card.style.display =
+          matchesSearch &&
+          matchesPerson &&
+          matchesPriority
+            ? ""
+            : "none";
+      });
+    }
+
+    function updateStatistics() {
+      const newCount =
+        document.querySelectorAll("#newColumn .task-card").length;
+
+      const progressCount =
+        document.querySelectorAll(
+          "#progressColumn .task-card"
+        ).length;
+
+      const doneCount =
+        document.querySelectorAll("#doneColumn .task-card").length;
+
+      const total =
+        newCount + progressCount + doneCount;
+
+      document.getElementById("newCount").textContent =
+        newCount;
+
+      document.getElementById("progressCount").textContent =
+        progressCount;
+
+      document.getElementById("doneCount").textContent =
+        doneCount;
+
+      document.getElementById("totalTasks").textContent =
+        total;
+
+      document.getElementById("newTasks").textContent =
+        newCount;
+
+      document.getElementById("progressTasks").textContent =
+        progressCount;
+
+      document.getElementById("doneTasks").textContent =
+        doneCount;
+    }
+
+    document
+      .getElementById("taskModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+
+    updateStatistics();
+  </script>
+
+</body>
+</html>
