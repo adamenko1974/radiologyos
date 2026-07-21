@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI Assistant — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+      color: #ffffff;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 8px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .notice {
+      margin-bottom: 22px;
+      padding: 15px 18px;
+      border: 1px solid #b8d4f7;
+      border-radius: 10px;
+      background: #eef5ff;
+      color: #344054;
+      line-height: 1.5;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(340px, 1fr) minmax(360px, 1fr);
+      gap: 22px;
+    }
+
+    .panel {
+      padding: 24px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(23, 32, 51, 0.05);
+    }
+
+    .panel h2 {
+      margin-bottom: 18px;
+      font-size: 21px;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      color: #344054;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #172033;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 165px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    select:focus,
+    textarea:focus {
+      border-color: #1267d6;
+      outline: 3px solid rgba(18, 103, 214, 0.12);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 12px 17px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    .secondary {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .result-placeholder {
+      padding: 40px 20px;
+      border: 1px dashed #cdd8e5;
+      border-radius: 10px;
+      text-align: center;
+      color: #667085;
+    }
+
+    .result {
+      display: none;
+    }
+
+    .result.open {
+      display: block;
+    }
+
+    .review-status {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 7px 11px;
+      border-radius: 20px;
+      background: #fff4d6;
+      color: #8a5b00;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .result-section {
+      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #edf1f5;
+    }
+
+    .result-section:last-child {
+      border-bottom: none;
+    }
+
+    .result-section h3 {
+      margin-bottom: 10px;
+      font-size: 17px;
+    }
+
+    .result-section p,
+    .result-section li {
+      color: #475467;
+      line-height: 1.7;
+    }
+
+    .result-section ul {
+      padding-left: 22px;
+    }
+
+    .warning {
+      padding: 13px;
+      border-left: 4px solid #d97706;
+      border-radius: 7px;
+      background: #fff8e8;
+    }
+
+    .success-box {
+      padding: 13px;
+      border-left: 4px solid #14804a;
+      border-radius: 7px;
+      background: #ebf8f1;
+    }
+
+    .history {
+      margin-top: 22px;
+    }
+
+    .history h2 {
+      margin-bottom: 16px;
+    }
+
+    .history-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .history-card {
+      padding: 17px;
+      border: 1px solid #dfe7f1;
+      border-radius: 11px;
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    .history-card:hover {
+      border-color: #1267d6;
+    }
+
+    .history-card strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .history-card span {
+      color: #667085;
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      main {
+        padding: 14px;
+      }
+
+      .panel {
+        padding: 18px;
+      }
+
+      .history-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      AI Assistant · Демонстраційний режим
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="ai.html" class="active">AI Assistant</a></li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="analytics.html">Аналітика</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <h1>AI Assistant</h1>
+
+        <p>
+          Перевірка структури, логіки та узгодженості рентгенологічного протоколу
+        </p>
+      </div>
+
+      <div class="notice">
+        AI Assistant є допоміжним інструментом. Він не встановлює діагноз
+        і не замінює лікаря-рентгенолога. Усі рекомендації потребують
+        професійної перевірки перед підписанням протоколу.
+      </div>
+
+      <div class="workspace">
+
+        <section class="panel">
+          <h2>Протокол для перевірки</h2>
+
+          <div class="field">
+            <label for="studyType">Тип дослідження</label>
+
+            <select id="studyType">
+              <option>КТ головного мозку</option>
+              <option>КТ приносових пазух</option>
+              <option>КТ органів грудної клітки</option>
+              <option>КТ органів черевної порожнини</option>
+              <option>КТ хребта</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="reviewMode">Режим перевірки</label>
+
+            <select id="reviewMode">
+              <option>Повна перевірка протоколу</option>
+              <option>Перевірка опису та висновку</option>
+              <option>Перевірка термінології</option>
+              <option>Пошук пропущених структур</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="reportText">Текст протоколу</label>
+
+            <textarea id="reportText">КТ головного мозку виконано без внутрішньовенного контрастування.
+
+У правій тім'яній частці визначається гіподенсивна ділянка розмірами до 18×12 мм. Шлуночкова система не розширена. Серединні структури не зміщені. Кістки черепа без травматичних змін.
+
+Висновок: КТ-ознак гострої внутрішньочерепної патології не виявлено.</textarea>
+          </div>
+
+          <div class="actions">
+            <button class="primary" onclick="reviewReport()">
+              Перевірити протокол
+            </button>
+
+            <button class="secondary" onclick="clearReport()">
+              Очистити
+            </button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Результат перевірки</h2>
+
+          <div class="result-placeholder" id="placeholder">
+            Вставте текст протоколу та натисніть
+            «Перевірити протокол».
+          </div>
+
+          <div class="result" id="result">
+
+            <span class="review-status">
+              Потребує уваги лікаря
+            </span>
+
+            <div class="result-section">
+              <h3>Знайдена невідповідність</h3>
+
+              <div class="warning">
+                В описі зазначена гіподенсивна ділянка у правій
+                тім'яній частці, але у висновку вказано відсутність
+                гострої внутрішньочерепної патології.
+              </div>
+            </div>
+
+            <div class="result-section">
+              <h3>Що потрібно перевірити</h3>
+
+              <ul>
+                <li>Клінічне значення гіподенсивної ділянки.</li>
+                <li>Відповідність змін судинному басейну.</li>
+                <li>Наявність набряку або об'ємного впливу.</li>
+                <li>Доцільність згадування знахідки у висновку.</li>
+              </ul>
+            </div>
+
+            <div class="result-section">
+              <h3>Пропозиція формулювання</h3>
+
+              <div class="success-box">
+                У правій тім'яній частці визначається гіподенсивна
+                ділянка, яка потребує клініко-анамнестичного
+                зіставлення та оцінки лікарем-рентгенологом.
+              </div>
+            </div>
+
+            <div class="result-section">
+              <h3>Структурна повнота</h3>
+
+              <p>
+                Не описані базальні цистерни, зовнішні лікворні
+                простори, м'які тканини голови та приносові пазухи.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+
+      <section class="history">
+        <h2>Швидкі сценарії</h2>
+
+        <div class="history-grid">
+
+          <div class="history-card" onclick="loadExample('brain')">
+            <strong>КТ головного мозку</strong>
+            <span>Перевірити відповідність опису та висновку</span>
+          </div>
+
+          <div class="history-card" onclick="loadExample('chest')">
+            <strong>КТ органів грудної клітки</strong>
+            <span>Перевірити повноту опису легенів і плеври</span>
+          </div>
+
+          <div class="history-card" onclick="loadExample('spine')">
+            <strong>КТ хребта</strong>
+            <span>Перевірити рівні, розміри та стеноз</span>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const examples = {
+      brain: `КТ головного мозку виконано без контрастування.
+
+У лівій лобній частці визначається гіподенсивна ділянка до 15 мм.
+Шлуночкова система не розширена. Серединні структури не зміщені.
+
+Висновок: КТ-ознак патології не виявлено.`,
+
+      chest: `КТ органів грудної клітки виконано без контрастування.
+
+У нижній частці правої легені визначаються ділянки ущільнення
+легеневої тканини. Плеврального випоту не виявлено.
+
+Висновок: КТ-ознаки правобічної нижньочасткової пневмонії.`,
+
+      spine: `КТ поперекового відділу хребта.
+
+На рівні L5-S1 визначається задня кила диска до 5,5 мм.
+Просвіт хребтового каналу звужений.
+
+Висновок: Дегенеративні зміни поперекового відділу хребта.`
+    };
+
+    function reviewReport() {
+      const text = document.getElementById("reportText").value.trim();
+
+      if (!text) {
+        alert("Введіть текст протоколу.");
+        return;
+      }
+
+      document.getElementById("placeholder").style.display = "none";
+      document.getElementById("result").classList.add("open");
+    }
+
+    function clearReport() {
+      document.getElementById("reportText").value = "";
+      document.getElementById("result").classList.remove("open");
+      document.getElementById("placeholder").style.display = "block";
+    }
+
+    function loadExample(type) {
+      document.getElementById("reportText").value = examples[type];
+      document.getElementById("result").classList.remove("open");
+      document.getElementById("placeholder").style.display = "block";
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+  </script>
+
+</body>
+</html>
