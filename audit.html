@@ -22,7 +22,7 @@
 
     header {
       height: 72px;
-      padding: 0 30px;
+      padding: 0 28px;
       background: #ffffff;
       border-bottom: 1px solid #dce4ee;
       display: flex;
@@ -37,9 +37,13 @@
       text-decoration: none;
     }
 
-    .header-info {
-      color: #667085;
-      font-size: 14px;
+    .database-status {
+      padding: 7px 11px;
+      border-radius: 20px;
+      background: #e7f7ef;
+      color: #14804a;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .layout {
@@ -87,7 +91,6 @@
     .page-top {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
       gap: 18px;
       margin-bottom: 24px;
     }
@@ -101,12 +104,12 @@
       color: #667085;
     }
 
-    .export-button {
+    .clear-button {
       padding: 13px 18px;
       border: none;
       border-radius: 9px;
-      background: #1267d6;
-      color: #ffffff;
+      background: #fdecec;
+      color: #b42318;
       cursor: pointer;
       font-weight: 700;
     }
@@ -138,7 +141,7 @@
 
     .toolbar {
       display: grid;
-      grid-template-columns: 1fr 210px 210px 180px;
+      grid-template-columns: 1fr 210px 210px;
       gap: 13px;
       margin-bottom: 20px;
     }
@@ -154,7 +157,7 @@
     }
 
     .panel {
-      padding: 21px;
+      padding: 20px;
       background: #ffffff;
       border: 1px solid #dfe7f1;
       border-radius: 14px;
@@ -167,7 +170,7 @@
 
     table {
       width: 100%;
-      min-width: 980px;
+      min-width: 1000px;
       border-collapse: collapse;
     }
 
@@ -176,6 +179,7 @@
       padding: 13px;
       border-bottom: 1px solid #edf1f5;
       text-align: left;
+      vertical-align: top;
     }
 
     th {
@@ -189,7 +193,7 @@
       font-size: 14px;
     }
 
-    .user-name {
+    .main-text {
       font-weight: 700;
     }
 
@@ -198,6 +202,7 @@
       margin-top: 4px;
       color: #667085;
       font-size: 12px;
+      line-height: 1.4;
     }
 
     .badge {
@@ -208,44 +213,44 @@
       font-weight: 700;
     }
 
-    .action-login {
-      background: #eef5ff;
-      color: #1267d6;
-    }
-
-    .action-create {
+    .created {
       background: #e7f7ef;
       color: #14804a;
     }
 
-    .action-edit {
-      background: #fff4d6;
-      color: #8a5b00;
+    .updated {
+      background: #eef5ff;
+      color: #1267d6;
     }
 
-    .action-delete {
+    .deleted {
       background: #fdecec;
       color: #b42318;
     }
 
-    .success {
-      color: #14804a;
-      font-weight: 700;
+    .module {
+      background: #edf2f7;
+      color: #475467;
     }
 
-    .warning {
-      color: #b42318;
+    .details-button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 7px;
+      background: #eaf2fc;
+      color: #1267d6;
+      cursor: pointer;
       font-weight: 700;
     }
 
     .empty-state {
       display: none;
-      padding: 35px;
-      color: #667085;
+      padding: 45px 15px;
       text-align: center;
+      color: #667085;
     }
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1050px) {
       .stats {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -274,10 +279,6 @@
         padding: 0 16px;
       }
 
-      .header-info {
-        display: none;
-      }
-
       .page-top {
         flex-direction: column;
       }
@@ -294,29 +295,27 @@
 
   <header>
     <a class="logo" href="index.html">RadiologyOS</a>
-    <div class="header-info">Безпека та контроль дій користувачів</div>
+
+    <span class="database-status" id="databaseStatus">
+      Підключення...
+    </span>
   </header>
 
   <div class="layout">
 
     <aside>
-      <h3>Робоче середовище</h3>
+      <h3>Адміністрування</h3>
 
       <ul class="menu">
         <li><a href="index.html">Головна</a></li>
-        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="executive-dashboard.html">Панель керівника</a></li>
         <li><a href="patients.html">Пацієнти</a></li>
         <li><a href="studies.html">Дослідження</a></li>
-        <li><a href="referrals.html">Направлення</a></li>
-        <li><a href="bookings-admin.html">Заявки</a></li>
-        <li><a href="archive.html">Архів</a></li>
-        <li><a href="reports.html">Звіти</a></li>
-        <li><a href="staff.html">Працівники</a></li>
-        <li><a href="schedule.html">Графік роботи</a></li>
-        <li><a href="tasks.html">Завдання</a></li>
-        <li><a href="equipment.html">Обладнання</a></li>
-        <li><a href="incidents.html">Журнал подій</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="users.html">Користувачі</a></li>
+        <li><a href="permissions.html">Права доступу</a></li>
         <li><a href="audit.html" class="active">Журнал аудиту</a></li>
+        <li><a href="data-center.html">Центр даних</a></li>
         <li><a href="settings.html">Налаштування</a></li>
       </ul>
     </aside>
@@ -326,34 +325,37 @@
       <div class="page-top">
         <div>
           <h1>Журнал аудиту</h1>
-          <p>Історія входів, змін протоколів та роботи з даними</p>
+
+          <p>
+            Історія створення, редагування та видалення записів
+          </p>
         </div>
 
-        <button class="export-button" onclick="exportAudit()">
-          Експорт журналу
+        <button class="clear-button" onclick="clearAudit()">
+          Очистити журнал
         </button>
       </div>
 
       <section class="stats">
 
         <div class="stat-card">
-          <span>Подій за сьогодні</span>
-          <strong id="totalCount">6</strong>
+          <span>Усього подій</span>
+          <strong id="totalCount">0</strong>
         </div>
 
         <div class="stat-card">
-          <span>Входів у систему</span>
-          <strong id="loginCount">2</strong>
+          <span>Створено записів</span>
+          <strong id="createdCount">0</strong>
         </div>
 
         <div class="stat-card">
-          <span>Змін даних</span>
-          <strong id="changeCount">3</strong>
+          <span>Оновлено записів</span>
+          <strong id="updatedCount">0</strong>
         </div>
 
         <div class="stat-card">
-          <span>Помилок доступу</span>
-          <strong id="errorCount">1</strong>
+          <span>Видалено записів</span>
+          <strong id="deletedCount">0</strong>
         </div>
 
       </section>
@@ -363,29 +365,26 @@
         <input
           id="searchInput"
           type="search"
-          placeholder="Пошук користувача або події..."
-          oninput="filterAudit()"
+          placeholder="Пошук за дією, модулем або ID..."
+          oninput="renderAudit()"
         >
 
-        <select id="actionFilter" onchange="filterAudit()">
+        <select id="moduleFilter" onchange="renderAudit()">
+          <option value="">Усі модулі</option>
+          <option value="patients">Пацієнти</option>
+          <option value="studies">Дослідження</option>
+          <option value="protocols">Протоколи</option>
+          <option value="tasks">Завдання</option>
+          <option value="inventory">Склад</option>
+          <option value="equipment">Обладнання</option>
+        </select>
+
+        <select id="actionFilter" onchange="renderAudit()">
           <option value="">Усі дії</option>
-          <option value="Вхід">Вхід</option>
-          <option value="Створення">Створення</option>
-          <option value="Редагування">Редагування</option>
-          <option value="Видалення">Видалення</option>
+          <option value="Створено запис">Створено</option>
+          <option value="Оновлено запис">Оновлено</option>
+          <option value="Видалено запис">Видалено</option>
         </select>
-
-        <select id="resultFilter" onchange="filterAudit()">
-          <option value="">Усі результати</option>
-          <option value="Успішно">Успішно</option>
-          <option value="Відмовлено">Відмовлено</option>
-        </select>
-
-        <input
-          id="dateFilter"
-          type="date"
-          onchange="filterAudit()"
-        >
 
       </div>
 
@@ -397,119 +396,21 @@
             <thead>
               <tr>
                 <th>Дата і час</th>
-                <th>Користувач</th>
                 <th>Дія</th>
-                <th>Об’єкт</th>
-                <th>Результат</th>
-                <th>IP / пристрій</th>
+                <th>Модуль</th>
+                <th>ID запису</th>
+                <th>Опис</th>
+                <th>Деталі</th>
               </tr>
             </thead>
 
-            <tbody id="auditTable">
-
-              <tr
-                data-action="Вхід"
-                data-result="Успішно"
-                data-date="2026-07-21"
-              >
-                <td>21.07.2026 08:03</td>
-                <td>
-                  <span class="user-name">Адаменко Д.М.</span>
-                  <span class="small">Лікар-рентгенолог</span>
-                </td>
-                <td><span class="badge action-login">Вхід</span></td>
-                <td>RadiologyOS</td>
-                <td class="success">Успішно</td>
-                <td>192.168.1.15 · Windows</td>
-              </tr>
-
-              <tr
-                data-action="Створення"
-                data-result="Успішно"
-                data-date="2026-07-21"
-              >
-                <td>21.07.2026 08:17</td>
-                <td>
-                  <span class="user-name">Адаменко Д.М.</span>
-                  <span class="small">Лікар-рентгенолог</span>
-                </td>
-                <td><span class="badge action-create">Створення</span></td>
-                <td>Протокол CT-2026-0326</td>
-                <td class="success">Успішно</td>
-                <td>192.168.1.15 · Windows</td>
-              </tr>
-
-              <tr
-                data-action="Редагування"
-                data-result="Успішно"
-                data-date="2026-07-21"
-              >
-                <td>21.07.2026 08:42</td>
-                <td>
-                  <span class="user-name">Клімов Л.В.</span>
-                  <span class="small">Рентгенлаборант</span>
-                </td>
-                <td><span class="badge action-edit">Редагування</span></td>
-                <td>Дані дослідження CT-2026-0325</td>
-                <td class="success">Успішно</td>
-                <td>192.168.1.18 · Windows</td>
-              </tr>
-
-              <tr
-                data-action="Вхід"
-                data-result="Відмовлено"
-                data-date="2026-07-21"
-              >
-                <td>21.07.2026 09:11</td>
-                <td>
-                  <span class="user-name">Невідомий користувач</span>
-                  <span class="small">Неправильний пароль</span>
-                </td>
-                <td><span class="badge action-login">Вхід</span></td>
-                <td>RadiologyOS</td>
-                <td class="warning">Відмовлено</td>
-                <td>192.168.1.22 · Android</td>
-              </tr>
-
-              <tr
-                data-action="Редагування"
-                data-result="Успішно"
-                data-date="2026-07-21"
-              >
-                <td>21.07.2026 09:34</td>
-                <td>
-                  <span class="user-name">Адміністратор</span>
-                  <span class="small">Системний доступ</span>
-                </td>
-                <td><span class="badge action-edit">Редагування</span></td>
-                <td>Налаштування відділення</td>
-                <td class="success">Успішно</td>
-                <td>192.168.1.10 · Windows</td>
-              </tr>
-
-              <tr
-                data-action="Видалення"
-                data-result="Успішно"
-                data-date="2026-07-21"
-              >
-                <td>21.07.2026 10:02</td>
-                <td>
-                  <span class="user-name">Адміністратор</span>
-                  <span class="small">Системний доступ</span>
-                </td>
-                <td><span class="badge action-delete">Видалення</span></td>
-                <td>Демонстраційне завдання</td>
-                <td class="success">Успішно</td>
-                <td>192.168.1.10 · Windows</td>
-              </tr>
-
-            </tbody>
+            <tbody id="auditTable"></tbody>
           </table>
 
         </div>
 
         <div class="empty-state" id="emptyState">
-          Подій за заданими параметрами не знайдено.
+          Записів аудиту за вибраними параметрами немає.
         </div>
 
       </section>
@@ -517,120 +418,314 @@
     </main>
   </div>
 
+  <script src="radiologyos-data.js"></script>
+
   <script>
-    function filterAudit() {
+    const moduleNames = {
+      patients: "Пацієнти",
+      studies: "Дослідження",
+      protocols: "Протоколи",
+      appointments: "Записи",
+      tasks: "Завдання",
+      notifications: "Сповіщення",
+      inventory: "Склад",
+      equipment: "Обладнання",
+      audit: "Аудит"
+    };
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatDateTime(value) {
+      if (!value) {
+        return "—";
+      }
+
+      return new Date(value).toLocaleString("uk-UA", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+    }
+
+    function actionClass(action) {
+      if (action === "Створено запис") {
+        return "created";
+      }
+
+      if (action === "Видалено запис") {
+        return "deleted";
+      }
+
+      return "updated";
+    }
+
+    function setDatabaseStatus(connected) {
+      const element =
+        document.getElementById("databaseStatus");
+
+      element.textContent =
+        connected ? "База підключена" : "База недоступна";
+
+      if (!connected) {
+        element.style.background = "#fdecec";
+        element.style.color = "#b42318";
+      }
+    }
+
+    function getRecordDescription(item) {
+      if (!item.recordId) {
+        return "Системна подія";
+      }
+
+      const record =
+        RadiologyOS.getById(
+          item.module,
+          item.recordId
+        );
+
+      if (!record) {
+        return "Запис більше не існує";
+      }
+
+      if (item.module === "patients") {
+        return record.fullName || "Пацієнт";
+      }
+
+      if (item.module === "studies") {
+        return (
+          (record.modality || "Дослідження") +
+          " · " +
+          (record.region || "Ділянку не вказано")
+        );
+      }
+
+      if (item.module === "protocols") {
+        return record.conclusion || "Медичний протокол";
+      }
+
+      if (item.module === "equipment") {
+        return record.name || "Обладнання";
+      }
+
+      if (item.module === "inventory") {
+        return record.name || "Матеріал";
+      }
+
+      return item.details || "Запис системи";
+    }
+
+    function renderAudit() {
       const search =
-        document.getElementById("searchInput").value.toLowerCase();
+        document.getElementById("searchInput")
+          .value
+          .trim()
+          .toLowerCase();
+
+      const module =
+        document.getElementById("moduleFilter").value;
 
       const action =
         document.getElementById("actionFilter").value;
 
-      const result =
-        document.getElementById("resultFilter").value;
+      const audit =
+        RadiologyOS.getAll("audit")
+          .filter((item) => {
+            const description =
+              getRecordDescription(item);
 
-      const date =
-        document.getElementById("dateFilter").value;
+            const matchesSearch =
+              !search ||
+              String(item.action || "")
+                .toLowerCase()
+                .includes(search) ||
+              String(item.module || "")
+                .toLowerCase()
+                .includes(search) ||
+              String(item.recordId || "")
+                .toLowerCase()
+                .includes(search) ||
+              String(description)
+                .toLowerCase()
+                .includes(search);
 
-      let visibleCount = 0;
+            return (
+              matchesSearch &&
+              (!module || item.module === module) &&
+              (!action || item.action === action)
+            );
+          })
+          .sort(
+            (a, b) =>
+              new Date(b.createdAt || 0) -
+              new Date(a.createdAt || 0)
+          );
 
-      document
-        .querySelectorAll("#auditTable tr")
-        .forEach((row) => {
-          const matchesSearch =
-            row.textContent.toLowerCase().includes(search);
+      const table =
+        document.getElementById("auditTable");
 
-          const matchesAction =
-            !action || row.dataset.action === action;
+      table.innerHTML = "";
 
-          const matchesResult =
-            !result || row.dataset.result === result;
+      audit.forEach((item) => {
+        const row =
+          document.createElement("tr");
 
-          const matchesDate =
-            !date || row.dataset.date === date;
+        const description =
+          getRecordDescription(item);
 
-          const visible =
-            matchesSearch &&
-            matchesAction &&
-            matchesResult &&
-            matchesDate;
+        row.innerHTML = `
+          <td>
+            <span class="main-text">
+              ${formatDateTime(item.createdAt)}
+            </span>
 
-          row.style.display = visible ? "" : "none";
+            <span class="small">
+              ${escapeHtml(item.id || "—")}
+            </span>
+          </td>
 
-          if (visible) {
-            visibleCount++;
-          }
-        });
+          <td>
+            <span class="badge ${actionClass(item.action)}">
+              ${escapeHtml(item.action || "Подія")}
+            </span>
+          </td>
+
+          <td>
+            <span class="badge module">
+              ${escapeHtml(
+                moduleNames[item.module] ||
+                item.module ||
+                "Система"
+              )}
+            </span>
+          </td>
+
+          <td>${escapeHtml(item.recordId || "—")}</td>
+
+          <td>
+            <span class="main-text">
+              ${escapeHtml(description)}
+            </span>
+
+            <span class="small">
+              ${escapeHtml(item.details || "Без додаткового опису")}
+            </span>
+          </td>
+
+          <td>
+            <button
+              class="details-button"
+              onclick="showDetails('${item.id}')"
+            >
+              Переглянути
+            </button>
+          </td>
+        `;
+
+        table.appendChild(row);
+      });
 
       document.getElementById("emptyState").style.display =
-        visibleCount === 0 ? "block" : "none";
+        audit.length ? "none" : "block";
+    }
+
+    function showDetails(id) {
+      const item =
+        RadiologyOS.getById("audit", id);
+
+      if (!item) {
+        alert("Запис аудиту не знайдено.");
+        return;
+      }
+
+      alert(
+        "Дата: " + formatDateTime(item.createdAt) + "\n" +
+        "Дія: " + (item.action || "—") + "\n" +
+        "Модуль: " +
+        (moduleNames[item.module] || item.module || "—") +
+        "\n" +
+        "ID запису: " + (item.recordId || "—") + "\n" +
+        "Опис: " + (item.details || "—")
+      );
     }
 
     function updateStatistics() {
-      const rows = [
-        ...document.querySelectorAll("#auditTable tr")
-      ];
-
-      const loginCount =
-        rows.filter(
-          row => row.dataset.action === "Вхід"
-        ).length;
-
-      const changeCount =
-        rows.filter(
-          row =>
-            row.dataset.action === "Створення" ||
-            row.dataset.action === "Редагування" ||
-            row.dataset.action === "Видалення"
-        ).length;
-
-      const errorCount =
-        rows.filter(
-          row => row.dataset.result === "Відмовлено"
-        ).length;
+      const audit =
+        RadiologyOS.getAll("audit");
 
       document.getElementById("totalCount").textContent =
-        rows.length;
+        audit.length;
 
-      document.getElementById("loginCount").textContent =
-        loginCount;
+      document.getElementById("createdCount").textContent =
+        audit.filter(
+          item => item.action === "Створено запис"
+        ).length;
 
-      document.getElementById("changeCount").textContent =
-        changeCount;
+      document.getElementById("updatedCount").textContent =
+        audit.filter(
+          item => item.action === "Оновлено запис"
+        ).length;
 
-      document.getElementById("errorCount").textContent =
-        errorCount;
+      document.getElementById("deletedCount").textContent =
+        audit.filter(
+          item => item.action === "Видалено запис"
+        ).length;
     }
 
-    function exportAudit() {
-      const rows = [
-        ...document.querySelectorAll("#auditTable tr")
-      ];
-
-      const lines = rows.map((row) => {
-        return [...row.children]
-          .map(cell => cell.innerText.replace(/\n/g, " "))
-          .join(";");
-      });
-
-      const content =
-        "Дата і час;Користувач;Дія;Об’єкт;Результат;Пристрій\n" +
-        lines.join("\n");
-
-      const blob = new Blob(
-        [content],
-        { type: "text/csv;charset=utf-8" }
+    function clearAudit() {
+      const confirmed = confirm(
+        "Очистити весь журнал аудиту?"
       );
 
-      const link = document.createElement("a");
+      if (!confirmed) {
+        return;
+      }
 
-      link.href = URL.createObjectURL(blob);
-      link.download = "radiologyos-audit.csv";
-      link.click();
+      const database =
+        RadiologyOS.readDatabase();
 
-      URL.revokeObjectURL(link.href);
+      database.audit = [];
+
+      RadiologyOS.writeDatabase(database);
+
+      renderAudit();
+      updateStatistics();
     }
 
-    updateStatistics();
+    function initializePage() {
+      if (!window.RadiologyOS) {
+        setDatabaseStatus(false);
+
+        alert(
+          "Не вдалося підключити radiologyos-data.js."
+        );
+
+        return;
+      }
+
+      setDatabaseStatus(true);
+      renderAudit();
+      updateStatistics();
+    }
+
+    window.addEventListener(
+      "radiologyos:data-changed",
+      function() {
+        renderAudit();
+        updateStatistics();
+      }
+    );
+
+    initializePage();
   </script>
 
 </body>
