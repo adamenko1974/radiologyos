@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Архів — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .export-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 28px;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    .panel {
+      padding: 22px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1000px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #667085;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .patient-name {
+      font-weight: 700;
+    }
+
+    .patient-id {
+      display: block;
+      margin-top: 4px;
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .status-saved {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .status-backup {
+      background: #eef5ff;
+      color: #1267d6;
+    }
+
+    .status-warning {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .actions button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .open-button {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .restore-button {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .delete-button {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .empty {
+      display: none;
+      padding: 40px 20px;
+      text-align: center;
+      color: #667085;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .detail {
+      padding: 13px;
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .detail span {
+      display: block;
+      margin-bottom: 5px;
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .detail strong {
+      font-size: 14px;
+    }
+
+    .protocol-box {
+      padding: 16px;
+      border: 1px solid #dfe7f1;
+      border-radius: 9px;
+      background: #ffffff;
+      line-height: 1.6;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .close-button {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      background: #172033;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .filters {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .stats,
+      .filters,
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Архів медичних досліджень
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Архів медичних досліджень
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html></li>
+        <li><a href="bookings-admin.html">Заявки</a></li>
+        <li><a href="ai.html">AI Assistant</a></li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="analytics.html">Аналітика</a></li>
+        <li><a href="reports.html">Звіти</a></li>
+        <li><a href="finance.html">Фінанси</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+        <li><a href="inventory.html">Склад</a></li>
+        <li><a href="quality.html">Якість</a></li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <h1>Архів досліджень</h1>
+        <p>Пошук завершених досліджень, протоколів і цифрових копій</p>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Усього в архіві</span>
+          <strong id="totalCount">6</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>КТ-дослідження</span>
+          <strong id="ctCount">4</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Рентгенографії</span>
+          <strong id="xrayCount">2</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Резервні копії</span>
+          <strong id="backupCount">5</strong>
+        </div>
+
+      </section>
+
+      <div class="filters">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="ПІБ, номер дослідження або діагноз..."
+          oninput="filterArchive()"
+        >
+
+        <select id="typeFilter" onchange="filterArchive()">
+          <option value="">Усі типи</option>
+          <option value="КТ">КТ</option>
+          <option value="Рентген">Рентген</option>
+        </select>
+
+        <input
+          id="dateFilter"
+          type="date"
+          onchange="filterArchive()"
+        >
+
+        <select id="statusFilter" onchange="filterArchive()">
+          <option value="">Усі статуси</option>
+          <option value="Архівовано">Архівовано</option>
+          <option value="Без резервної копії">Без резервної копії</option>
+        </select>
+
+      </div>
+
+      <section class="panel">
+
+        <div class="table-wrap">
+
+          <table>
+            <thead>
+              <tr>
+                <th>№</th>
+                <th>Пацієнт</th>
+                <th>Дата</th>
+                <th>Тип</th>
+                <th>Область</th>
+                <th>Лікар</th>
+                <th>Статус</th>
+                <th>Дії</th>
+              </tr>
+            </thead>
+
+            <tbody id="archiveTable">
+
+              <tr
+                data-type="КТ"
+                data-status="Архівовано"
+                data-date="2026-07-21"
+              >
+                <td>CT-2026-0326</td>
+                <td class="patient-name">Коваленко Андрій Петрович</td>
+                <td>21.07.2026</td>
+                <td><span class="study-type">КТ</span></td>
+                <td>Головний мозок</td>
+                <td>Адаменко Д.М.</td>
+                <td>
+                  <span class="status status-saved">Архівовано</span>
+                </td>
+                <td class="actions">
+                  <button class="view-button" onclick="showStudy(this)">
+                    Переглянути
+                  </button>
+                  <button class="download-button" onclick="downloadProtocol(this)">
+                    Протокол
+                  </button>
+                  <button class="delete-button" onclick="deleteStudy(this)">
+                    Видалити
+                  </button>
+                </td>
+              </tr>
+
+              <tr
+                data-type="КТ"
+                data-status="Архівовано"
+                data-date="2026-07-20"
+              >
+                <td>CT-2026-0325</td>
+                <td class="patient-name">Мельник Сергій Іванович</td>
+                <td>20.07.2026</td>
+                <td><span class="study-type">КТ</span></td>
+                <td>Органи грудної клітки</td>
+                <td>Адаменко Д.М.</td>
+                <td>
+                  <span class="status status-saved">Архівовано</span>
+                </td>
+                <td class="actions">
+                  <button class="view-button" onclick="showStudy(this)">
+                    Переглянути
+                  </button>
+                  <button class="download-button" onclick="downloadProtocol(this)">
+                    Протокол
+                  </button>
+                  <button class="delete-button" onclick="deleteStudy(this)">
+                    Видалити
+                  </button>
+                </td>
+              </tr>
+
+              <tr
+                data-type="Рентген"
+                data-status="Архівовано"
+                data-date="2026-07-19"
+              >
+                <td>XR-2026-0148</td>
+                <td class="patient-name">Петренко Олег Миколайович</td>
+                <td>19.07.2026</td>
+                <td><span class="study-type">Рентген</span></td>
+                <td>Грудна клітка</td>
+                <td>Микитенко К.М.</td>
+                <td>
+                  <span class="status status-saved">Архівовано</span>
+                </td>
+                <td class="actions">
+                  <button class="view-button" onclick="showStudy(this)">
+                    Переглянути
+                  </button>
+                  <button class="download-button" onclick="downloadProtocol(this)">
+                    Протокол
+                  </button>
+                  <button class="delete-button" onclick="deleteStudy(this)">
+                    Видалити
+                  </button>
+                </td>
+              </tr>
+
+              <tr
+                data-type="КТ"
+                data-status="Без резервної копії"
+                data-date="2026-07-18"
+              >
+                <td>CT-2026-0324</td>
+                <td class="patient-name">Шевченко Роман Вікторович</td>
+                <td>18.07.2026</td>
+                <td><span class="study-type">КТ</span></td>
+                <td>Поперековий відділ хребта</td>
+                <td>Адаменко Д.М.</td>
+                <td>
+                  <span class="status status-copy">Без резервної копії</span>
+                </td>
+                <td class="actions">
+                  <button class="view-button" onclick="showStudy(this)">
+                    Переглянути
+                  </button>
+                  <button class="download-button" onclick="downloadProtocol(this)">
+                    Протокол
+                  </button>
+                  <button class="delete-button" onclick="deleteStudy(this)">
+                    Видалити
+                  </button>
+                </td>
+              </tr>
+
+              <tr
+                data-type="КТ"
+                data-status="Архівовано"
+                data-date="2026-07-17"
+              >
+                <td>CT-2026-0323</td>
+                <td class="patient-name">Іваненко Максим Олександрович</td>
+                <td>17.07.2026</td>
+                <td><span class="study-type">КТ</span></td>
+                <td>Черевна порожнина</td>
+                <td>Адаменко Д.М.</td>
+                <td>
+                  <span class="status status-saved">Архівовано</span>
+                </td>
+                <td class="actions">
+                  <button class="view-button" onclick="showStudy(this)">
+                    Переглянути
+                  </button>
+                  <button class="download-button" onclick="downloadProtocol(this)">
+                    Протокол
+                  </button>
+                  <button class="delete-button" onclick="deleteStudy(this)">
+                    Видалити
+                  </button>
+                </td>
+              </tr>
+
+              <tr
+                data-type="Рентген"
+                data-status="Архівовано"
+                data-date="2026-07-16"
+              >
+                <td>XR-2026-0147</td>
+                <td class="patient-name">Сидоренко Дмитро Васильович</td>
+                <td>16.07.2026</td>
+                <td><span class="study-type">Рентген</span></td>
+                <td>Правий плечовий суглоб</td>
+                <td>Микитенко К.М.</td>
+                <td>
+                  <span class="status status-saved">Архівовано</span>
+                </td>
+                <td class="actions">
+                  <button class="view-button" onclick="showStudy(this)">
+                    Переглянути
+                  </button>
+                  <button class="download-button" onclick="downloadProtocol(this)">
+                    Протокол
+                  </button>
+                  <button class="delete-button" onclick="deleteStudy(this)">
+                    Видалити
+                  </button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+        <div class="empty-state" id="emptyState">
+          За заданими параметрами досліджень не знайдено.
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="modal" id="studyModal">
+
+    <div class="modal-box">
+
+      <h2 id="modalTitle">Дослідження</h2>
+
+      <div class="details-grid">
+        <div class="detail">
+          <span>Пацієнт</span>
+          <strong id="modalPatient">—</strong>
+        </div>
+
+        <div class="detail">
+          <span>Дата</span>
+          <strong id="modalDate">—</strong>
+        </div>
+
+        <div class="detail">
+          <span>Тип дослідження</span>
+          <strong id="modalType">—</strong>
+        </div>
+
+        <div class="detail">
+          <span>Область</span>
+          <strong id="modalArea">—</strong>
+        </div>
+      </div>
+
+      <div class="protocol-box">
+        <strong>Висновок:</strong><br>
+        Архівний протокол збережено в системі.
+        Повний текст буде доступний після підключення бази даних
+        та інтеграції з PACS/Orthanc.
+      </div>
+
+      <div class="modal-actions">
+        <button class="close-button" onclick="closeModal()">
+          Закрити
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function filterArchive() {
+      const search =
+        document.getElementById("searchInput").value.toLowerCase();
+
+      const type =
+        document.getElementById("typeFilter").value;
+
+      const date =
+        document.getElementById("dateFilter").value;
+
+      const status =
+        document.getElementById("statusFilter").value;
+
+      let visibleCount = 0;
+
+      document
+        .querySelectorAll("#archiveTable tr")
+        .forEach((row) => {
+          const matchesSearch =
+            row.textContent.toLowerCase().includes(search);
+
+          const matchesType =
+            !type || row.dataset.type === type;
+
+          const matchesDate =
+            !date || row.dataset.date === date;
+
+          const matchesStatus =
+            !status || row.dataset.status === status;
+
+          const visible =
+            matchesSearch &&
+            matchesType &&
+            matchesDate &&
+            matchesStatus;
+
+          row.style.display = visible ? "" : "none";
+
+          if (visible) {
+            visibleCount++;
+          }
+        });
+
+      document.getElementById("emptyState").style.display =
+        visibleCount === 0 ? "block" : "none";
+    }
+
+    function showStudy(button) {
+      const row = button.closest("tr");
+      const cells = row.children;
+
+      document.getElementById("modalTitle").textContent =
+        cells[0].textContent;
+
+      document.getElementById("modalPatient").textContent =
+        cells[1].textContent;
+
+      document.getElementById("modalDate").textContent =
+        cells[2].textContent;
+
+      document.getElementById("modalType").textContent =
+        row.dataset.type;
+
+      document.getElementById("modalArea").textContent =
+        cells[4].textContent;
+
+      document.getElementById("studyModal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("studyModal").classList.remove("open");
+    }
+
+    function downloadProtocol(button) {
+      const row = button.closest("tr");
+      const number = row.children[0].textContent;
+      const patient = row.children[1].textContent;
+      const area = row.children[4].textContent;
+
+      const content =
+        "RadiologyOS\n\n" +
+        "Номер дослідження: " + number + "\n" +
+        "Пацієнт: " + patient + "\n" +
+        "Область: " + area + "\n\n" +
+        "Архівний протокол дослідження.";
+
+      const blob = new Blob(
+        [content],
+        { type: "text/plain;charset=utf-8" }
+      );
+
+      const link = document.createElement("a");
+
+      link.href = URL.createObjectURL(blob);
+      link.download = number + ".txt";
+      link.click();
+
+      URL.revokeObjectURL(link.href);
+    }
+
+    function deleteStudy(button) {
+      const confirmed = confirm(
+        "Видалити це дослідження з демонстраційного архіву?"
+      );
+
+      if (!confirmed) return;
+
+      button.closest("tr").remove();
+      updateStatistics();
+      filterArchive();
+    }
+
+    function updateStatistics() {
+      const rows = [
+        ...document.querySelectorAll("#archiveTable tr")
+      ];
+
+      const ctCount =
+        rows.filter(row => row.dataset.type === "КТ").length;
+
+      const xrayCount =
+        rows.filter(row => row.dataset.type === "Рентген").length;
+
+      const backupCount =
+        rows.filter(
+          row => row.dataset.status === "Архівовано"
+        ).length;
+
+            document.getElementById("totalCount").textContent =
+        rows.length;
+
+      document.getElementById("ctCount").textContent =
+        ctCount;
+
+      document.getElementById("xrayCount").textContent =
+        xrayCount;
+
+      document.getElementById("backupCount").textContent =
+        backupCount;
+    }
+
+    document
+      .getElementById("studyModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+
+    updateStatistics();
+  </script>
+
+</body>
+</html>
