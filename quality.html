@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Контроль якості — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .add-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 28px;
+    }
+
+    .quality-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 22px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .panel h2 {
+      margin-bottom: 18px;
+      font-size: 21px;
+    }
+
+    .check-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #edf1f5;
+    }
+
+    .check-item:last-child {
+      border-bottom: none;
+    }
+
+    .check-item input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .check-text strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .check-text span {
+      color: #667085;
+      font-size: 13px;
+    }
+
+    .badge {
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-ok {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .badge-warning {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .badge-critical {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .score-box {
+      margin-bottom: 22px;
+      padding: 24px;
+      border-radius: 12px;
+      background: #eef5ff;
+      text-align: center;
+    }
+
+    .score-box strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #1267d6;
+      font-size: 46px;
+    }
+
+    .score-box span {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .metric {
+      margin-bottom: 18px;
+    }
+
+    .metric-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 7px;
+      font-size: 14px;
+    }
+
+    .progress {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #e8edf3;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 20px;
+      background: #1267d6;
+    }
+
+    .table-panel {
+      margin-top: 18px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 850px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #667085;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 560px;
+      padding: 26px;
+      background: #ffffff;
+      border-radius: 14px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .secondary,
+    .primary {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .secondary {
+      background: #edf2f7;
+      color: #344054;
+    }
+
+    .primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .quality-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .check-item {
+        grid-template-columns: auto 1fr;
+      }
+
+      .check-item .badge {
+        grid-column: 2;
+        justify-self: start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Контроль якості та безпеки
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="bookings-admin.html">Заявки</a></li>
+        <li><a href="ai.html">AI Assistant</a></li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="analytics.html">Аналітика</a></li>
+        <li><a href="reports.html">Звіти</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+        <li><a href="inventory.html">Склад</a></li>
+        <li><a href="quality.html" class="active">Якість</a></li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Контроль якості</h1>
+          <p>Перевірки безпеки, протоколів та організації роботи</p>
+        </div>
+
+        <button class="add-button" onclick="openModal()">
+          + Додати перевірку
+        </button>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Загальний рівень</span>
+          <strong id="qualityScore">86%</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Виконано перевірок</span>
+          <strong id="completedCount">6</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Потребують уваги</span>
+          <strong id="warningCount">2</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Критичні зауваження</span>
+          <strong id="criticalCount">0</strong>
+        </div>
+
+      </section>
+
+      <div class="quality-grid">
+
+        <section class="panel">
+
+          <h2>Щоденний чек-лист</h2>
+
+          <div class="check-item">
+            <input type="checkbox" checked onchange="updateScore()">
+
+            <div class="check-text">
+              <strong>Перевірка готовності КТ</strong>
+              <span>Апарат, інжектор, робоча станція та DICOM</span>
+            </div>
+
+            <span class="badge badge-ok">Виконано</span>
+          </div>
+
+          <div class="check-item">
+            <input type="checkbox" checked onchange="updateScore()">
+
+            <div class="check-text">
+              <strong>Контроль направлень</strong>
+              <span>Наявність клінічного завдання та області дослідження</span>
+            </div>
+
+            <span class="badge badge-ok">Виконано</span>
+          </div>
+
+          <div class="check-item">
+            <input type="checkbox" checked onchange="updateScore()">
+
+            <div class="check-text">
+              <strong>Контроль контрастних досліджень</strong>
+              <span>Креатинін, алергологічний анамнез, венозний доступ</span>
+            </div>
+
+            <span class="badge badge-ok">Виконано</span>
+          </div>
+
+          <div class="check-item">
+            <input type="checkbox" checked onchange="updateScore()">
+
+            <div class="check-text">
+              <strong>Перевірка журналу досліджень</strong>
+              <span>Відповідність записів фактично виконаним дослідженням</span>
+            </div>
+
+            <span class="badge badge-ok">Виконано</span>
+          </div>
+
+          <div class="check-item">
+            <input type="checkbox" onchange="updateScore()">
+
+            <div class="check-text">
+              <strong>Резервне копіювання PACS</strong>
+              <span>Контроль збереження та доступності архіву</span>
+            </div>
+
+            <span class="badge badge-warning">Не виконано</span>
+          </div>
+
+          <div class="check-item">
+            <input type="checkbox" onchange="updateScore()">
+
+            <div class="check-text">
+              <strong>Контроль запасів контрасту</strong>
+              <span>Перевірка залишків і термінів придатності</span>
+            </div>
+
+            <span class="badge badge-warning">Не виконано</span>
+          </div>
+
+        </section>
+
+        <section class="panel">
+
+          <h2>Показники якості</h2>
+
+          <div class="score-box">
+            <strong id="scoreLarge">86%</strong>
+            <span>Поточний інтегральний показник</span>
+          </div>
+
+          <div class="metric">
+            <div class="metric-top">
+              <span>Повнота протоколів</span>
+              <strong>94%</strong>
+            </div>
+
+            <div class="progress">
+              <div class="progress-bar" style="width: 94%"></div>
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-top">
+              <span>Своєчасність описів</span>
+              <strong>88%</strong>
+            </div>
+
+            <div class="progress">
+              <div class="progress-bar" style="width: 88%"></div>
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-top">
+              <span>Технічна якість зображень</span>
+              <strong>92%</strong>
+            </div>
+
+            <div class="progress">
+              <div class="progress-bar" style="width: 92%"></div>
+            </div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-top">
+              <span>Виконання чек-листів</span>
+              <strong id="checklistMetric">67%</strong>
+            </div>
+
+            <div class="progress">
+              <div
+                class="progress-bar"
+                id="checklistBar"
+                style="width: 67%"
+              ></div>
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+
+      <section class="panel table-panel">
+
+        <h2>Журнал перевірок</h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Категорія</th>
+                <th>Перевірка</th>
+                <th>Відповідальний</th>
+                <th>Результат</th>
+              </tr>
+            </thead>
+
+            <tbody id="qualityTable">
+
+              <tr>
+                <td>21.07.2026</td>
+                <td>Обладнання</td>
+                <td>Перевірка готовності Siemens CT</td>
+                <td>Черговий лаборант</td>
+                <td><span class="badge badge-ok">Відповідає</span></td>
+              </tr>
+
+              <tr>
+                <td>20.07.2026</td>
+                <td>Безпека</td>
+                <td>Контроль венозного доступу перед контрастуванням</td>
+                <td>Медичний персонал</td>
+                <td><span class="badge badge-ok">Відповідає</span></td>
+              </tr>
+
+              <tr>
+                <td>18.07.2026</td>
+                <td>PACS</td>
+                <td>Перевірка резервного копіювання Orthanc</td>
+                <td>Адміністратор</td>
+                <td><span class="badge badge-warning">Зауваження</span></td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="modal" id="qualityModal">
+
+    <div class="modal-box">
+
+      <h2>Нова перевірка</h2>
+
+      <div class="field">
+        <label for="checkCategory">Категорія</label>
+
+        <select id="checkCategory">
+          <option>Обладнання</option>
+          <option>Безпека</option>
+          <option>Протоколи</option>
+          <option>PACS</option>
+          <option>Склад</option>
+          <option>Організація роботи</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="checkName">Назва перевірки</label>
+        <input id="checkName" type="text">
+      </div>
+
+      <div class="field">
+        <label for="responsible">Відповідальний</label>
+        <input id="responsible" type="text">
+      </div>
+
+      <div class="field">
+        <label for="checkResult">Результат</label>
+
+        <select id="checkResult">
+          <option>Відповідає</option>
+          <option>Зауваження</option>
+          <option>Критично</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="checkComment">Коментар</label>
+        <textarea id="checkComment"></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="secondary" onclick="closeModal()">
+          Скасувати
+        </button>
+
+        <button class="primary" onclick="addCheck()">
+          Зберегти
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function updateScore() {
+      const checks = [
+        ...document.querySelectorAll(
+          ".check-item input[type='checkbox']"
+        )
+      ];
+
+      const completed =
+        checks.filter(check => check.checked).length;
+
+      const percent =
+        Math.round((completed / checks.length) * 100);
+
+      document.getElementById("qualityScore").textContent =
+        percent + "%";
+
+      document.getElementById("scoreLarge").textContent =
+        percent + "%";
+
+      document.getElementById("completedCount").textContent =
+        completed;
+
+      document.getElementById("warningCount").textContent =
+        checks.length - completed;
+
+      document.getElementById("checklistMetric").textContent =
+        percent + "%";
+
+      document.getElementById("checklistBar").style.width =
+        percent + "%";
+
+      checks.forEach((check) => {
+        const badge =
+          check.closest(".check-item").querySelector(".badge");
+
+        if (check.checked) {
+          badge.textContent = "Виконано";
+          badge.className = "badge badge-ok";
+        } else {
+          badge.textContent = "Не виконано";
+          badge.className = "badge badge-warning";
+        }
+      });
+    }
+
+    function openModal() {
+      document.getElementById("qualityModal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("qualityModal").classList.remove("open");
+    }
+
+    function resultClass(result) {
+      if (result === "Критично") {
+        return "badge-critical";
+      }
+
+      if (result === "Зауваження") {
+        return "badge-warning";
+      }
+
+      return "badge-ok";
+    }
+
+    function addCheck() {
+      const category =
+        document.getElementById("checkCategory").value;
+
+      const name =
+        document.getElementById("checkName").value.trim();
+
+      const responsible =
+        document.getElementById("responsible").value.trim();
+
+      const result =
+        document.getElementById("checkResult").value;
+
+      if (!name || !responsible) {
+        alert("Вкажіть назву перевірки та відповідального.");
+        return;
+      }
+
+      const today =
+        new Date().toLocaleDateString("uk-UA");
+
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${today}</td>
+        <td>${category}</td>
+        <td>${name}</td>
+        <td>${responsible}</td>
+        <td>
+          <span class="badge ${resultClass(result)}">
+            ${result}
+          </span>
+        </td>
+      `;
+
+      document.getElementById("qualityTable").prepend(row);
+
+      document.getElementById("checkName").value = "";
+      document.getElementById("responsible").value = "";
+      document.getElementById("checkComment").value = "";
+
+      closeModal();
+    }
+
+    document
+      .getElementById("qualityModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+
+    updateScore();
+  </script>
+
+</body>
+</html>
