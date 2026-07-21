@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Панель керівника — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 30px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .live {
+      padding: 7px 10px;
+      border-radius: 20px;
+      background: #e7f7ef;
+      color: #14804a;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .refresh-button {
+      padding: 12px 17px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      padding: 18px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 13px;
+    }
+
+    .stat-card strong {
+      font-size: 25px;
+    }
+
+    .positive {
+      color: #14804a;
+    }
+
+    .warning {
+      color: #b26a00;
+    }
+
+    .danger {
+      color: #b42318;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .panel h2 {
+      margin-bottom: 5px;
+      font-size: 19px;
+    }
+
+    .panel-description {
+      margin-bottom: 18px;
+      color: #667085;
+      font-size: 13px;
+    }
+
+    .queue-list,
+    .event-list,
+    .equipment-list {
+      list-style: none;
+    }
+
+    .queue-item,
+    .event-item,
+    .equipment-item {
+      display: grid;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid #edf1f5;
+    }
+
+    .queue-item {
+      grid-template-columns: 70px 1fr auto;
+    }
+
+    .event-item {
+      grid-template-columns: 68px 1fr auto;
+    }
+
+    .equipment-item {
+      grid-template-columns: 1fr auto;
+    }
+
+    .queue-item:last-child,
+    .event-item:last-child,
+    .equipment-item:last-child {
+      border-bottom: none;
+    }
+
+    .time {
+      font-weight: 700;
+      color: #1267d6;
+    }
+
+    .item-title {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .small {
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .ready {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .waiting {
+      background: #eef5ff;
+      color: #1267d6;
+    }
+
+    .urgent {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .service {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .progress-row {
+      margin-bottom: 16px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 7px;
+      font-size: 13px;
+    }
+
+    .progress {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #e8edf3;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 20px;
+      background: #1267d6;
+    }
+
+    .staff-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .staff-card {
+      padding: 14px;
+      border: 1px solid #e3eaf2;
+      border-radius: 10px;
+      background: #f9fbfd;
+    }
+
+    .staff-card strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .chart {
+      height: 210px;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      padding-top: 20px;
+    }
+
+    .bar-wrap {
+      flex: 1;
+      text-align: center;
+    }
+
+    .bar {
+      width: 100%;
+      min-height: 15px;
+      border-radius: 7px 7px 0 0;
+      background: #1267d6;
+    }
+
+    .bar-label {
+      display: block;
+      margin-top: 7px;
+      color: #667085;
+      font-size: 11px;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 1250px) {
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-right span:not(.live) {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .staff-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .queue-item,
+      .event-item {
+        grid-template-columns: 58px 1fr;
+      }
+
+      .queue-item .badge,
+      .event-item .badge {
+        grid-column: 2;
+        justify-self: start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-right">
+      <span id="currentTime">21.07.2026 12:00</span>
+      <span class="live">Система онлайн</span>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Керування</h3>
+
+      <ul class="menu">
+        <li>
+          <a href="executive-dashboard.html" class="active">
+            Панель керівника
+          </a>
+        </li>
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="schedule.html">Графік роботи</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+        <li><a href="inventory.html">Склад</a></li>
+        <li><a href="finance.html">Фінанси</a></li>
+        <li><a href="reports.html">Звіти</a></li>
+        <li><a href="incidents.html">Журнал подій</a></li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Панель керівника</h1>
+
+          <p>
+            Оперативний стан відділення променевої діагностики
+          </p>
+        </div>
+
+        <button class="refresh-button" onclick="refreshDashboard()">
+          Оновити дані
+        </button>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Досліджень сьогодні</span>
+          <strong id="studyCount">24</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Пацієнтів у черзі</span>
+          <strong id="queueCount" class="warning">5</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Готових протоколів</span>
+          <strong class="positive">18</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Прострочених протоколів</span>
+          <strong class="danger">2</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Дохід за день</span>
+          <strong>31 500 ₴</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Середній час КТ</span>
+          <strong>24 хв</strong>
+        </div>
+
+      </section>
+
+      <section class="dashboard-grid">
+
+        <article class="panel">
+          <h2>Черга пацієнтів</h2>
+          <p class="panel-description">
+            Найближчі заплановані дослідження
+          </p>
+
+          <ul class="queue-list">
+            <li class="queue-item">
+              <span class="time">12:10</span>
+              <span>
+                <span class="item-title">КТ головного мозку</span>
+                <span class="small">Пацієнт №1048 · без контрасту</span>
+              </span>
+              <span class="badge ready">Готовий</span>
+            </li>
+
+            <li class="queue-item">
+              <span class="time">12:30</span>
+              <span>
+                <span class="item-title">КТ ОГК</span>
+                <span class="small">Пацієнт №1049 · контроль</span>
+              </span>
+              <span class="badge waiting">Очікує</span>
+            </li>
+
+            <li class="queue-item">
+              <span class="time">12:50</span>
+              <span>
+                <span class="item-title">КТ ОЧП з контрастом</span>
+                <span class="small">Пацієнт №1050 · креатинін перевірено</span>
+              </span>
+              <span class="badge ready">Готовий</span>
+            </li>
+
+            <li class="queue-item">
+              <span class="time">13:20</span>
+              <span>
+                <span class="item-title">КТ поперекового відділу</span>
+                <span class="small">Пацієнт №1051 · планове</span>
+              </span>
+              <span class="badge waiting">Очікує</span>
+            </li>
+          </ul>
+        </article>
+
+        <article class="panel">
+          <h2>Стан обладнання</h2>
+          <p class="panel-description">
+            Актуальний статус апаратів відділення
+          </p>
+
+          <ul class="equipment-list">
+            <li class="equipment-item">
+              <span>
+                <span class="item-title">Siemens CT</span>
+                <span class="small">Кабінет №1</span>
+              </span>
+              <span class="badge ready">Працює</span>
+            </li>
+
+            <li class="equipment-item">
+              <span>
+                <span class="item-title">AMAX 5000</span>
+                <span class="small">Рентгенівський кабінет</span>
+              </span>
+              <span class="badge service">Контроль</span>
+            </li>
+
+            <li class="equipment-item">
+              <span>
+                <span class="item-title">Інжектор</span>
+                <span class="small">Приміщення 1Б</span>
+              </span>
+              <span class="badge ready">Працює</span>
+            </li>
+
+            <li class="equipment-item">
+              <span>
+                <span class="item-title">Orthanc PACS</span>
+                <span class="small">DICOM-сервер</span>
+              </span>
+              <span class="badge ready">Онлайн</span>
+            </li>
+          </ul>
+        </article>
+
+        <article class="panel">
+          <h2>Завантаження відділення</h2>
+          <p class="panel-description">
+            Виконання денного плану
+          </p>
+
+          <div class="progress-row">
+            <div class="progress-top">
+              <span>КТ-дослідження</span>
+              <strong>75%</strong>
+            </div>
+            <div class="progress">
+              <div class="progress-bar" style="width:75%"></div>
+            </div>
+          </div>
+
+          <div class="progress-row">
+            <div class="progress-top">
+              <span>Рентгенографія</span>
+              <strong>62%</strong>
+            </div>
+            <div class="progress">
+              <div class="progress-bar" style="width:62%"></div>
+            </div>
+          </div>
+
+          <div class="progress-row">
+            <div class="progress-top">
+              <span>Готовність протоколів</span>
+              <strong>81%</strong>
+            </div>
+            <div class="progress">
+              <div class="progress-bar" style="width:81%"></div>
+            </div>
+          </div>
+
+          <div class="progress-row">
+            <div class="progress-top">
+              <span>Використання робочого часу</span>
+              <strong>88%</strong>
+            </div>
+            <div class="progress">
+              <div class="progress-bar" style="width:88%"></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h2>Персонал у зміні</h2>
+          <p class="panel-description">
+            Працівники, які зараз працюють
+          </p>
+
+          <div class="staff-grid">
+            <div class="staff-card">
+              <strong>Адаменко Д.М.</strong>
+              <span class="small">Лікар-рентгенолог</span>
+            </div>
+
+            <div class="staff-card">
+              <strong>Клімов Л.В.</strong>
+              <span class="small">Рентгенлаборант</span>
+            </div>
+
+            <div class="staff-card">
+              <strong>Черговий лікар</strong>
+              <span class="small">Рентгенографія</span>
+            </div>
+
+            <div class="staff-card">
+              <strong>Медична сестра</strong>
+              <span class="small">Контрастні дослідження</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h2>Критичні події</h2>
+          <p class="panel-description">
+            Події, які потребують контролю керівника
+          </p>
+
+          <ul class="event-list">
+            <li class="event-item">
+              <span class="time">09:10</span>
+              <span>
+                <span class="item-title">Помилка E09 на AMAX 5000</span>
+                <span class="small">Інженер повідомлений</span>
+              </span>
+              <span class="badge urgent">Важливо</span>
+            </li>
+
+            <li class="event-item">
+              <span class="time">10:25</span>
+              <span>
+                <span class="item-title">Низький залишок контрасту</span>
+                <span class="small">Залишок на 8 досліджень</span>
+              </span>
+              <span class="badge service">Контроль</span>
+            </li>
+
+            <li class="event-item">
+              <span class="time">11:40</span>
+              <span>
+                <span class="item-title">Два протоколи прострочені</span>
+                <span class="small">Очікують підписання лікарем</span>
+              </span>
+              <span class="badge urgent">Терміново</span>
+            </li>
+          </ul>
+        </article>
+
+        <article class="panel">
+          <h2>Продуктивність за тиждень</h2>
+          <p class="panel-description">
+            Кількість виконаних досліджень
+          </p>
+
+          <div class="chart">
+            <div class="bar-wrap">
+              <div class="bar" style="height:55%"></div>
+              <span class="bar-label">Пн</span>
+            </div>
+
+            <div class="bar-wrap">
+              <div class="bar" style="height:72%"></div>
+              <span class="bar-label">Вт</span>
+            </div>
+
+            <div class="bar-wrap">
+              <div class="bar" style="height:68%"></div>
+              <span class="bar-label">Ср</span>
+            </div>
+
+            <div class="bar-wrap">
+              <div class="bar" style="height:84%"></div>
+              <span class="bar-label">Чт</span>
+            </div>
+
+            <div class="bar-wrap">
+              <div class="bar" style="height:91%"></div>
+              <span class="bar-label">Пт</span>
+            </div>
+
+            <div class="bar-wrap">
+              <div class="bar" style="height:45%"></div>
+              <span class="bar-label">Сб</span>
+            </div>
+
+            <div class="bar-wrap">
+              <div class="bar" style="height:30%"></div>
+              <span class="bar-label">Нд</span>
+            </div>
+          </div>
+        </article>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+
+      document.getElementById("currentTime").textContent =
+        now.toLocaleString("uk-UA", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+    }
+
+    function refreshDashboard() {
+      const studyCount =
+        document.getElementById("studyCount");
+
+      const queueCount =
+        document.getElementById("queueCount");
+
+      studyCount.textContent =
+        24 + Math.floor(Math.random() * 3);
+
+      queueCount.textContent =
+        4 + Math.floor(Math.random() * 3);
+
+      updateClock();
+
+      alert("Дані панелі оновлено.");
+    }
+
+    updateClock();
+    setInterval(updateClock, 60000);
+  </script>
+
+</body>
+</html>
