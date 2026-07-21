@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Аналітика — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+      color: #ffffff;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    select {
+      padding: 11px 14px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font-size: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(23, 32, 51, 0.04);
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 10px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 30px;
+    }
+
+    .change {
+      margin-top: 8px;
+      color: #14804a;
+      font-size: 13px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .panel {
+      padding: 22px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(23, 32, 51, 0.05);
+    }
+
+    .panel h2 {
+      margin-bottom: 6px;
+      font-size: 20px;
+    }
+
+    .panel-subtitle {
+      margin-bottom: 24px;
+      color: #667085;
+      font-size: 13px;
+    }
+
+    .chart {
+      height: 260px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 20px;
+      border-bottom: 1px solid #dfe7f1;
+    }
+
+    .bar-column {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bar-value {
+      color: #475467;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .bar {
+      width: 70%;
+      min-width: 24px;
+      background: #1267d6;
+      border-radius: 7px 7px 0 0;
+      transition: 0.3s;
+    }
+
+    .bar:hover {
+      opacity: 0.75;
+    }
+
+    .bar-label {
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .modality-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .modality-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .modality-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+
+    .progress {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #edf2f7;
+    }
+
+    .progress div {
+      height: 100%;
+      border-radius: 20px;
+      background: #1267d6;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+    }
+
+    th {
+      color: #667085;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      background: #e7f7ef;
+      color: #14804a;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 650px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Аналітика роботи відділення
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="analytics.html" class="active">Аналітика</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Аналітика</h1>
+          <p>Ключові показники роботи відділення променевої діагностики</p>
+        </div>
+
+        <select id="period" onchange="changePeriod()">
+          <option value="week">Останні 7 днів</option>
+          <option value="month">Останні 30 днів</option>
+          <option value="year">Поточний рік</option>
+        </select>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Досліджень</span>
+          <strong id="studyCount">126</strong>
+          <div class="change" id="studyChange">↑ 8% за тиждень</div>
+        </div>
+
+        <div class="stat-card">
+          <span>КТ-досліджень</span>
+          <strong id="ctCount">84</strong>
+          <div class="change">67% від загальної кількості</div>
+        </div>
+
+        <div class="stat-card">
+          <span>Середній час опису</span>
+          <strong id="reportTime">18 хв</strong>
+          <div class="change">↓ 3 хв порівняно з минулим періодом</div>
+        </div>
+
+        <div class="stat-card">
+          <span>Підписано протоколів</span>
+          <strong id="signedCount">119</strong>
+          <div class="change">94% завершених досліджень</div>
+        </div>
+
+      </section>
+
+      <section class="dashboard">
+
+        <div class="panel">
+          <h2>Дослідження за днями</h2>
+          <div class="panel-subtitle">Кількість виконаних досліджень</div>
+
+          <div class="chart" id="chart"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Розподіл за методами</h2>
+          <div class="panel-subtitle">Частка досліджень за модальністю</div>
+
+          <div class="modality-list">
+
+            <div class="modality-row">
+              <div class="modality-top">
+                <span>Комп’ютерна томографія</span>
+                <strong>67%</strong>
+              </div>
+
+              <div class="progress">
+                <div style="width: 67%"></div>
+              </div>
+            </div>
+
+            <div class="modality-row">
+              <div class="modality-top">
+                <span>Рентгенографія</span>
+                <strong>25%</strong>
+              </div>
+
+              <div class="progress">
+                <div style="width: 25%"></div>
+              </div>
+            </div>
+
+            <div class="modality-row">
+              <div class="modality-top">
+                <span>Рентгеноскопія</span>
+                <strong>8%</strong>
+              </div>
+
+              <div class="progress">
+                <div style="width: 8%"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <section class="panel">
+        <h2>Навантаження за видами досліджень</h2>
+        <div class="panel-subtitle">Найчастіше виконувані дослідження</div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Дослідження</th>
+              <th>Кількість</th>
+              <th>Середній час опису</th>
+              <th>Завершення</th>
+              <th>Статус</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>КТ головного мозку</td>
+              <td>31</td>
+              <td>14 хв</td>
+              <td>97%</td>
+              <td><span class="status">Норма</span></td>
+            </tr>
+
+            <tr>
+              <td>КТ органів грудної клітки</td>
+              <td>24</td>
+              <td>21 хв</td>
+              <td>92%</td>
+              <td><span class="status">Норма</span></td>
+            </tr>
+
+            <tr>
+              <td>КТ органів черевної порожнини</td>
+              <td>16</td>
+              <td>28 хв</td>
+              <td>88%</td>
+              <td><span class="status">Норма</span></td>
+            </tr>
+
+            <tr>
+              <td>КТ хребта</td>
+              <td>13</td>
+              <td>19 хв</td>
+              <td>94%</td>
+              <td><span class="status">Норма</span></td>
+            </tr>
+
+            <tr>
+              <td>Рентгенографія ОГК</td>
+              <td>21</td>
+              <td>9 хв</td>
+              <td>100%</td>
+              <td><span class="status">Норма</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const periods = {
+      week: {
+        studies: 126,
+        ct: 84,
+        reportTime: "18 хв",
+        signed: 119,
+        change: "↑ 8% за тиждень",
+        labels: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"],
+        values: [16, 21, 18, 24, 20, 15, 12]
+      },
+
+      month: {
+        studies: 512,
+        ct: 342,
+        reportTime: "19 хв",
+        signed: 486,
+        change: "↑ 6% за місяць",
+        labels: ["1 тиж.", "2 тиж.", "3 тиж.", "4 тиж."],
+        values: [116, 132, 121, 143]
+      },
+
+      year: {
+        studies: 5840,
+        ct: 3913,
+        reportTime: "20 хв",
+        signed: 5497,
+        change: "↑ 12% за рік",
+        labels: ["Січ", "Лют", "Бер", "Кві", "Тра", "Чер", "Лип"],
+        values: [620, 710, 760, 845, 900, 965, 1040]
+      }
+    };
+
+    function renderChart(labels, values) {
+      const chart = document.getElementById("chart");
+      const maximum = Math.max(...values);
+
+      chart.innerHTML = "";
+
+      values.forEach((value, index) => {
+        const height = Math.round((value / maximum) * 190);
+
+        chart.innerHTML += `
+          <div class="bar-column">
+            <div class="bar-value">${value}</div>
+            <div class="bar" style="height: ${height}px"></div>
+            <div class="bar-label">${labels[index]}</div>
+          </div>
+        `;
+      });
+    }
+
+    function changePeriod() {
+      const selected = document.getElementById("period").value;
+      const data = periods[selected];
+
+      document.getElementById("studyCount").textContent =
+        data.studies;
+
+      document.getElementById("ctCount").textContent =
+        data.ct;
+
+      document.getElementById("reportTime").textContent =
+        data.reportTime;
+
+      document.getElementById("signedCount").textContent =
+        data.signed;
+
+      document.getElementById("studyChange").textContent =
+        data.change;
+
+      renderChart(data.labels, data.values);
+    }
+
+    renderChart(
+      periods.week.labels,
+      periods.week.values
+    );
+  </script>
+
+</body>
+</html>
