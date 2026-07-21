@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Технічне обслуговування — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 30px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .add-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      padding: 19px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 27px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 220px 220px;
+      gap: 13px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .panel {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1050px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 13px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #667085;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .equipment-name {
+      font-weight: 700;
+    }
+
+    .small {
+      display: block;
+      margin-top: 4px;
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .planned {
+      background: #eef5ff;
+      color: #1267d6;
+    }
+
+    .progress {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .completed {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .overdue {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .actions button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .start-button {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .complete-button {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .delete-button {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 620px;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 25px;
+      background: #ffffff;
+      border-radius: 14px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .secondary,
+    .primary {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .secondary {
+      background: #edf2f7;
+      color: #344054;
+    }
+
+    .primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar,
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Планове та аварійне технічне обслуговування
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+        <li>
+          <a href="maintenance.html" class="active">
+            Технічне обслуговування
+          </a>
+        </li>
+        <li><a href="incidents.html">Журнал подій</a></li>
+        <li><a href="rooms.html">Приміщення</a></li>
+        <li><a href="inventory.html">Склад</a></li>
+        <li><a href="quality.html">Якість</a></li>
+        <li><a href="documents.html">Документи</a></li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Технічне обслуговування</h1>
+
+          <p>
+            Планування перевірок, ремонтів і сервісних робіт
+          </p>
+        </div>
+
+        <button class="add-button" onclick="openModal()">
+          + Додати роботу
+        </button>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Усього робіт</span>
+          <strong id="totalCount">5</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Заплановано</span>
+          <strong id="plannedCount">2</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>У роботі</span>
+          <strong id="progressCount">1</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Завершено</span>
+          <strong id="completedCount">2</strong>
+        </div>
+
+      </section>
+
+      <div class="toolbar">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Пошук обладнання або роботи..."
+          oninput="filterRows()"
+        >
+
+        <select id="equipmentFilter" onchange="filterRows()">
+          <option value="">Усе обладнання</option>
+          <option value="Siemens CT">Siemens CT</option>
+          <option value="AMAX 5000">AMAX 5000</option>
+          <option value="Інжектор">Інжектор</option>
+          <option value="Стабілізатор">Стабілізатор</option>
+        </select>
+
+        <select id="statusFilter" onchange="filterRows()">
+          <option value="">Усі статуси</option>
+          <option value="Заплановано">Заплановано</option>
+          <option value="У роботі">У роботі</option>
+          <option value="Завершено">Завершено</option>
+          <option value="Прострочено">Прострочено</option>
+        </select>
+
+      </div>
+
+      <section class="panel">
+
+        <div class="table-wrap">
+
+          <table>
+            <thead>
+              <tr>
+                <th>Обладнання</th>
+                <th>Робота</th>
+                <th>Дата</th>
+                <th>Виконавець</th>
+                <th>Тип</th>
+                <th>Статус</th>
+                <th>Дії</th>
+              </tr>
+            </thead>
+
+            <tbody id="maintenanceTable">
+
+              <tr data-equipment="Siemens CT" data-status="Заплановано">
+                <td>
+                  <span class="equipment-name">Siemens CT</span>
+                  <span class="small">Кабінет №1</span>
+                </td>
+                <td>Планова технічна перевірка</td>
+                <td>25.07.2026</td>
+                <td>Сервісний інженер</td>
+                <td>Планова</td>
+                <td><span class="badge planned">Заплановано</span></td>
+                <td class="actions">
+                  <button class="start-button" onclick="startWork(this)">
+                    Почати
+                  </button>
+                  <button class="delete-button" onclick="deleteWork(this)">
+                    Видалити
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-equipment="AMAX 5000" data-status="У роботі">
+                <td>
+                  <span class="equipment-name">AMAX 5000</span>
+                  <span class="small">Рентгенівський кабінет</span>
+                </td>
+                <td>Діагностика помилки E09</td>
+                <td>21.07.2026</td>
+                <td>Інженер</td>
+                <td>Аварійна</td>
+                <td><span class="badge progress">У роботі</span></td>
+                <td class="actions">
+                  <button class="complete-button" onclick="completeWork(this)">
+                    Завершити
+                  </button>
+                  <button class="delete-button" onclick="deleteWork(this)">
+                    Видалити
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-equipment="Інжектор" data-status="Заплановано">
+                <td>
+                  <span class="equipment-name">Інжектор</span>
+                  <span class="small">Приміщення 1Б</span>
+                </td>
+                <td>Перевірка герметичності системи</td>
+                <td>28.07.2026</td>
+                <td>Медичний технік</td>
+                <td>Планова</td>
+                <td><span class="badge planned">Заплановано</span></td>
+                <td class="actions">
+                  <button class="start-button" onclick="startWork(this)">
+                    Почати
+                  </button>
+                  <button class="delete-button" onclick="deleteWork(this)">
+                    Видалити
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-equipment="Стабілізатор" data-status="Завершено">
+                <td>
+                  <span class="equipment-name">Стабілізатор</span>
+                  <span class="small">Потужність 90 кВт</span>
+                </td>
+                <td>Перевірка вхідної напруги</td>
+                <td>18.07.2026</td>
+                <td>Електрик</td>
+                <td>Контрольна</td>
+                <td><span class="badge completed">Завершено</span></td>
+                <td class="actions">
+                  <button class="delete-button" onclick="deleteWork(this)">
+                    Видалити
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-equipment="Siemens CT" data-status="Завершено">
+                <td>
+                  <span class="equipment-name">Siemens CT</span>
+                  <span class="small">Кабінет №1</span>
+                </td>
+                <td>Перевірка системи охолодження</td>
+                <td>15.07.2026</td>
+                <td>Сервісний інженер</td>
+                <td>Контрольна</td>
+                <td><span class="badge completed">Завершено</span></td>
+                <td class="actions">
+                  <button class="delete-button" onclick="deleteWork(this)">
+                    Видалити
+                  </button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="modal" id="maintenanceModal">
+
+    <div class="modal-box">
+
+      <h2>Нова сервісна робота</h2>
+
+      <div class="field">
+        <label for="equipmentName">Обладнання</label>
+
+        <select id="equipmentName">
+          <option>Siemens CT</option>
+          <option>AMAX 5000</option>
+          <option>Інжектор</option>
+          <option>Стабілізатор</option>
+          <option>Робоча станція</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="workName">Назва роботи</label>
+        <input id="workName" type="text">
+      </div>
+
+      <div class="field">
+        <label for="workDescription">Опис</label>
+        <textarea id="workDescription"></textarea>
+      </div>
+
+      <div class="row">
+
+        <div class="field">
+          <label for="workDate">Дата</label>
+          <input id="workDate" type="date">
+        </div>
+
+        <div class="field">
+          <label for="workType">Тип роботи</label>
+
+          <select id="workType">
+            <option>Планова</option>
+            <option>Контрольна</option>
+            <option>Аварійна</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label for="workExecutor">Виконавець</label>
+        <input id="workExecutor" type="text">
+      </div>
+
+      <div class="modal-actions">
+
+        <button class="secondary" onclick="closeModal()">
+          Скасувати
+        </button>
+
+        <button class="primary" onclick="addWork()">
+          Зберегти
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function openModal() {
+      document
+        .getElementById("maintenanceModal")
+        .classList.add("open");
+    }
+
+    function closeModal() {
+      document
+        .getElementById("maintenanceModal")
+        .classList.remove("open");
+    }
+
+    function formatDate(date) {
+      if (!date) {
+        return new Date().toLocaleDateString("uk-UA");
+      }
+
+      return new Date(date).toLocaleDateString("uk-UA");
+    }
+
+    function addWork() {
+      const equipment =
+        document.getElementById("equipmentName").value;
+
+      const name =
+        document.getElementById("workName").value.trim();
+
+      const date =
+        document.getElementById("workDate").value;
+
+      const type =
+        document.getElementById("workType").value;
+
+      const executor =
+        document.getElementById("workExecutor").value.trim();
+
+      if (!name || !executor) {
+        alert("Вкажіть назву роботи та виконавця.");
+        return;
+      }
+
+      const row = document.createElement("tr");
+
+      row.dataset.equipment = equipment;
+      row.dataset.status = "Заплановано";
+
+      row.innerHTML = `
+        <td>
+          <span class="equipment-name">${equipment}</span>
+          <span class="small">Новий запис</span>
+        </td>
+        <td>${name}</td>
+        <td>${formatDate(date)}</td>
+        <td>${executor}</td>
+        <td>${type}</td>
+        <td>
+          <span class="badge planned">Заплановано</span>
+        </td>
+        <td class="actions">
+          <button class="start-button" onclick="startWork(this)">
+            Почати
+          </button>
+          <button class="delete-button" onclick="deleteWork(this)">
+            Видалити
+          </button>
+        </td>
+      `;
+
+      document
+        .getElementById("maintenanceTable")
+        .prepend(row);
+
+      document.getElementById("workName").value = "";
+      document.getElementById("workDescription").value = "";
+      document.getElementById("workDate").value = "";
+      document.getElementById("workExecutor").value = "";
+
+      updateStatistics();
+      closeModal();
+    }
+
+    function startWork(button) {
+      const row = button.closest("tr");
+
+      row.dataset.status = "У роботі";
+
+      row.children[5].innerHTML =
+        '<span class="badge progress">У роботі</span>';
+
+      button.textContent = "Завершити";
+      button.className = "complete-button";
+      button.setAttribute("onclick", "completeWork(this)");
+
+      updateStatistics();
+      filterRows();
+    }
+
+    function completeWork(button) {
+      const row = button.closest("tr");
+
+      row.dataset.status = "Завершено";
+
+      row.children[5].innerHTML =
+        '<span class="badge completed">Завершено</span>';
+
+      button.remove();
+
+      updateStatistics();
+      filterRows();
+    }
+
+    function deleteWork(button) {
+      if (!confirm("Видалити цю сервісну роботу?")) {
+        return;
+      }
+
+      button.closest("tr").remove();
+
+      updateStatistics();
+      filterRows();
+    }
+
+    function filterRows() {
+      const search =
+        document.getElementById("searchInput").value.toLowerCase();
+
+      const equipment =
+        document.getElementById("equipmentFilter").value;
+
+      const status =
+        document.getElementById("statusFilter").value;
+
+      document
+        .querySelectorAll("#maintenanceTable tr")
+        .forEach((row) => {
+          const matchesSearch =
+            row.textContent.toLowerCase().includes(search);
+
+          const matchesEquipment =
+            !equipment ||
+            row.dataset.equipment === equipment;
+
+          const matchesStatus =
+            !status ||
+            row.dataset.status === status;
+
+          row.style.display =
+            matchesSearch &&
+            matchesEquipment &&
+            matchesStatus
+              ? ""
+              : "none";
+        });
+    }
+
+    function updateStatistics() {
+      const rows = [
+        ...document.querySelectorAll(
+          "#maintenanceTable tr"
+        )
+      ];
+
+      document.getElementById("totalCount").textContent =
+        rows.length;
+
+      document.getElementById("plannedCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Заплановано"
+        ).length;
+
+      document.getElementById("progressCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "У роботі"
+        ).length;
+
+      document.getElementById("completedCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Завершено"
+        ).length;
+    }
+
+    document
+      .getElementById("maintenanceModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+
+    updateStatistics();
+  </script>
+
+</body>
+</html>
