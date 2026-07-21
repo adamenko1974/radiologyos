@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Послуги та ціни — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #172033;
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 18px 7%;
+      background: #ffffff;
+      border-bottom: 1px solid #dfe7f1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      gap: 22px;
+    }
+
+    nav a {
+      color: #475467;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #1267d6;
+    }
+
+    .hero {
+      padding: 65px 7%;
+      text-align: center;
+      background:
+        radial-gradient(circle at top right, #dcecff, transparent 38%),
+        #f4f7fb;
+    }
+
+    .hero h1 {
+      margin-bottom: 16px;
+      font-size: 44px;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto;
+      color: #667085;
+      font-size: 18px;
+    }
+
+    main {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+      padding: 50px 0 70px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 11px 17px;
+      border: 1px solid #cdd8e5;
+      border-radius: 22px;
+      background: #ffffff;
+      color: #344054;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .tab.active {
+      border-color: #1267d6;
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .service-card {
+      display: flex;
+      flex-direction: column;
+      padding: 25px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 15px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .service-category {
+      margin-bottom: 12px;
+      color: #1267d6;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .service-card h2 {
+      margin-bottom: 12px;
+      font-size: 21px;
+    }
+
+    .service-card p {
+      margin-bottom: 18px;
+      color: #667085;
+      flex-grow: 1;
+    }
+
+    .service-info {
+      padding-top: 15px;
+      border-top: 1px solid #edf1f5;
+    }
+
+    .service-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 8px;
+      color: #475467;
+      font-size: 14px;
+    }
+
+    .price {
+      color: #1267d6;
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+    .book-button {
+      display: block;
+      margin-top: 18px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: #1267d6;
+      color: #ffffff;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .book-button:hover {
+      background: #0d56b5;
+    }
+
+    .notice {
+      margin-top: 35px;
+      padding: 20px;
+      border-left: 4px solid #d97706;
+      border-radius: 10px;
+      background: #fff8e8;
+      color: #5f4a1d;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    footer {
+      padding: 30px 7%;
+      background: #111827;
+      color: #cbd5e1;
+      text-align: center;
+    }
+
+    @media (max-width: 950px) {
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 16px 4%;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .hero {
+        padding: 45px 4%;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <nav>
+      <a href="index.html">Головна</a>
+      <a href="services.html" class="active">Послуги</a>
+      <a href="booking.html">Онлайн-запис</a>
+      <a href="protocols.html">Робоча система</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Діагностичні послуги</h1>
+
+    <p>
+      Комп’ютерна томографія та рентгенологічні дослідження.
+      Остаточний перелік послуг, підготовка та вартість
+      уточнюються під час підтвердження запису.
+    </p>
+  </section>
+
+  <main>
+
+    <div class="tabs">
+      <button class="tab active" onclick="filterServices('all', this)">
+        Усі послуги
+      </button>
+
+      <button class="tab" onclick="filterServices('ct', this)">
+        Комп’ютерна томографія
+      </button>
+
+      <button class="tab" onclick="filterServices('xray', this)">
+        Рентгенографія
+      </button>
+
+      <button class="tab" onclick="filterServices('contrast', this)">
+        З контрастуванням
+      </button>
+    </div>
+
+    <section class="services-grid">
+
+      <article class="service-card" data-category="ct">
+        <div class="service-category">Комп’ютерна томографія</div>
+
+        <h2>КТ головного мозку</h2>
+
+        <p>
+          Оцінка речовини головного мозку, шлуночкової системи,
+          кісток черепа та додаткових структур.
+        </p>
+
+        <div class="service-info">
+          <div class="service-row">
+            <span>Тривалість</span>
+            <strong>10–20 хв</strong>
+          </div>
+
+          <div class="service-row">
+            <span>Вартість</span>
+            <span class="price">Уточнюється</span>
+          </div>
+        </div>
+
+        <a class="book-button" href="booking.html">
+          Записатися
+        </a>
+      </article>
+
+      <article class="service-card" data-category="ct">
+        <div class="service-category">Комп’ютерна томографія</div>
+
+        <h2>КТ приносових пазух</h2>
+
+        <p>
+          Дослідження верхньощелепних, лобових, клиноподібної
+          пазух та клітин решітчастого лабіринту.
+        </p>
+
+        <div class="service-info">
+          <div class="service-row">
+            <span>Тривалість</span>
+            <strong>10–15 хв</strong>
+          </div>
+
+          <div class="service-row">
+            <span>Вартість</span>
+            <span class="price">Уточнюється</span>
+          </div>
+        </div>
+
+        <a class="book-button" href="booking.html">
+          Записатися
+        </a>
+      </article>
+
+      <article class="service-card" data-category="ct">
+        <div class="service-category">Комп’ютерна томографія</div>
+
+        <h2>КТ органів грудної клітки</h2>
+
+        <p>
+          Оцінка легеневої тканини, бронхів, плеври,
+          середостіння, судин та кісткових структур.
+        </p>
+
+        <div class="service-info">
+          <div class="service-row">
+            <span>Тривалість</span>
+            <strong>15–25 хв</strong>
+          </div>
+
+          <div class="service-row">
+            <span>Вартість</span>
+            <span class="price">Уточнюється</span>
+          </div>
+        </div>
+
+        <a class="book-button" href="booking.html">
+          Записатися
+        </a>
+      </article>
+
+      <article class="service-card" data-category="ct">
+        <div class="service-category">Комп’ютерна томографія</div>
+
+        <h2>КТ органів черевної порожнини</h2>
+
+        <p>
+          Оцінка печінки, жовчних шляхів, підшлункової залози,
+          селезінки, нирок та заочеревинного простору.
+        </p>
+
+        <div class="service-info">
+          <div class="service-row">
+            <span>Тривалість</span>
+            <strong>20–30 хв</strong>
+          </div>
+
+          <div class="service-row">
+            <span>Вартість</span>
+            <span class="price">Уточнюється</span>
+          </div>
+        </div>
+
+        <a class="book-button" href="booking.html">
+          Записатися
+        </a>
+      </article>
+
+      <article class="service-card" data-category="contrast">
+        <div class="service-category">Контрастне дослідження</div>
+
+        <h2>КТ з внутрішньовенним контрастуванням</h2>
+
+        <p>
+          Контрастне підсилення застосовується за показаннями
+          для детальнішої оцінки органів, судин та патологічних змін.
+        </p>
+
+        <div class="service-info">
+          <div class="service-row">
+            <span>Підготовка</span>
+            <strong>За рекомендацією</strong>
+          </div>
+
+          <div class="service-row">
+            <span>Вартість</span>
+            <span class="price">від 4 700 грн</span>
+          </div>
+        </div>
+
+        <a class="book-button" href="booking.html">
+          Записатися
+        </a>
+      </article>
+
+      <article class="service-card" data-category="xray">
+        <div class="service-category">Рентгенографія</div>
+
+        <h2>Рентгенографія органів грудної клітки</h2>
+
+        <p>
+          Дослідження легенів, плевральних порожнин,
+          серця та кісткових структур грудної клітки.
+        </p>
+
+        <div class="service-info">
+          <div class="service-row">
+            <span>Проєкції</span>
+            <strong>1–2</strong>
+          </div>
+
+          <div class="service-row">
+            <span>Вартість</span>
+            <span class="price">Уточнюється</span>
+          </div>
+        </div>
+
+        <a class="book-button" href="booking.html">
+          Записатися
+        </a>
+      </article>
+
+      <article class="service-card" data-category="xray">
+        <div class="service-category">Рентгенографія</div>
+
+        <h2>Рентгенографія кісток та суглобів</h2>
+
+        <p>
+          Дослідження кісток і суглобів при травмах,
+          дегенеративних та інших патологічних змінах.
+        </p>
+
+        <div class="service-info">
+          <div class="service-row">
+            <span>Проєкції</span>
+            <strong>2</strong>
+          </div>
+
+          <div class="service-row">
+            <span>Вартість</span>
+            <span class="price">Уточнюється</span>
+          </div>
+        </div>
+
+        <a class="book-button" href="booking.html">
+          Записатися
+        </a>
+      </article>
+
+      <article class="service-card" data-category="ct">
+        <div class="service-category">Комп’ютерна томографія</div>
+
+        <h2>КТ хребта</h2>
+
+        <p>
+          Оцінка тіл хребців, міжхребцевих дисків,
+          хребтового каналу та дегенеративних змін.
+        </p>
+
+        <div class="service-info">
+          <div class="service-row">
+            <span>Тривалість</span>
+            <strong>15–25 хв</strong>
+          </div>
+
+          <div class="service-row">
+            <span>Вартість</span>
+            <span class="price">Уточнюється</span>
+          </div>
+        </div>
+
+        <a class="book-button" href="booking.html">
+          Записатися
+        </a>
+      </article>
+
+    </section>
+
+    <div class="notice">
+      <strong>Важливо:</strong>
+      для КТ із внутрішньовенним контрастуванням можуть бути
+      потрібні результати аналізу креатиніну. Рішення про
+      застосування контрасту приймає лікар.
+    </div>
+
+  </main>
+
+  <footer>
+    © 2026 RadiologyOS · Послуги променевої діагностики
+  </footer>
+
+  <script>
+    function filterServices(category, button) {
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      document.querySelectorAll(".service-card").forEach((card) => {
+        const show =
+          category === "all" ||
+          card.dataset.category === category;
+
+        card.classList.toggle("hidden", !show);
+      });
+    }
+  </script>
+
+</body>
+</html>
