@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Графік роботи — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .add-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 28px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    .panel {
+      padding: 22px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 950px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #667085;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .employee {
+      font-weight: 700;
+    }
+
+    .position {
+      display: block;
+      margin-top: 4px;
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .shift {
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .shift-day {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .shift-duty {
+      background: #eef5ff;
+      color: #1267d6;
+    }
+
+    .shift-off {
+      background: #edf1f5;
+      color: #667085;
+    }
+
+    .shift-sick {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .edit-button {
+      padding: 8px 11px;
+      border: none;
+      border-radius: 7px;
+      background: #eaf2fc;
+      color: #1267d6;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 560px;
+      padding: 26px;
+      background: #ffffff;
+      border-radius: 14px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .secondary,
+    .primary {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .secondary {
+      background: #edf2f7;
+      color: #344054;
+    }
+
+    .primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar,
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Графік роботи персоналу
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="bookings-admin.html">Заявки</a></li>
+        <li><a href="archive.html">Архів</a></li>
+        <li><a href="ai.html">AI Assistant</a></li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="analytics.html">Аналітика</a></li>
+        <li><a href="reports.html">Звіти</a></li>
+        <li><a href="finance.html">Фінанси</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="schedule.html" class="active">Графік роботи</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+        <li><a href="inventory.html">Склад</a></li>
+        <li><a href="quality.html">Якість</a></li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Графік роботи</h1>
+          <p>Зміни лікарів, лаборантів і чергового персоналу</p>
+        </div>
+
+        <button class="add-button" onclick="openModal()">
+          + Додати зміну
+        </button>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Працівників сьогодні</span>
+          <strong id="workingCount">4</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Чергують</span>
+          <strong id="dutyCount">1</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Вихідний</span>
+          <strong id="offCount">1</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Лікарняний</span>
+          <strong id="sickCount">1</strong>
+        </div>
+
+      </section>
+
+      <div class="toolbar">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Пошук працівника..."
+          oninput="filterSchedule()"
+        >
+
+        <select id="statusFilter" onchange="filterSchedule()">
+          <option value="">Усі статуси</option>
+          <option value="Робоча зміна">Робоча зміна</option>
+          <option value="Чергує">Чергує</option>
+          <option value="Вихідний">Вихідний</option>
+          <option value="Лікарняний">Лікарняний</option>
+        </select>
+
+      </div>
+
+      <section class="panel">
+
+        <div class="table-wrap">
+
+          <table>
+            <thead>
+              <tr>
+                <th>Працівник</th>
+                <th>Понеділок</th>
+                <th>Вівторок</th>
+                <th>Середа</th>
+                <th>Четвер</th>
+                <th>П’ятниця</th>
+                <th>Субота</th>
+                <th>Дії</th>
+              </tr>
+            </thead>
+
+            <tbody id="scheduleTable">
+
+              <tr data-status="Робоча зміна">
+                <td>
+                  <span class="employee">Адаменко Д.М.</span>
+                  <span class="position">Лікар-рентгенолог</span>
+                </td>
+                <td><span class="shift shift-day">08:00–16:00</span></td>
+                <td><span class="shift shift-day">08:00–16:00</span></td>
+                <td><span class="shift shift-day">08:00–16:00</span></td>
+                <td><span class="shift shift-day">08:00–16:00</span></td>
+                <td><span class="shift shift-day">08:00–16:00</span></td>
+                <td><span class="shift shift-duty">Чергує</span></td>
+                <td>
+                  <button class="edit-button" onclick="editRow(this)">
+                    Змінити
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-status="Лікарняний">
+                <td>
+                  <span class="employee">Микитенко К.М.</span>
+                  <span class="position">Лікар-рентгенолог</span>
+                </td>
+                <td><span class="shift shift-sick">Лікарняний</span></td>
+                <td><span class="shift shift-sick">Лікарняний</span></td>
+                <td><span class="shift shift-sick">Лікарняний</span></td>
+                <td><span class="shift shift-sick">Лікарняний</span></td>
+                <td><span class="shift shift-sick">Лікарняний</span></td>
+                <td><span class="shift shift-off">Вихідний</span></td>
+                <td>
+                  <button class="edit-button" onclick="editRow(this)">
+                    Змінити
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-status="Робоча зміна">
+                <td>
+                  <span class="employee">Клімов Л.В.</span>
+                  <span class="position">Рентгенлаборант</span>
+                </td>
+                <td><span class="shift shift-day">08:00–15:00</span></td>
+                <td><span class="shift shift-day">08:00–15:00</span></td>
+                <td><span class="shift shift-day">08:00–15:00</span></td>
+                <td><span class="shift shift-day">08:00–15:00</span></td>
+                <td><span class="shift shift-day">08:00–15:00</span></td>
+                <td><span class="shift shift-off">Вихідний</span></td>
+                <td>
+                  <button class="edit-button" onclick="editRow(this)">
+                    Змінити
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-status="Чергує">
+                <td>
+                  <span class="employee">Черговий лаборант</span>
+                  <span class="position">Рентгенлаборант</span>
+                </td>
+                <td><span class="shift shift-duty">16:00–08:00</span></td>
+                <td><span class="shift shift-off">Вихідний</span></td>
+                <td><span class="shift shift-duty">16:00–08:00</span></td>
+                <td><span class="shift shift-off">Вихідний</span></td>
+                <td><span class="shift shift-duty">16:00–08:00</span></td>
+                <td><span class="shift shift-duty">Чергує</span></td>
+                <td>
+                  <button class="edit-button" onclick="editRow(this)">
+                    Змінити
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-status="Вихідний">
+                <td>
+                  <span class="employee">Медична сестра</span>
+                  <span class="position">Контрастні дослідження</span>
+                </td>
+                <td><span class="shift shift-day">09:00–15:00</span></td>
+                <td><span class="shift shift-day">09:00–15:00</span></td>
+                <td><span class="shift shift-day">09:00–15:00</span></td>
+                <td><span class="shift shift-day">09:00–15:00</span></td>
+                <td><span class="shift shift-day">09:00–15:00</span></td>
+                <td><span class="shift shift-off">Вихідний</span></td>
+                <td>
+                  <button class="edit-button" onclick="editRow(this)">
+                    Змінити
+                  </button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="modal" id="scheduleModal">
+
+    <div class="modal-box">
+
+      <h2>Додати зміну</h2>
+
+      <div class="field">
+        <label for="employeeName">Працівник</label>
+        <input id="employeeName" type="text">
+      </div>
+
+      <div class="field">
+        <label for="employeePosition">Посада</label>
+        <input id="employeePosition" type="text">
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="shiftDay">День</label>
+
+          <select id="shiftDay">
+            <option>Понеділок</option>
+            <option>Вівторок</option>
+            <option>Середа</option>
+            <option>Четвер</option>
+            <option>П’ятниця</option>
+            <option>Субота</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="shiftStatus">Статус</label>
+
+          <select id="shiftStatus">
+            <option>Робоча зміна</option>
+            <option>Чергує</option>
+            <option>Вихідний</option>
+            <option>Лікарняний</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="shiftStart">Початок</label>
+          <input id="shiftStart" type="time" value="08:00">
+        </div>
+
+        <div class="field">
+          <label for="shiftEnd">Завершення</label>
+          <input id="shiftEnd" type="time" value="16:00">
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="secondary" onclick="closeModal()">
+          Скасувати
+        </button>
+
+        <button class="primary" onclick="addScheduleRow()">
+          Зберегти
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function filterSchedule() {
+      const search =
+        document.getElementById("searchInput").value.toLowerCase();
+
+      const status =
+        document.getElementById("statusFilter").value;
+
+      document
+        .querySelectorAll("#scheduleTable tr")
+        .forEach((row) => {
+          const matchesSearch =
+            row.textContent.toLowerCase().includes(search);
+
+          const matchesStatus =
+            !status || row.dataset.status === status;
+
+          row.style.display =
+            matchesSearch && matchesStatus ? "" : "none";
+        });
+    }
+
+    function openModal() {
+      document
+        .getElementById("scheduleModal")
+        .classList.add("open");
+    }
+
+    function closeModal() {
+      document
+        .getElementById("scheduleModal")
+        .classList.remove("open");
+    }
+
+    function getShiftClass(status) {
+      if (status === "Чергує") return "shift-duty";
+      if (status === "Вихідний") return "shift-off";
+      if (status === "Лікарняний") return "shift-sick";
+
+      return "shift-day";
+    }
+
+    function addScheduleRow() {
+      const name =
+        document.getElementById("employeeName").value.trim();
+
+      const position =
+        document.getElementById("employeePosition").value.trim();
+
+      const status =
+        document.getElementById("shiftStatus").value;
+
+      const start =
+        document.getElementById("shiftStart").value;
+
+      const end =
+        document.getElementById("shiftEnd").value;
+
+      if (!name || !position) {
+        alert("Вкажіть працівника та посаду.");
+        return;
+      }
+
+      const shiftText =
+        status === "Робоча зміна"
+          ? start + "–" + end
+          : status;
+
+      const shiftClass = getShiftClass(status);
+
+      const row = document.createElement("tr");
+
+      row.dataset.status = status;
+
+      row.innerHTML = `
+        <td>
+          <span class="employee">${name}</span>
+          <span class="position">${position}</span>
+        </td>
+        <td><span class="shift ${shiftClass}">${shiftText}</span></td>
+        <td><span class="shift shift-off">—</span></td>
+        <td><span class="shift shift-off">—</span></td>
+        <td><span class="shift shift-off">—</span></td>
+        <td><span class="shift shift-off">—</span></td>
+        <td><span class="shift shift-off">—</span></td>
+        <td>
+          <button class="edit-button" onclick="editRow(this)">
+            Змінити
+          </button>
+        </td>
+      `;
+
+      document.getElementById("scheduleTable").append(row);
+
+      document.getElementById("employeeName").value = "";
+      document.getElementById("employeePosition").value = "";
+
+      updateStatistics();
+      closeModal();
+    }
+
+    function editRow(button) {
+      const row = button.closest("tr");
+      const name =
+        row.querySelector(".employee").textContent;
+
+      alert(
+        "Редагування графіка для: " + name +
+        "\nПовна форма буде підключена разом із базою даних."
+      );
+    }
+
+    function updateStatistics() {
+      const rows = [
+        ...document.querySelectorAll("#scheduleTable tr")
+      ];
+
+      document.getElementById("workingCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Робоча зміна"
+        ).length;
+
+      document.getElementById("dutyCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Чергує"
+        ).length;
+
+      document.getElementById("offCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Вихідний"
+        ).length;
+
+      document.getElementById("sickCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Лікарняний"
+        ).length;
+    }
+
+    document
+      .getElementById("scheduleModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+
+    updateStatistics();
+  </script>
+
+</body>
+</html>
