@@ -53,66 +53,60 @@
     }
   ];
 
-  const roleNames = {
-    admin: "Адміністратор",
-    manager: "Керівник",
-    doctor: "Лікар",
-    technician: "Лаборант",
-    nurse: "Медична сестра"
-  };
-
   const rolePermissions = {
-    admin: ["*"],
+  admin: ["*"],
 
-    manager: [
-      "dashboard",
-      "patients",
-      "studies",
-      "protocols",
-      "reports",
-      "analytics",
-      "finance",
-      "inventory",
-      "equipment",
-      "staff",
-      "schedule",
-      "audit",
-      "settings"
-    ],
+  manager: [
+    "dashboard",
+    "patients",
+    "studies",
+    "protocols",
+    "reports",
+    "analytics",
+    "finance",
+    "inventory",
+    "equipment",
+    "staff",
+    "schedule",
+    "audit",
+    "settings",
+    "crm",
+    "tasks"
+  ],
 
-    doctor: [
-      "dashboard",
-      "patients",
-      "studies",
-      "protocols",
-      "archive",
-      "knowledge",
-      "ai",
-      "contrast",
-      "dose"
-    ],
+  doctor: [
+    "dashboard",
+    "patients",
+    "studies",
+    "protocols",
+    "reports",
+    "schedule",
+    "crm",
+    "tasks"
+  ],
 
-    technician: [
-      "dashboard",
-      "patients",
-      "studies",
-      "referrals",
-      "contrast",
-      "equipment",
-      "inventory",
-      "checklists",
-      "daily-log"
-    ],
+  technician: [
+    "dashboard",
+    "patients",
+    "studies",
+    "schedule",
+    "equipment",
+    "inventory",
+    "crm",
+    "tasks"
+  ],
 
-    nurse: [
-      "dashboard",
-      "patients",
-      "studies",
-      "contrast",
-      "inventory",
-      "checklists"
-    ]
-  };
+  nurse: [
+    "dashboard",
+    "patients",
+    "studies",
+    "schedule",
+    "contrast",
+    "inventory",
+    "crm",
+    "tasks"
+  ]
+};
 
   function clone(value) {
     return JSON.parse(JSON.stringify(value));
