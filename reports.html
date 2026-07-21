@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Звіти — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .print-button {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      color: #475467;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font-size: 14px;
+    }
+
+    .apply-button {
+      align-self: end;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      background: #172033;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 28px;
+    }
+
+    .report-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 22px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .panel h2 {
+      margin-bottom: 18px;
+      font-size: 21px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 620px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #667085;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .progress-item {
+      margin-bottom: 20px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .progress-track {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #e8edf3;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 20px;
+      background: #1267d6;
+    }
+
+    .note {
+      margin-top: 22px;
+      padding: 16px;
+      border-left: 4px solid #1267d6;
+      border-radius: 8px;
+      background: #eef5ff;
+      color: #475467;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .report-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .filters,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      aside,
+      .print-button,
+      .filters {
+        display: none;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      main {
+        padding: 0;
+      }
+
+      body {
+        background: #ffffff;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Статистика та звітність відділення
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="bookings-admin.html">Заявки</a></li>
+        <li><a href="ai.html">AI Assistant</a></li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="analytics.html">Аналітика</a></li>
+        <li><a href="reports.html" class="active">Звіти</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Звіти відділення</h1>
+          <p>Кількість досліджень, навантаження та розподіл за напрямками</p>
+        </div>
+
+        <button class="print-button" onclick="window.print()">
+          Друкувати звіт
+        </button>
+      </div>
+
+      <section class="filters">
+
+        <div class="field">
+          <label for="dateFrom">Початкова дата</label>
+          <input id="dateFrom" type="date">
+        </div>
+
+        <div class="field">
+          <label for="dateTo">Кінцева дата</label>
+          <input id="dateTo" type="date">
+        </div>
+
+        <div class="field">
+          <label for="department">Тип дослідження</label>
+
+          <select id="department">
+            <option>Усі дослідження</option>
+            <option>Комп’ютерна томографія</option>
+            <option>Рентгенографія</option>
+            <option>Контрастні дослідження</option>
+          </select>
+        </div>
+
+        <button class="apply-button" onclick="applyReport()">
+          Сформувати
+        </button>
+
+      </section>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Усього досліджень</span>
+          <strong id="totalStudies">326</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>КТ-досліджень</span>
+          <strong id="ctStudies">214</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Рентгенографій</span>
+          <strong id="xrayStudies">112</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Середньо за день</span>
+          <strong id="dailyAverage">15</strong>
+        </div>
+
+      </section>
+
+      <div class="report-grid">
+
+        <section class="panel">
+
+          <h2>Розподіл досліджень</h2>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Дослідження</th>
+                  <th>Кількість</th>
+                  <th>Частка</th>
+                </tr>
+              </thead>
+
+              <tbody id="reportTable">
+                <tr>
+                  <td>КТ головного мозку</td>
+                  <td>82</td>
+                  <td>25%</td>
+                </tr>
+
+                <tr>
+                  <td>КТ органів грудної клітки</td>
+                  <td>71</td>
+                  <td>22%</td>
+                </tr>
+
+                <tr>
+                  <td>КТ черевної порожнини</td>
+                  <td>38</td>
+                  <td>12%</td>
+                </tr>
+
+                <tr>
+                  <td>КТ хребта та кінцівок</td>
+                  <td>23</td>
+                  <td>7%</td>
+                </tr>
+
+                <tr>
+                  <td>Рентгенографія грудної клітки</td>
+                  <td>64</td>
+                  <td>20%</td>
+                </tr>
+
+                <tr>
+                  <td>Рентгенографія кісток і суглобів</td>
+                  <td>48</td>
+                  <td>14%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </section>
+
+        <section class="panel">
+
+          <h2>Навантаження за напрямками</h2>
+
+          <div class="progress-item">
+            <div class="progress-top">
+              <span>КТ головного мозку</span>
+              <strong>82</strong>
+            </div>
+
+            <div class="progress-track">
+              <div class="progress-bar" style="width: 82%"></div>
+            </div>
+          </div>
+
+          <div class="progress-item">
+            <div class="progress-top">
+              <span>КТ органів грудної клітки</span>
+              <strong>71</strong>
+            </div>
+
+            <div class="progress-track">
+              <div class="progress-bar" style="width: 71%"></div>
+            </div>
+          </div>
+
+          <div class="progress-item">
+            <div class="progress-top">
+              <span>КТ черевної порожнини</span>
+              <strong>38</strong>
+            </div>
+
+            <div class="progress-track">
+              <div class="progress-bar" style="width: 38%"></div>
+            </div>
+          </div>
+
+          <div class="progress-item">
+            <div class="progress-top">
+              <span>Рентгенографія грудної клітки</span>
+              <strong>64</strong>
+            </div>
+
+            <div class="progress-track">
+              <div class="progress-bar" style="width: 64%"></div>
+            </div>
+          </div>
+
+          <div class="progress-item">
+            <div class="progress-top">
+              <span>Кістки та суглоби</span>
+              <strong>48</strong>
+            </div>
+
+            <div class="progress-track">
+              <div class="progress-bar" style="width: 48%"></div>
+            </div>
+          </div>
+
+          <div class="note">
+            Дані на цій сторінці поки демонстраційні.
+            Після підключення бази даних звіт формуватиметься
+            автоматично на підставі реальних досліджень.
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    function setDefaultDates() {
+      const today = new Date();
+      const firstDay = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1
+      );
+
+      document.getElementById("dateFrom").value =
+        firstDay.toISOString().split("T")[0];
+
+      document.getElementById("dateTo").value =
+        today.toISOString().split("T")[0];
+    }
+
+    function applyReport() {
+      const type =
+        document.getElementById("department").value;
+
+      if (type === "Комп’ютерна томографія") {
+        document.getElementById("totalStudies").textContent = "214";
+        document.getElementById("ctStudies").textContent = "214";
+        document.getElementById("xrayStudies").textContent = "0";
+        document.getElementById("dailyAverage").textContent = "10";
+      } else if (type === "Рентгенографія") {
+        document.getElementById("totalStudies").textContent = "112";
+        document.getElementById("ctStudies").textContent = "0";
+        document.getElementById("xrayStudies").textContent = "112";
+        document.getElementById("dailyAverage").textContent = "5";
+      } else if (type === "Контрастні дослідження") {
+        document.getElementById("totalStudies").textContent = "27";
+        document.getElementById("ctStudies").textContent = "27";
+        document.getElementById("xrayStudies").textContent = "0";
+        document.getElementById("dailyAverage").textContent = "1";
+      } else {
+        document.getElementById("totalStudies").textContent = "326";
+        document.getElementById("ctStudies").textContent = "214";
+        document.getElementById("xrayStudies").textContent = "112";
+        document.getElementById("dailyAverage").textContent = "15";
+      }
+    }
+
+    setDefaultDates();
+  </script>
+
+</body>
+</html>
