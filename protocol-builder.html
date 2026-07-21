@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Конструктор протоколів — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      min-height: 72px;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .status {
+      padding: 7px 11px;
+      border-radius: 20px;
+      background: #e7f7ef;
+      color: #14804a;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .layout {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      grid-template-columns: 250px 1fr;
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      margin-bottom: 22px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .builder-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 21px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .panel h2 {
+      margin-bottom: 6px;
+      font-size: 20px;
+    }
+
+    .description {
+      margin-bottom: 18px;
+      color: #667085;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    .short-text {
+      min-height: 105px;
+    }
+
+    .study-info {
+      padding: 14px;
+      margin-bottom: 15px;
+      border-radius: 9px;
+      background: #f8fafc;
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .dynamic-fields {
+      padding-top: 4px;
+    }
+
+    .empty-fields {
+      padding: 18px;
+      border-radius: 9px;
+      background: #f8fafc;
+      color: #667085;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      padding: 12px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    .secondary {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .success {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .warning {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .result-meta {
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      border-radius: 8px;
+      background: #eef5ff;
+      color: #1267d6;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .message {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      display: none;
+      padding: 14px 18px;
+      border-radius: 9px;
+      background: #172033;
+      color: #ffffff;
+      box-shadow: 0 10px 30px rgba(23, 32, 51, 0.2);
+      font-size: 14px;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      .builder-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 14px 16px;
+      }
+
+      .button-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <span class="status" id="systemStatus">
+      Підключення...
+    </span>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Протоколи</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="protocols.html">Готові протоколи</a></li>
+        <li>
+          <a href="protocol-builder.html" class="active">
+            Конструктор
+          </a>
+        </li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="ai.html">AI-помічник</a></li>
+        <li><a href="data-center.html">Центр даних</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <h1>Конструктор КТ-протоколів</h1>
+
+        <p>
+          Оберіть дослідження, шаблон і заповніть параметри патології
+        </p>
+      </div>
+
+      <section class="builder-grid">
+
+        <article class="panel">
+
+          <h2>1. Вихідні дані</h2>
+
+          <p class="description">
+            Оберіть зареєстроване дослідження та відповідний шаблон.
+          </p>
+
+          <div class="field">
+            <label for="studyId">Дослідження</label>
+
+            <select id="studyId" onchange="studyChanged()">
+              <option value="">Оберіть дослідження</option>
+            </select>
+          </div>
+
+          <div class="study-info" id="studyInfo">
+            Дані дослідження ще не вибрані.
+          </div>
+
+          <div class="field">
+            <label for="templateId">Шаблон протоколу</label>
+
+            <select id="templateId" onchange="templateChanged()">
+              <option value="">Оберіть шаблон</option>
+            </select>
+          </div>
+
+          <div class="dynamic-fields" id="dynamicFields">
+            <div class="empty-fields">
+              Оберіть шаблон для відображення параметрів.
+            </div>
+          </div>
+
+          <div class="button-grid">
+            <button
+              class="primary"
+              type="button"
+              onclick="generateProtocol()"
+            >
+              Сформувати протокол
+            </button>
+
+            <button
+              class="secondary"
+              type="button"
+              onclick="resetBuilder()"
+            >
+              Очистити
+            </button>
+          </div>
+
+        </article>
+
+        <article class="panel">
+
+          <h2>2. Готовий протокол</h2>
+
+          <p class="description">
+            Текст можна перевірити та відредагувати перед збереженням.
+          </p>
+
+          <div class="result-meta" id="resultMeta">
+            Протокол ще не сформовано
+          </div>
+
+          <div class="field">
+            <label for="descriptionText">Опис</label>
+
+            <textarea
+              id="descriptionText"
+              placeholder="Тут з’явиться опис дослідження..."
+            ></textarea>
+          </div>
+
+          <div class="field">
+            <label for="conclusionText">Висновок</label>
+
+            <textarea
+              class="short-text"
+              id="conclusionText"
+              placeholder="Тут з’явиться висновок..."
+            ></textarea>
+          </div>
+
+          <div class="field">
+            <label for="doctorName">Лікар-рентгенолог</label>
+
+            <input
+              id="doctorName"
+              type="text"
+              value="Адаменко Д.М."
+            >
+          </div>
+
+          <div class="button-grid">
+
+            <button
+              class="success"
+              type="button"
+              onclick="saveToDatabase()"
+            >
+              Зберегти як протокол
+            </button>
+
+            <button
+              class="warning"
+              type="button"
+              onclick="copyProtocol()"
+            >
+              Копіювати текст
+            </button>
+
+          </div>
+
+        </article>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="message" id="message"></div>
+
+  <script src="radiologyos-data.js"></script>
+  <script src="radiologyos-templates.js"></script>
+
+  <script>
+    let currentTemplate = null;
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function setStatus(connected) {
+      const status =
+        document.getElementById("systemStatus");
+
+      status.textContent =
+        connected
+          ? "База і шаблони підключені"
+          : "Система недоступна";
+
+      if (!connected) {
+        status.style.background = "#fdecec";
+        status.style.color = "#b42318";
+      }
+    }
+
+    function loadStudies() {
+      const select =
+        document.getElementById("studyId");
+
+      const patients =
+        RadiologyOS.getAll("patients");
+
+      const patientMap = {};
+
+      patients.forEach((patient) => {
+        patientMap[patient.id] = patient;
+      });
+
+      select.innerHTML =
+        '<option value="">Оберіть дослідження</option>';
+
+      RadiologyOS
+        .getAll("studies")
+        .forEach((study) => {
+          const patient =
+            patientMap[study.patientId];
+
+          const option =
+            document.createElement("option");
+
+          option.value = study.id;
+
+          option.textContent =
+            (patient ? patient.fullName : "Пацієнт") +
+            " · " +
+            (study.modality || "—") +
+            " · " +
+            (study.region || "—");
+
+          select.appendChild(option);
+        });
+    }
+
+    function studyChanged() {
+      const studyId =
+        document.getElementById("studyId").value;
+
+      const info =
+        document.getElementById("studyInfo");
+
+      if (!studyId) {
+        info.textContent =
+          "Дані дослідження ще не вибрані.";
+
+        loadTemplates();
+        return;
+      }
+
+      const study =
+        RadiologyOS.getById("studies", studyId);
+
+      const patient =
+        study
+          ? RadiologyOS.getById(
+              "patients",
+              study.patientId
+            )
+          : null;
+
+      if (!study) {
+        info.textContent =
+          "Дослідження не знайдено.";
+
+        return;
+      }
+
+      info.innerHTML = `
+        <strong>
+          ${escapeHtml(
+            patient
+              ? patient.fullName
+              : "Пацієнта не знайдено"
+          )}
+        </strong><br>
+
+        ${escapeHtml(study.modality || "—")} ·
+        ${escapeHtml(study.region || "—")}<br>
+
+        Контраст:
+        ${study.contrast ? "так" : "ні"} ·
+
+        Статус:
+        ${escapeHtml(study.status || "—")}
+      `;
+
+      loadTemplates(study.region);
+    }
+
+    function loadTemplates(region) {
+      const select =
+        document.getElementById("templateId");
+
+      const templates =
+        region
+          ? RadiologyTemplates.getByRegion(region)
+          : RadiologyTemplates.getAll();
+
+      select.innerHTML =
+        '<option value="">Оберіть шаблон</option>';
+
+      templates.forEach((template) => {
+        const option =
+          document.createElement("option");
+
+        option.value = template.id;
+
+        option.textContent =
+          template.name +
+          " · " +
+          template.category;
+
+        select.appendChild(option);
+      });
+
+      currentTemplate = null;
+
+      document.getElementById("dynamicFields").innerHTML =
+        '<div class="empty-fields">Оберіть шаблон для відображення параметрів.</div>';
+    }
+
+    function templateChanged() {
+      const templateId =
+        document.getElementById("templateId").value;
+
+      currentTemplate =
+        RadiologyTemplates.getById(templateId);
+
+      renderTemplateFields();
+    }
+
+    function renderTemplateFields() {
+      const container =
+        document.getElementById("dynamicFields");
+
+      if (!currentTemplate) {
+        container.innerHTML =
+          '<div class="empty-fields">Оберіть шаблон для відображення параметрів.</div>';
+
+        return;
+      }
+
+      if (
+        !Array.isArray(currentTemplate.fields) ||
+        !currentTemplate.fields.length
+      ) {
+        container.innerHTML =
+          '<div class="empty-fields">Цей шаблон не потребує додаткових параметрів.</div>';
+
+        return;
+      }
+
+      container.innerHTML =
+        currentTemplate.fields.map((field) => {
+          if (field.type === "select") {
+            const options =
+              (field.options || [])
+                .map((option) => `
+                  <option value="${escapeHtml(option)}">
+                    ${escapeHtml(option)}
+                  </option>
+                `)
+                .join("");
+
+            return `
+              <div class="field">
+                <label for="field-${field.key}">
+                  ${escapeHtml(field.label)}
+                </label>
+
+                <select
+                  id="field-${field.key}"
+                  data-template-field="${field.key}"
+                >
+                  ${options}
+                </select>
+              </div>
+            `;
+          }
+
+          return `
+            <div class="field">
+              <label for="field-${field.key}">
+                ${escapeHtml(field.label)}
+              </label>
+
+              <input
+                id="field-${field.key}"
+                data-template-field="${field.key}"
+                type="${field.type || "text"}"
+                placeholder="${escapeHtml(field.placeholder || "")}"
+              >
+            </div>
+          `;
+        }).join("");
+    }
+
+    function collectFieldValues() {
+      const values = {};
+
+      document
+        .querySelectorAll("[data-template-field]")
+        .forEach((field) => {
+          values[field.dataset.templateField] =
+            field.value.trim();
+        });
+
+      return values;
+    }
+
+    function generateProtocol() {
+      const templateId =
+        document.getElementById("templateId").value;
+
+      if (!templateId) {
+        alert("Оберіть шаблон протоколу.");
+        return;
+      }
+
+      const result =
+        RadiologyTemplates.generate(
+          templateId,
+          collectFieldValues()
+        );
+
+      if (!result) {
+        alert("Не вдалося сформувати протокол.");
+        return;
+      }
+
+      document.getElementById("descriptionText").value =
+        result.description;
+
+      document.getElementById("conclusionText").value =
+        result.conclusion;
+
+      document.getElementById("resultMeta").textContent =
+        "Шаблон: " + result.templateName;
+
+      showMessage("Протокол сформовано");
+    }
+
+    function saveToDatabase() {
+      const studyId =
+        document.getElementById("studyId").value;
+
+      const description =
+        document.getElementById("descriptionText")
+          .value
+          .trim();
+
+      const conclusion =
+        document.getElementById("conclusionText")
+          .value
+          .trim();
+
+      const doctor =
+        document.getElementById("doctorName")
+          .value
+          .trim();
+
+      if (!studyId) {
+        alert("Оберіть дослідження.");
+        return;
+      }
+
+      if (!description || !conclusion) {
+        alert("Спочатку сформуйте опис і висновок.");
+        return;
+      }
+
+      const existing =
+        RadiologyOS.getAll("protocols").find(
+          protocol => protocol.studyId === studyId
+        );
+
+      if (existing) {
+        const confirmed = confirm(
+          "Для цього дослідження вже існує протокол. Оновити його?"
+        );
+
+        if (!confirmed) return;
+
+        RadiologyOS.update(
+          "protocols",
+          existing.id,
+          {
+            description,
+            conclusion,
+            doctor,
+            status: "Чернетка",
+            templateId:
+              currentTemplate
+                ? currentTemplate.id
+                : null
+          }
+        );
+
+        showMessage("Протокол оновлено");
+        return;
+      }
+
+      RadiologyOS.create(
+        "protocols",
+        {
+          studyId,
+          description,
+          conclusion,
+          doctor,
+          status: "Чернетка",
+          templateId:
+            currentTemplate
+              ? currentTemplate.id
+              : null
+        },
+        "PRT"
+      );
+
+      showMessage("Протокол збережено у базі");
+    }
+
+    async function copyProtocol() {
+      const description =
+        document.getElementById("descriptionText").value;
+
+      const conclusion =
+        document.getElementById("conclusionText").value;
+
+      if (!description && !conclusion) {
+        alert("Немає тексту для копіювання.");
+        return;
+      }
+
+      const text =
+        "ОПИС:\n" +
+        description +
+        "\n\nВИСНОВОК:\n" +
+        conclusion;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        showMessage("Текст скопійовано");
+      } catch (error) {
+        alert(
+          "Не вдалося скопіювати текст автоматично."
+        );
+      }
+    }
+
+    function resetBuilder() {
+      document.getElementById("templateId").value = "";
+      document.getElementById("descriptionText").value = "";
+      document.getElementById("conclusionText").value = "";
+
+      document.getElementById("resultMeta").textContent =
+        "Протокол ще не сформовано";
+
+      currentTemplate = null;
+      renderTemplateFields();
+    }
+
+    function showMessage(text) {
+      const message =
+        document.getElementById("message");
+
+      message.textContent = text;
+      message.classList.add("show");
+
+      setTimeout(() => {
+        message.classList.remove("show");
+      }, 1800);
+    }
+
+    function initializePage() {
+      if (
+        !window.RadiologyOS ||
+        !window.RadiologyTemplates
+      ) {
+        setStatus(false);
+
+        alert(
+          "Не вдалося підключити базу або бібліотеку шаблонів."
+        );
+
+        return;
+      }
+
+      setStatus(true);
+      loadStudies();
+      loadTemplates();
+    }
+
+    window.addEventListener(
+      "radiologyos:data-changed",
+      loadStudies
+    );
+
+    initializePage();
+  </script>
+
+</body>
+</html> 
