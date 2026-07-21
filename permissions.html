@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Права доступу — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 30px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .save-all-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      padding: 19px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 27px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      gap: 13px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    .panel {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 980px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: center;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #667085;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    th:first-child,
+    td:first-child {
+      text-align: left;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .module-name {
+      font-weight: 700;
+    }
+
+    .module-description {
+      display: block;
+      margin-top: 4px;
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .permission-check {
+      width: 19px;
+      height: 19px;
+      cursor: pointer;
+    }
+
+    .role-head {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: none;
+    }
+
+    .admin {
+      background: #ede9fe;
+      color: #6941c6;
+    }
+
+    .doctor {
+      background: #eef5ff;
+      color: #1267d6;
+    }
+
+    .technician {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .nurse {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .message {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      display: none;
+      padding: 14px 18px;
+      border-radius: 9px;
+      background: #172033;
+      color: #ffffff;
+      box-shadow: 0 10px 30px rgba(23, 32, 51, 0.2);
+      font-size: 14px;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Керування ролями та доступом
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="users.html">Користувачі</a></li>
+        <li>
+          <a href="permissions.html" class="active">
+            Права доступу
+          </a>
+        </li>
+        <li><a href="audit.html">Журнал аудиту</a></li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+
+        <div>
+          <h1>Ролі та права доступу</h1>
+
+          <p>
+            Визначення доступу користувачів до розділів RadiologyOS
+          </p>
+        </div>
+
+        <button class="save-all-button" onclick="savePermissions()">
+          Зберегти права
+        </button>
+
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Системних ролей</span>
+          <strong>4</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Модулів системи</span>
+          <strong id="moduleCount">10</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Активних дозволів</span>
+          <strong id="permissionCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Останнє збереження</span>
+          <strong id="lastSaved">—</strong>
+        </div>
+
+      </section>
+
+      <div class="toolbar">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Пошук модуля..."
+          oninput="filterModules()"
+        >
+
+        <select id="roleFilter" onchange="filterRole()">
+          <option value="">Показати всі ролі</option>
+          <option value="admin">Адміністратор</option>
+          <option value="doctor">Лікар</option>
+          <option value="technician">Лаборант</option>
+          <option value="nurse">Медична сестра</option>
+        </select>
+
+      </div>
+
+      <section class="panel">
+
+        <div class="table-wrap">
+
+          <table>
+            <thead>
+              <tr>
+                <th>Модуль</th>
+
+                <th data-role-column="admin">
+                  <span class="role-head admin">
+                    Адміністратор
+                  </span>
+                </th>
+
+                <th data-role-column="doctor">
+                  <span class="role-head doctor">
+                    Лікар
+                  </span>
+                </th>
+
+                <th data-role-column="technician">
+                  <span class="role-head technician">
+                    Лаборант
+                  </span>
+                </th>
+
+                <th data-role-column="nurse">
+                  <span class="role-head nurse">
+                    Медична сестра
+                  </span>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody id="permissionsTable">
+
+              <tr>
+                <td>
+                  <span class="module-name">Пацієнти</span>
+                  <span class="module-description">
+                    Перегляд та редагування карток пацієнтів
+                  </span>
+                </td>
+
+                <td data-role-column="admin">
+                  <input class="permission-check" data-module="patients" data-role="admin" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="doctor">
+                  <input class="permission-check" data-module="patients" data-role="doctor" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="technician">
+                  <input class="permission-check" data-module="patients" data-role="technician" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="nurse">
+                  <input class="permission-check" data-module="patients" data-role="nurse" type="checkbox" checked>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="module-name">Дослідження</span>
+                  <span class="module-description">
+                    Реєстрація та перегляд виконаних досліджень
+                  </span>
+                </td>
+
+                <td data-role-column="admin">
+                  <input class="permission-check" data-module="studies" data-role="admin" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="doctor">
+                  <input class="permission-check" data-module="studies" data-role="doctor" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="technician">
+                  <input class="permission-check" data-module="studies" data-role="technician" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="nurse">
+                  <input class="permission-check" data-module="studies" data-role="nurse" type="checkbox">
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="module-name">Протоколи</span>
+                  <span class="module-description">
+                    Створення та підписання медичних висновків
+                  </span>
+                </td>
+
+                <td data-role-column="admin">
+                  <input class="permission-check" data-module="protocols" data-role="admin" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="doctor">
+                  <input class="permission-check" data-module="protocols" data-role="doctor" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="technician">
+                  <input class="permission-check" data-module="protocols" data-role="technician" type="checkbox">
+                </td>
+
+                <td data-role-column="nurse">
+                  <input class="permission-check" data-module="protocols" data-role="nurse" type="checkbox">
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="module-name">Контраст</span>
+                  <span class="module-description">
+                    Перевірка безпеки контрастних досліджень
+                  </span>
+                </td>
+
+                <td data-role-column="admin">
+                  <input class="permission-check" data-module="contrast" data-role="admin" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="doctor">
+                  <input class="permission-check" data-module="contrast" data-role="doctor" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="technician">
+                  <input class="permission-check" data-module="contrast" data-role="technician" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="nurse">
+                  <input class="permission-check" data-module="contrast" data-role="nurse" type="checkbox" checked>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="module-name">Архів</span>
+                  <span class="module-description">
+                    Доступ до протоколів та DICOM-досліджень
+                  </span>
+                </td>
+
+                <td data-role-column="admin">
+                  <input class="permission-check" data-module="archive" data-role="admin" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="doctor">
+                  <input class="permission-check" data-module="archive" data-role="doctor" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="technician">
+                  <input class="permission-check" data-module="archive" data-role="technician" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="nurse">
+                  <input class="permission-check" data-module="archive" data-role="nurse" type="checkbox">
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="module-name">Обладнання</span>
+                  <span class="module-description">
+                    Стан апаратів і сервісні роботи
+                  </span>
+                </td>
+
+                <td data-role-column="admin">
+                  <input class="permission-check" data-module="equipment" data-role="admin" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="doctor">
+                  <input class="permission-check" data-module="equipment" data-role="doctor" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="technician">
+                  <input class="permission-check" data-module="equipment" data-role="technician" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="nurse">
+                  <input class="permission-check" data-module="equipment" data-role="nurse" type="checkbox">
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="module-name">Склад</span>
+                  <span class="module-description">
+                    Облік контрасту та витратних матеріалів
+                  </span>
+                </td>
+
+                <td data-role-column="admin">
+                  <input class="permission-check" data-module="inventory" data-role="admin" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="doctor">
+                  <input class="permission-check" data-module="inventory" data-role="doctor" type="checkbox">
+                </td>
+
+                <td data-role-column="technician">
+                  <input class="permission-check" data-module="inventory" data-role="technician" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="nurse">
+                  <input class="permission-check" data-module="inventory" data-role="nurse" type="checkbox" checked>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="module-name">Звіти</span>
+                  <span class="module-description">
+                    Статистика та друк звітів відділення
+                  </span>
+                </td>
+
+                <td data-role-column="admin">
+                  <input class="permission-check" data-module="reports" data-role="admin" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="doctor">
+                  <input class="permission-check" data-module="reports" data-role="doctor" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="technician">
+                  <input class="permission-check" data-module="reports" data-role="technician" type="checkbox">
+                </td>
+
+                <td data-role-column="nurse">
+                  <input class="permission-check" data-module="reports" data-role="nurse" type="checkbox">
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="module-name">Користувачі</span>
+                  <span class="module-description">
+                    Створення та блокування облікових записів
+                  </span>
+                </td>
+
+                <td data-role-column="admin">
+                  <input class="permission-check" data-module="users" data-role="admin" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="doctor">
+                  <input class="permission-check" data-module="users" data-role="doctor" type="checkbox">
+                </td>
+
+                <td data-role-column="technician">
+                  <input class="permission-check" data-module="users" data-role="technician" type="checkbox">
+                </td>
+
+                <td data-role-column="nurse">
+                  <input class="permission-check" data-module="users" data-role="nurse" type="checkbox">
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="module-name">Налаштування</span>
+                  <span class="module-description">
+                    Системні параметри та конфігурація
+                  </span>
+                </td>
+
+                <td data-role-column="admin">
+                  <input class="permission-check" data-module="settings" data-role="admin" type="checkbox" checked>
+                </td>
+
+                <td data-role-column="doctor">
+                  <input class="permission-check" data-module="settings" data-role="doctor" type="checkbox">
+                </td>
+
+                <td data-role-column="technician">
+                  <input class="permission-check" data-module="settings" data-role="technician" type="checkbox">
+                </td>
+
+                <td data-role-column="nurse">
+                  <input class="permission-check" data-module="settings" data-role="nurse" type="checkbox">
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="message" id="message">
+    Права доступу збережено
+  </div>
+
+  <script>
+    const storageKey = "radiologyosPermissions";
+
+    function collectPermissions() {
+      const permissions = {};
+
+      document
+        .querySelectorAll(".permission-check")
+        .forEach((checkbox) => {
+          const role = checkbox.dataset.role;
+          const module = checkbox.dataset.module;
+
+          if (!permissions[role]) {
+            permissions[role] = {};
+          }
+
+          permissions[role][module] = checkbox.checked;
+        });
+
+      return permissions;
+    }
+
+    function savePermissions() {
+      const permissions = collectPermissions();
+
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify(permissions)
+      );
+
+      const now = new Date().toLocaleTimeString("uk-UA", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+      localStorage.setItem(
+        "radiologyosPermissionsSavedAt",
+        now
+      );
+
+      document.getElementById("lastSaved").textContent = now;
+
+      updateStatistics();
+      showMessage("Права доступу збережено");
+    }
+
+    function loadPermissions() {
+      const saved =
+        JSON.parse(localStorage.getItem(storageKey) || "null");
+
+      if (saved) {
+        document
+          .querySelectorAll(".permission-check")
+          .forEach((checkbox) => {
+            const role = checkbox.dataset.role;
+           
+          const module = checkbox.dataset.module;
+
+          if (
+            saved[role] &&
+            typeof saved[role][module] === "boolean"
+          ) {
+            checkbox.checked = saved[role][module];
+          }
+        });
+    }
+
+    const savedAt =
+      localStorage.getItem("radiologyosPermissionsSavedAt");
+
+    if (savedAt) {
+      document.getElementById("lastSaved").textContent =
+        savedAt;
+    }
+
+    updateStatistics();
+  }
+
+  function filterModules() {
+    const search =
+      document.getElementById("searchInput").value.toLowerCase();
+
+    document
+      .querySelectorAll("#permissionsTable tr")
+      .forEach((row) => {
+        row.style.display =
+          row.textContent.toLowerCase().includes(search)
+            ? ""
+            : "none";
+      });
+  }
+
+  function filterRole() {
+    const selectedRole =
+      document.getElementById("roleFilter").value;
+
+    document
+      .querySelectorAll("[data-role-column]")
+      .forEach((cell) => {
+        const role = cell.dataset.roleColumn;
+
+        cell.style.display =
+          !selectedRole || role === selectedRole
+            ? ""
+            : "none";
+      });
+  }
+
+  function updateStatistics() {
+    const modules =
+      document.querySelectorAll("#permissionsTable tr").length;
+
+    const permissions = [
+      ...document.querySelectorAll(".permission-check")
+    ].filter(item => item.checked).length;
+
+    document.getElementById("moduleCount").textContent =
+      modules;
+
+    document.getElementById("permissionCount").textContent =
+      permissions;
+  }
+
+  function showMessage(text) {
+    const message =
+      document.getElementById("message");
+
+    message.textContent = text;
+    message.classList.add("show");
+
+    setTimeout(() => {
+      message.classList.remove("show");
+    }, 1800);
+  }
+
+  document
+    .querySelectorAll(".permission-check")
+    .forEach((checkbox) => {
+      checkbox.addEventListener(
+        "change",
+        updateStatistics
+      );
+    });
+
+  loadPermissions();
+</script>
+
+</body>
+</html>
