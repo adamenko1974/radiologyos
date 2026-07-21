@@ -21,13 +21,14 @@
     }
 
     header {
-      height: 72px;
-      padding: 0 28px;
-      background: #ffffff;
-      border-bottom: 1px solid #dce4ee;
+      min-height: 72px;
+      padding: 13px 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 15px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
     }
 
     .logo {
@@ -37,6 +38,12 @@
       text-decoration: none;
     }
 
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
     .database-status {
       padding: 7px 11px;
       border-radius: 20px;
@@ -44,12 +51,13 @@
       color: #14804a;
       font-size: 12px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .layout {
+      min-height: calc(100vh - 72px);
       display: grid;
       grid-template-columns: 250px 1fr;
-      min-height: calc(100vh - 72px);
     }
 
     aside {
@@ -91,6 +99,7 @@
     .page-top {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
       gap: 18px;
       margin-bottom: 24px;
     }
@@ -158,7 +167,7 @@
     }
 
     textarea {
-      min-height: 85px;
+      min-height: 90px;
       resize: vertical;
     }
 
@@ -176,7 +185,7 @@
 
     table {
       width: 100%;
-      min-width: 900px;
+      min-width: 930px;
       border-collapse: collapse;
     }
 
@@ -185,6 +194,7 @@
       padding: 13px;
       border-bottom: 1px solid #edf1f5;
       text-align: left;
+      vertical-align: top;
     }
 
     th {
@@ -207,6 +217,7 @@
       margin-top: 4px;
       color: #667085;
       font-size: 12px;
+      line-height: 1.4;
     }
 
     .badge {
@@ -217,12 +228,12 @@
       font-weight: 700;
     }
 
-    .active {
+    .active-status {
       background: #e7f7ef;
       color: #14804a;
     }
 
-    .inactive {
+    .inactive-status {
       background: #edf2f7;
       color: #667085;
     }
@@ -258,7 +269,7 @@
 
     .empty-state {
       display: none;
-      padding: 40px;
+      padding: 42px 15px;
       text-align: center;
       color: #667085;
     }
@@ -280,7 +291,7 @@
 
     .modal-box {
       width: 100%;
-      max-width: 620px;
+      max-width: 640px;
       max-height: 92vh;
       overflow-y: auto;
       padding: 25px;
@@ -355,9 +366,13 @@
       }
     }
 
-    @media (max-width: 650px) {
+    @media (max-width: 680px) {
       header {
-        padding: 0 16px;
+        padding: 12px 16px;
+      }
+
+      .database-status {
+        display: none;
       }
 
       .page-top {
@@ -376,10 +391,20 @@
 <body>
 
   <header>
-    <a class="logo" href="index.html">RadiologyOS</a>
-    <span class="database-status" id="databaseStatus">
-      Підключення...
-    </span>
+    <a class="logo" href="index.html">
+      RadiologyOS
+    </a>
+
+    <div class="header-right">
+      <span
+        class="database-status"
+        id="databaseStatus"
+      >
+        Підключення...
+      </span>
+
+      <div id="currentUser"></div>
+    </div>
   </header>
 
   <div class="layout">
@@ -388,21 +413,56 @@
       <h3>Робоче середовище</h3>
 
       <ul class="menu">
-        <li><a href="index.html">Головна</a></li>
-        <li><a href="executive-dashboard.html">Панель керівника</a></li>
-        <li><a href="patients.html" class="active">Пацієнти</a></li>
-        <li><a href="studies.html">Дослідження</a></li>
-        <li><a href="protocols.html">Протоколи</a></li>
-        <li><a href="booking.html">Онлайн-запис</a></li>
-        <li><a href="archive.html">Архів</a></li>
-        <li><a href="data-center.html">Центр даних</a></li>
-        <li><a href="settings.html">Налаштування</a></li>
+
+        <li data-permission="dashboard">
+          <a href="executive-dashboard.html">
+            Панель керівника
+          </a>
+        </li>
+
+        <li data-permission="dashboard">
+          <a href="index.html">Головна</a>
+        </li>
+
+        <li data-permission="patients">
+          <a href="patients.html" class="active">
+            Пацієнти
+          </a>
+        </li>
+
+        <li data-permission="studies">
+          <a href="studies.html">Дослідження</a>
+        </li>
+
+        <li data-permission="protocols">
+          <a href="protocols.html">Протоколи</a>
+        </li>
+
+        <li data-permission="protocols">
+          <a href="protocol-builder.html">
+            Конструктор протоколів
+          </a>
+        </li>
+
+        <li data-permission="archive">
+          <a href="archive.html">Архів</a>
+        </li>
+
+        <li data-permission="contrast">
+          <a href="contrast.html">Контраст</a>
+        </li>
+
+        <li data-permission="settings">
+          <a href="data-center.html">Центр даних</a>
+        </li>
+
       </ul>
     </aside>
 
     <main>
 
       <div class="page-top">
+
         <div>
           <h1>Пацієнти</h1>
 
@@ -411,9 +471,14 @@
           </p>
         </div>
 
-        <button class="add-button" onclick="openModal()">
+        <button
+          class="add-button"
+          type="button"
+          onclick="openModal()"
+        >
           + Додати пацієнта
         </button>
+
       </div>
 
       <section class="stats">
@@ -449,7 +514,10 @@
           oninput="renderPatients()"
         >
 
-        <select id="statusFilter" onchange="renderPatients()">
+        <select
+          id="statusFilter"
+          onchange="renderPatients()"
+        >
           <option value="">Усі статуси</option>
           <option value="Активний">Активні</option>
           <option value="Неактивний">Неактивні</option>
@@ -469,6 +537,7 @@
                 <th>Дата народження</th>
                 <th>Телефон</th>
                 <th>Статус</th>
+                <th>Досліджень</th>
                 <th>Дії</th>
               </tr>
             </thead>
@@ -517,17 +586,28 @@
       <div class="row">
 
         <div class="field">
-          <label for="status">Статус</label>
+          <label for="patientStatus">Статус</label>
 
-          <select id="status">
-            <option value="Активний">Активний</option>
-            <option value="Неактивний">Неактивний</option>
+          <select id="patientStatus">
+            <option value="Активний">
+              Активний
+            </option>
+
+            <option value="Неактивний">
+              Неактивний
+            </option>
           </select>
         </div>
 
         <div class="field">
-          <label for="documentNumber">Документ</label>
-          <input id="documentNumber" type="text">
+          <label for="documentNumber">
+            Номер документа
+          </label>
+
+          <input
+            id="documentNumber"
+            type="text"
+          >
         </div>
 
       </div>
@@ -539,11 +619,19 @@
 
       <div class="modal-actions">
 
-        <button class="secondary" onclick="closeModal()">
+        <button
+          class="secondary"
+          type="button"
+          onclick="closeModal()"
+        >
           Скасувати
         </button>
 
-        <button class="primary" onclick="savePatient()">
+        <button
+          class="primary"
+          type="button"
+          onclick="savePatient()"
+        >
           Зберегти
         </button>
 
@@ -552,28 +640,20 @@
     </div>
   </div>
 
+  <script src="radiologyos-auth.js"></script>
+  <script src="radiologyos-page-guard.js"></script>
   <script src="radiologyos-data.js"></script>
 
   <script>
-    function setDatabaseStatus(connected) {
-      const status =
-        document.getElementById("databaseStatus");
+    const pageAllowed = RadiologyGuard.initialize({
+      permission: "patients",
+      userContainerId: "currentUser"
+    });
 
-      status.textContent =
-        connected ? "База підключена" : "База недоступна";
-
-      if (!connected) {
-        status.style.background = "#fdecec";
-        status.style.color = "#b42318";
-      }
-    }
-
-    function formatDate(value) {
-      if (!value) {
-        return "—";
-      }
-
-      return new Date(value).toLocaleDateString("uk-UA");
+    if (!pageAllowed) {
+      throw new Error(
+        "Доступ до сторінки заборонено"
+      );
     }
 
     function escapeHtml(value) {
@@ -585,12 +665,61 @@
         .replaceAll("'", "&#039;");
     }
 
+    function formatDate(value) {
+      if (!value) {
+        return "—";
+      }
+
+      return new Date(value).toLocaleDateString(
+        "uk-UA"
+      );
+    }
+
+    function setDatabaseStatus(connected) {
+      const status =
+        document.getElementById("databaseStatus");
+
+      status.textContent =
+        connected
+          ? "База підключена"
+          : "База недоступна";
+
+      if (connected) {
+        status.style.background = "#e7f7ef";
+        status.style.color = "#14804a";
+      } else {
+        status.style.background = "#fdecec";
+        status.style.color = "#b42318";
+      }
+    }
+
+    function clearForm() {
+      document.getElementById("modalTitle").textContent =
+        "Новий пацієнт";
+
+      document.getElementById("patientId").value = "";
+      document.getElementById("fullName").value = "";
+      document.getElementById("birthDate").value = "";
+      document.getElementById("phone").value = "";
+
+      document.getElementById("patientStatus").value =
+        "Активний";
+
+      document.getElementById("documentNumber").value =
+        "";
+
+      document.getElementById("notes").value = "";
+    }
+
     function openModal(patientId) {
       clearForm();
 
       if (patientId) {
         const patient =
-          RadiologyOS.getById("patients", patientId);
+          RadiologyOS.getById(
+            "patients",
+            patientId
+          );
 
         if (!patient) {
           alert("Пацієнта не знайдено.");
@@ -612,7 +741,7 @@
         document.getElementById("phone").value =
           patient.phone || "";
 
-        document.getElementById("status").value =
+        document.getElementById("patientStatus").value =
           patient.status || "Активний";
 
         document.getElementById("documentNumber").value =
@@ -633,43 +762,43 @@
         .classList.remove("open");
     }
 
-    function clearForm() {
-      document.getElementById("modalTitle").textContent =
-        "Новий пацієнт";
-
-      document.getElementById("patientId").value = "";
-      document.getElementById("fullName").value = "";
-      document.getElementById("birthDate").value = "";
-      document.getElementById("phone").value = "";
-      document.getElementById("status").value = "Активний";
-      document.getElementById("documentNumber").value = "";
-      document.getElementById("notes").value = "";
-    }
-
     function savePatient() {
       const id =
         document.getElementById("patientId").value;
 
       const fullName =
-        document.getElementById("fullName").value.trim();
+        document.getElementById("fullName")
+          .value
+          .trim();
 
       const birthDate =
         document.getElementById("birthDate").value;
 
       const phone =
-        document.getElementById("phone").value.trim();
+        document.getElementById("phone")
+          .value
+          .trim();
 
       const status =
-        document.getElementById("status").value;
+        document.getElementById(
+          "patientStatus"
+        ).value;
 
       const documentNumber =
-        document.getElementById("documentNumber").value.trim();
+        document.getElementById(
+          "documentNumber"
+        ).value.trim();
 
       const notes =
-        document.getElementById("notes").value.trim();
+        document.getElementById("notes")
+          .value
+          .trim();
 
       if (!fullName || !birthDate) {
-        alert("Вкажіть ПІБ та дату народження.");
+        alert(
+          "Вкажіть ПІБ та дату народження."
+        );
+
         return;
       }
 
@@ -682,24 +811,23 @@
         notes
       };
 
-      let result;
-
-      if (id) {
-        result = RadiologyOS.update(
-          "patients",
-          id,
-          data
-        );
-      } else {
-        result = RadiologyOS.create(
-          "patients",
-          data,
-          "PAT"
-        );
-      }
+      const result = id
+        ? RadiologyOS.update(
+            "patients",
+            id,
+            data
+          )
+        : RadiologyOS.create(
+            "patients",
+            data,
+            "PAT"
+          );
 
       if (!result) {
-        alert("Не вдалося зберегти пацієнта.");
+        alert(
+          "Не вдалося зберегти пацієнта."
+        );
+
         return;
       }
 
@@ -708,11 +836,48 @@
       updateStatistics();
     }
 
+    function getPatientStudies(patientId) {
+      return RadiologyOS
+        .getAll("studies")
+        .filter(
+          study =>
+            study.patientId === patientId
+        );
+    }
+
+    function viewPatient(id) {
+      const patient =
+        RadiologyOS.getById("patients", id);
+
+      if (!patient) {
+        alert("Пацієнта не знайдено.");
+        return;
+      }
+
+      const studies =
+        getPatientStudies(id);
+
+      alert(
+        "ID: " + patient.id + "\n" +
+        "Пацієнт: " + patient.fullName + "\n" +
+        "Дата народження: " +
+        formatDate(patient.birthDate) + "\n" +
+        "Телефон: " +
+        (patient.phone || "—") + "\n" +
+        "Документ: " +
+        (patient.documentNumber || "—") + "\n" +
+        "Статус: " +
+        (patient.status || "Активний") + "\n" +
+        "Досліджень: " +
+        studies.length + "\n" +
+        "Примітки: " +
+        (patient.notes || "—")
+      );
+    }
+
     function deletePatient(id) {
       const studies =
-        RadiologyOS.getAll("studies").filter(
-          study => study.patientId === id
-        );
+        getPatientStudies(id);
 
       if (studies.length) {
         alert(
@@ -723,42 +888,21 @@
         return;
       }
 
-      const confirmed = confirm(
-        "Видалити пацієнта з бази?"
-      );
-
-      if (!confirmed) {
+      if (
+        !confirm(
+          "Видалити пацієнта з бази?"
+        )
+      ) {
         return;
       }
 
-      RadiologyOS.remove("patients", id);
+      RadiologyOS.remove(
+        "patients",
+        id
+      );
 
       renderPatients();
       updateStatistics();
-    }
-
-    function viewPatient(id) {
-      const patient =
-        RadiologyOS.getById("patients", id);
-
-      if (!patient) {
-        return;
-      }
-
-      const studies =
-        RadiologyOS.getAll("studies").filter(
-          study => study.patientId === id
-        );
-
-      alert(
-        "ID: " + patient.id + "\n" +
-        "Пацієнт: " + patient.fullName + "\n" +
-        "Дата народження: " +
-        formatDate(patient.birthDate) + "\n" +
-        "Телефон: " + (patient.phone || "—") + "\n" +
-        "Досліджень: " + studies.length + "\n" +
-        "Примітки: " + (patient.notes || "—")
-      );
     }
 
     function renderPatients() {
@@ -769,43 +913,81 @@
           .toLowerCase();
 
       const status =
-        document.getElementById("statusFilter").value;
+        document.getElementById(
+          "statusFilter"
+        ).value;
+
+      const studies =
+        RadiologyOS.getAll("studies");
+
+      const studyCountMap = {};
+
+      studies.forEach((study) => {
+        const patientId =
+          study.patientId;
+
+        studyCountMap[patientId] =
+          (studyCountMap[patientId] || 0) + 1;
+      });
 
       const patients =
-        RadiologyOS.getAll("patients").filter((patient) => {
-          const matchesSearch =
-            !search ||
-            String(patient.id || "")
-              .toLowerCase()
-              .includes(search) ||
-            String(patient.fullName || "")
-              .toLowerCase()
-              .includes(search) ||
-            String(patient.phone || "")
-              .toLowerCase()
-              .includes(search);
+        RadiologyOS
+          .getAll("patients")
+          .filter((patient) => {
+            const matchesSearch =
+              !search ||
+              String(patient.id || "")
+                .toLowerCase()
+                .includes(search) ||
+              String(patient.fullName || "")
+                .toLowerCase()
+                .includes(search) ||
+              String(patient.phone || "")
+                .toLowerCase()
+                .includes(search) ||
+              String(
+                patient.documentNumber || ""
+              )
+                .toLowerCase()
+                .includes(search);
 
-          const matchesStatus =
-            !status || patient.status === status;
+            const matchesStatus =
+              !status ||
+              patient.status === status;
 
-          return matchesSearch && matchesStatus;
-        });
+            return (
+              matchesSearch &&
+              matchesStatus
+            );
+          })
+          .sort((a, b) =>
+            String(a.fullName || "")
+              .localeCompare(
+                String(b.fullName || ""),
+                "uk"
+              )
+          );
 
       const table =
-        document.getElementById("patientsTable");
+        document.getElementById(
+          "patientsTable"
+        );
 
       table.innerHTML = "";
 
       patients.forEach((patient) => {
-        const row = document.createElement("tr");
+        const row =
+          document.createElement("tr");
 
         const statusClass =
           patient.status === "Неактивний"
-            ? "inactive"
-            : "active";
+            ? "inactive-status"
+            : "active-status";
 
         row.innerHTML = `
-          <td>${escapeHtml(patient.id)}</td>
+          <td>
+            ${escapeHtml(patient.id)}
+          </td>
 
           <td>
             <span class="patient-name">
@@ -813,13 +995,20 @@
             </span>
 
             <span class="small">
-              ${escapeHtml(patient.documentNumber || "Документ не вказано")}
+              ${escapeHtml(
+                patient.documentNumber ||
+                "Документ не вказано"
+              )}
             </span>
           </td>
 
-          <td>${formatDate(patient.birthDate)}</td>
+          <td>
+            ${formatDate(patient.birthDate)}
+          </td>
 
-          <td>${escapeHtml(patient.phone || "—")}</td>
+          <td>
+              ${escapeHtml(patient.phone || "—")}
+                        </td>
 
           <td>
             <span class="badge ${statusClass}">
@@ -827,25 +1016,26 @@
             </span>
           </td>
 
+          <td>
+            ${studyCountMap[patient.id] || 0}
+          </td>
+
           <td class="actions">
             <button
               class="view-button"
-              onclick="viewPatient('${patient.id}')"
-            >
+              onclick="viewPatient('${patient.id}')">
               Деталі
             </button>
 
             <button
               class="edit-button"
-              onclick="openModal('${patient.id}')"
-            >
+              onclick="openModal('${patient.id}')">
               Редагувати
             </button>
 
             <button
               class="delete-button"
-              onclick="deletePatient('${patient.id}')"
-            >
+              onclick="deletePatient('${patient.id}')">
               Видалити
             </button>
           </td>
@@ -859,11 +1049,8 @@
     }
 
     function updateStatistics() {
-      const patients =
-        RadiologyOS.getAll("patients");
-
-      const studies =
-        RadiologyOS.getAll("studies");
+      const patients = RadiologyOS.getAll("patients");
+      const studies = RadiologyOS.getAll("studies");
 
       const today =
         new Date().toISOString().slice(0, 10);
@@ -879,8 +1066,7 @@
       document.getElementById("todayCount").textContent =
         patients.filter(
           patient =>
-            String(patient.createdAt || "")
-              .startsWith(today)
+            String(patient.createdAt || "").startsWith(today)
         ).length;
 
       document.getElementById("studyCount").textContent =
