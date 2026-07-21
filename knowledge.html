@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>База знань — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+      color: white;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: white;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 8px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .search-box {
+      margin-bottom: 24px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #cdd8e5;
+      border-radius: 10px;
+      background: white;
+      font-size: 15px;
+    }
+
+    .search-box input:focus {
+      border-color: #1267d6;
+      outline: 3px solid rgba(18, 103, 214, 0.12);
+    }
+
+    .categories {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .category-button {
+      padding: 10px 14px;
+      border: 1px solid #cdd8e5;
+      border-radius: 20px;
+      background: white;
+      color: #344054;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .category-button.active {
+      border-color: #1267d6;
+      background: #1267d6;
+      color: white;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 24px;
+    }
+
+    .article-list,
+    .article-view {
+      background: white;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(23, 32, 51, 0.05);
+    }
+
+    .article-list {
+      overflow: hidden;
+    }
+
+    .article-item {
+      padding: 18px;
+      border-bottom: 1px solid #edf1f5;
+      cursor: pointer;
+    }
+
+    .article-item:last-child {
+      border-bottom: none;
+    }
+
+    .article-item:hover,
+    .article-item.active {
+      background: #eef5ff;
+    }
+
+    .article-item h3 {
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    .article-item p {
+      color: #667085;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .article-view {
+      padding: 28px;
+    }
+
+    .article-view h2 {
+      margin-bottom: 10px;
+      font-size: 27px;
+    }
+
+    .article-meta {
+      margin-bottom: 24px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .article-view h3 {
+      margin: 24px 0 10px;
+    }
+
+    .article-view p,
+    .article-view li {
+      color: #475467;
+      line-height: 1.7;
+    }
+
+    .article-view ul {
+      padding-left: 22px;
+    }
+
+    .note {
+      margin-top: 24px;
+      padding: 16px;
+      border-left: 4px solid #1267d6;
+      border-radius: 8px;
+      background: #eef5ff;
+      color: #344054;
+    }
+
+    .empty {
+      display: none;
+      padding: 30px;
+      text-align: center;
+      color: #667085;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Клінічна база знань
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="knowledge.html" class="active">База знань</a></li>
+        <li><a href="#">Аналітика</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <h1>База знань</h1>
+
+        <p>
+          Шаблони, алгоритми опису та клінічні довідкові матеріали
+        </p>
+      </div>
+
+      <div class="search-box">
+        <input
+          id="search"
+          type="search"
+          placeholder="Пошук патології, органа або терміна..."
+          oninput="filterArticles()"
+        >
+      </div>
+
+      <div class="categories">
+        <button
+          class="category-button active"
+          onclick="filterCategory('', this)"
+        >
+          Усі
+        </button>
+
+        <button
+          class="category-button"
+          onclick="filterCategory('Головний мозок', this)"
+        >
+          Головний мозок
+        </button>
+
+        <button
+          class="category-button"
+          onclick="filterCategory('ОГК', this)"
+        >
+          ОГК
+        </button>
+
+        <button
+          class="category-button"
+          onclick="filterCategory('ОЧП', this)"
+        >
+          ОЧП
+        </button>
+
+        <button
+          class="category-button"
+          onclick="filterCategory('Хребет', this)"
+        >
+          Хребет
+        </button>
+      </div>
+
+      <div class="content-grid">
+
+        <section class="article-list" id="articleList">
+
+          <article
+            class="article-item active"
+            data-category="Головний мозок"
+            data-title="Алгоритм опису КТ головного мозку"
+            onclick="openArticle('brainAlgorithm', this)"
+          >
+            <h3>Алгоритм опису КТ головного мозку</h3>
+            <p>Послідовність оцінки структур та формування висновку.</p>
+          </article>
+
+          <article
+            class="article-item"
+            data-category="Головний мозок"
+            data-title="Оцінка внутрішньочерепного крововиливу"
+            onclick="openArticle('hemorrhage', this)"
+          >
+            <h3>Внутрішньочерепний крововилив</h3>
+            <p>Локалізація, щільність, об’ємний вплив та ускладнення.</p>
+          </article>
+
+          <article
+            class="article-item"
+            data-category="Головний мозок"
+            data-title="Ознаки ішемічного інсульту"
+            onclick="openArticle('ischemia', this)"
+          >
+            <h3>Ознаки ішемічного інсульту</h3>
+            <p>Ранні та пізні КТ-ознаки ішемічних змін.</p>
+          </article>
+
+          <article
+            class="article-item"
+            data-category="ОГК"
+            data-title="Алгоритм опису КТ органів грудної клітки"
+            onclick="openArticle('chest', this)"
+          >
+            <h3>Алгоритм опису КТ ОГК</h3>
+            <p>Легені, плевра, середостіння, серце та кісткові структури.</p>
+          </article>
+
+          <article
+            class="article-item"
+            data-category="ОЧП"
+            data-title="Алгоритм опису КТ черевної порожнини"
+            onclick="openArticle('abdomen', this)"
+          >
+            <h3>Алгоритм опису КТ ОЧП</h3>
+            <p>Системна оцінка органів черевної порожнини.</p>
+          </article>
+
+          <article
+            class="article-item"
+            data-category="Хребет"
+            data-title="Оцінка дегенеративних змін хребта"
+            onclick="openArticle('spine', this)"
+          >
+            <h3>Дегенеративні зміни хребта</h3>
+            <p>Диски, канал, суглоби, остеофіти та нервові корінці.</p>
+          </article>
+
+          <div class="empty" id="emptyMessage">
+            Матеріалів за запитом не знайдено.
+          </div>
+
+        </section>
+
+        <section class="article-view" id="articleView">
+
+          <h2>Алгоритм опису КТ головного мозку</h2>
+
+          <div class="article-meta">
+            Категорія: Головний мозок · Версія 1.0
+          </div>
+
+          <p>
+            Опис КТ головного мозку доцільно виконувати за єдиною
+            послідовністю, щоб не пропускати важливі структури.
+          </p>
+
+          <h3>Послідовність оцінки</h3>
+
+          <ul>
+            <li>Якість дослідження та наявність артефактів.</li>
+            <li>Стан речовини головного мозку.</li>
+            <li>Наявність осередкових змін або крововиливу.</li>
+            <li>Шлуночкова система та базальні цистерни.</li>
+            <li>Серединні структури та ознаки об’ємного впливу.</li>
+            <li>Зовнішні лікворні простори.</li>
+            <li>Кістки черепа та м’які тканини.</li>
+            <li>Приносові пазухи та комірки соскоподібних відростків.</li>
+          </ul>
+
+          <div class="note">
+            Остаточне клінічне рішення та формулювання висновку
+            завжди залишаються за лікарем-рентгенологом.
+          </div>
+
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    let selectedCategory = "";
+
+    const articles = {
+      brainAlgorithm: {
+        title: "Алгоритм опису КТ головного мозку",
+        category: "Головний мозок",
+        text: `
+          <p>
+            Опис КТ головного мозку виконується за сталою
+            послідовністю для зменшення ризику пропуску патології.
+          </p>
+
+          <h3>Послідовність оцінки</h3>
+
+          <ul>
+            <li>Якість дослідження та артефакти.</li>
+            <li>Речовина головного мозку.</li>
+            <li>Осередкові та дифузні зміни.</li>
+            <li>Шлуночкова система.</li>
+            <li>Серединні структури.</li>
+            <li>Лікворні простори.</li>
+            <li>Кістки черепа.</li>
+            <li>Приносові пазухи.</li>
+          </ul>
+        `
+      },
+
+      hemorrhage: {
+        title: "Внутрішньочерепний крововилив",
+        category: "Головний мозок",
+        text: `
+          <p>
+            При виявленні крововиливу потрібно визначити його тип,
+            локалізацію, розміри та вплив на навколишні структури.
+          </p>
+
+          <h3>Обов’язкові параметри</h3>
+
+          <ul>
+            <li>Локалізація та сторона ураження.</li>
+            <li>Максимальні розміри.</li>
+            <li>Стан перифокальних тканин.</li>
+            <li>Компресія шлуночків та цистерн.</li>
+            <li>Зміщення серединних структур.</li>
+            <li>Поширення крові у шлуночки або субарахноїдальні простори.</li>
+          </ul>
+        `
+      },
+
+      ischemia: {
+        title: "Ознаки ішемічного інсульту",
+        category: "Головний мозок",
+        text: `
+          <p>
+            Ранні КТ-ознаки ішемії можуть бути малопомітними,
+            тому оцінку слід проводити у відповідних вікнах.
+          </p>
+
+          <h3>Можливі ознаки</h3>
+
+          <ul>
+            <li>Зниження диференціації сірої та білої речовини.</li>
+            <li>Згладженість кортикальних борозен.</li>
+            <li>Гіподенсивність паренхіми.</li>
+            <li>Гіперденсна артерія.</li>
+            <li>Поява об’ємного впливу.</li>
+          </ul>
+        `
+      },
+
+      chest: {
+        title: "Алгоритм опису КТ ОГК",
+        category: "ОГК",
+        text: `
+          <p>
+            Опис КТ органів грудної клітки виконується системно:
+            легенева тканина, бронхи, плевра, середостіння,
+            серце, судини та кісткові структури.
+          </p>
+        `
+      },
+
+      abdomen: {
+        title: "Алгоритм опису КТ ОЧП",
+        category: "ОЧП",
+        text: `
+          <p>
+            Оцінюються печінка, жовчні шляхи, підшлункова залоза,
+            селезінка, надниркові залози, нирки, кишківник,
+            лімфатичні вузли та судини.
+          </p>
+        `
+      },
+
+      spine: {
+        title: "Дегенеративні зміни хребта",
+        category: "Хребет",
+        text: `
+          <p>
+            Необхідно оцінювати висоту міжхребцевих дисків,
+            замикальні пластинки, остеофіти, фасеткові суглоби,
+            хребтовий канал та міжхребцеві отвори.
+          </p>
+        `
+      }
+    };
+
+    function openArticle(articleId, element) {
+      const article = articles[articleId];
+
+      document.querySelectorAll(".article-item")
+        .forEach((item) => item.classList.remove("active"));
+
+      element.classList.add("active");
+
+      document.getElementById("articleView").innerHTML = `
+        <h2>${article.title}</h2>
+
+        <div class="article-meta">
+          Категорія: ${article.category} · Версія 1.0
+        </div>
+
+        ${article.text}
+
+        <div class="note">
+          Матеріал має довідковий характер.
+          Остаточний висновок формує лікар-рентгенолог.
+        </div>
+      `;
+    }
+
+    function filterCategory(category, button) {
+      selectedCategory = category;
+
+      document.querySelectorAll(".category-button")
+        .forEach((item) => item.classList.remove("active"));
+
+      button.classList.add("active");
+
+      filterArticles();
+    }
+
+    function filterArticles() {
+      const searchValue =
+        document.getElementById("search").value.toLowerCase();
+
+      const items =
+        document.querySelectorAll(".article-item");
+
+      let visibleCount = 0;
+
+      items.forEach((item) => {
+        const title =
+          item.dataset.title.toLowerCase();
+
+        const category =
+          item.dataset.category;
+
+        const matchesSearch =
+          title.includes(searchValue);
+
+        const matchesCategory =
+          !selectedCategory || category === selectedCategory;
+
+        const visible =
+          matchesSearch && matchesCategory;
+
+        item.style.display = visible ? "block" : "none";
+
+        if (visible) {
+          visibleCount++;
+        }
+      });
+
+      document.getElementById("emptyMessage").style.display =
+        visibleCount === 0 ? "block" : "none";
+    }
+  </script>
+
+</body>
+</html>
