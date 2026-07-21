@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Налаштування — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 22px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .panel h2 {
+      margin-bottom: 18px;
+      font-size: 21px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      color: #344054;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid #edf1f5;
+    }
+
+    .toggle-row:last-child {
+      border-bottom: none;
+    }
+
+    .toggle-text strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .toggle-text span {
+      color: #667085;
+      font-size: 13px;
+    }
+
+    .switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: #cbd5e1;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 3px;
+      left: 3px;
+      border-radius: 50%;
+      background: #ffffff;
+      transition: 0.2s;
+    }
+
+    .switch input:checked + .slider {
+      background: #1267d6;
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translateX(22px);
+    }
+
+    .save-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+      padding: 18px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .secondary,
+    .primary {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .secondary {
+      background: #edf2f7;
+      color: #344054;
+    }
+
+    .primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    .message {
+      display: none;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 9px;
+      background: #e7f7ef;
+      color: #14804a;
+      font-weight: 700;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .settings-grid,
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      .save-bar {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Системні налаштування
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="bookings-admin.html">Заявки</a></li>
+        <li><a href="ai.html">AI Assistant</a></li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="analytics.html">Аналітика</a></li>
+        <li><a href="reports.html">Звіти</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+        <li><a href="settings.html" class="active">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <h1>Налаштування</h1>
+        <p>Основні параметри відділення та системи RadiologyOS</p>
+      </div>
+
+      <div class="settings-grid">
+
+        <section class="panel">
+          <h2>Інформація про відділення</h2>
+
+          <div class="field">
+            <label for="departmentName">Назва відділення</label>
+            <input
+              id="departmentName"
+              type="text"
+              value="Відділення променевої діагностики"
+            >
+          </div>
+
+          <div class="field">
+            <label for="hospitalName">Назва закладу</label>
+            <input
+              id="hospitalName"
+              type="text"
+              value="Чернігівський військовий госпіталь"
+            >
+          </div>
+
+          <div class="field">
+            <label for="address">Адреса</label>
+            <input
+              id="address"
+              type="text"
+              value="м. Чернігів"
+            >
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="phone">Телефон</label>
+              <input
+                id="phone"
+                type="tel"
+                placeholder="+380..."
+              >
+            </div>
+
+            <div class="field">
+              <label for="email">Електронна пошта</label>
+              <input
+                id="email"
+                type="email"
+                value="info@radiologyos.com"
+              >
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Робочий графік</h2>
+
+          <div class="row">
+            <div class="field">
+              <label for="workStart">Початок роботи</label>
+              <input id="workStart" type="time" value="08:00">
+            </div>
+
+            <div class="field">
+              <label for="workEnd">Завершення роботи</label>
+              <input id="workEnd" type="time" value="16:00">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="workDays">Робочі дні</label>
+
+            <select id="workDays">
+              <option selected>Понеділок–п’ятниця</option>
+              <option>Понеділок–субота</option>
+              <option>Щоденно</option>
+              <option>Змінний графік</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="appointmentDuration">
+              Стандартний інтервал запису
+            </label>
+
+            <select id="appointmentDuration">
+              <option>10 хвилин</option>
+              <option selected>20 хвилин</option>
+              <option>30 хвилин</option>
+              <option>60 хвилин</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Медичні параметри</h2>
+
+          <div class="toggle-row">
+            <div class="toggle-text">
+              <strong>Контроль креатиніну</strong>
+              <span>Перед КТ із внутрішньовенним контрастуванням</span>
+            </div>
+
+            <label class="switch">
+              <input id="creatinineCheck" type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-text">
+              <strong>Обов’язкове направлення</strong>
+              <span>Вимагати направлення при створенні запису</span>
+            </div>
+
+            <label class="switch">
+              <input id="referralRequired" type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-text">
+              <strong>Автоматичний номер протоколу</strong>
+              <span>Формувати унікальний номер нового дослідження</span>
+            </div>
+
+            <label class="switch">
+              <input id="autoProtocolNumber" type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Сповіщення та безпека</h2>
+
+          <div class="toggle-row">
+            <div class="toggle-text">
+              <strong>Сповіщення про нові заявки</strong>
+              <span>Показувати повідомлення про онлайн-записи</span>
+            </div>
+
+            <label class="switch">
+              <input id="bookingNotifications" type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-text">
+              <strong>Автоматичне резервне копіювання</strong>
+              <span>Зберігати резервну копію локальних даних</span>
+            </div>
+
+            <label class="switch">
+              <input id="backupEnabled" type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="field">
+            <label for="sessionTime">
+              Автоматичний вихід із системи
+            </label>
+
+            <select id="sessionTime">
+              <option>15 хвилин</option>
+              <option selected>30 хвилин</option>
+              <option>60 хвилин</option>
+              <option>Не виходити автоматично</option>
+            </select>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="save-bar">
+        <button class="secondary" onclick="resetSettings()">
+          Відновити
+        </button>
+
+        <button class="primary" onclick="saveSettings()">
+          Зберегти налаштування
+        </button>
+      </div>
+
+      <div class="message" id="saveMessage">
+        Налаштування успішно збережено.
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    const settingIds = [
+      "departmentName",
+      "hospitalName",
+      "address",
+      "phone",
+      "email",
+      "workStart",
+      "workEnd",
+      "workDays",
+      "appointmentDuration",
+      "creatinineCheck",
+      "referralRequired",
+      "autoProtocolNumber",
+      "bookingNotifications",
+      "backupEnabled",
+      "sessionTime"
+    ];
+
+    function saveSettings() {
+      const settings = {};
+
+      settingIds.forEach((id) => {
+        const element = document.getElementById(id);
+
+        settings[id] =
+          element.type === "checkbox"
+            ? element.checked
+            : element.value;
+      });
+
+      localStorage.setItem(
+        "radiologyosSettings",
+        JSON.stringify(settings)
+      );
+
+      const message =
+        document.getElementById("saveMessage");
+
+      message.classList.add("show");
+
+      setTimeout(() => {
+        message.classList.remove("show");
+      }, 2500);
+    }
+
+    function loadSettings() {
+      const saved = JSON.parse(
+        localStorage.getItem("radiologyosSettings") || "null"
+      );
+
+      if (!saved) return;
+
+      settingIds.forEach((id) => {
+        const element = document.getElementById(id);
+
+        if (!(id in saved)) return;
+
+        if (element.type === "checkbox") {
+          element.checked = saved[id];
+        } else {
+          element.value = saved[id];
+        }
+      });
+    }
+
+    function resetSettings() {
+      const confirmed = confirm(
+        "Відновити налаштування, збережені раніше?"
+      );
+
+      if (!confirmed) return;
+
+      loadSettings();
+    }
+
+    loadSettings();
+  </script>
+
+</body>
+</html>
