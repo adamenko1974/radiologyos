@@ -928,9 +928,9 @@
         document.getElementById("auditList");
 
       const audit =
-        Array.isArray(database.audit
-                                ? database.audit.slice(0, 6)
-          : [];
+  Array.isArray(database.audit)
+    ? database.audit.slice(0, 6)
+    : [];
 
       if (!audit.length) {
         list.innerHTML =
