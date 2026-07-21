@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Користувачі — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 30px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .add-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      padding: 19px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 27px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 220px 220px;
+      gap: 13px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    .panel {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 950px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 13px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #667085;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .user-name {
+      font-weight: 700;
+    }
+
+    .small {
+      display: block;
+      margin-top: 4px;
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .role-admin {
+      background: #ede9fe;
+      color: #6941c6;
+    }
+
+    .role-doctor {
+      background: #eef5ff;
+      color: #1267d6;
+    }
+
+    .role-tech {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .role-nurse {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .active-status {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .blocked-status {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .actions button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .edit-button {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .status-button {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .delete-button {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 580px;
+      padding: 25px;
+      background: #ffffff;
+      border-radius: 14px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .secondary,
+    .primary {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .secondary {
+      background: #edf2f7;
+      color: #344054;
+    }
+
+    .primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar,
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Користувачі та права доступу
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="schedule.html">Графік роботи</a></li>
+        <li><a href="tasks.html">Завдання</a></li>
+        <li><a href="audit.html">Журнал аудиту</a></li>
+        <li><a href="users.html" class="active">Користувачі</a></li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Користувачі системи</h1>
+
+          <p>
+            Облікові записи, ролі та контроль доступу до RadiologyOS
+          </p>
+        </div>
+
+        <button class="add-button" onclick="openModal()">
+          + Додати користувача
+        </button>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Усього користувачів</span>
+          <strong id="totalCount">5</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Активні</span>
+          <strong id="activeCount">4</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Адміністратори</span>
+          <strong id="adminCount">1</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Заблоковані</span>
+          <strong id="blockedCount">1</strong>
+        </div>
+
+      </section>
+
+      <div class="toolbar">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Пошук користувача..."
+          oninput="filterUsers()"
+        >
+
+        <select id="roleFilter" onchange="filterUsers()">
+          <option value="">Усі ролі</option>
+          <option value="Адміністратор">Адміністратор</option>
+          <option value="Лікар">Лікар</option>
+          <option value="Лаборант">Лаборант</option>
+          <option value="Медична сестра">Медична сестра</option>
+        </select>
+
+        <select id="statusFilter" onchange="filterUsers()">
+          <option value="">Усі статуси</option>
+          <option value="Активний">Активний</option>
+          <option value="Заблокований">Заблокований</option>
+        </select>
+
+      </div>
+
+      <section class="panel">
+
+        <div class="table-wrap">
+
+          <table>
+            <thead>
+              <tr>
+                <th>Користувач</th>
+                <th>Email</th>
+                <th>Роль</th>
+                <th>Останній вхід</th>
+                <th>Статус</th>
+                <th>Дії</th>
+              </tr>
+            </thead>
+
+            <tbody id="usersTable">
+
+              <tr data-role="Адміністратор" data-status="Активний">
+                <td>
+                  <span class="user-name">Адміністратор</span>
+                  <span class="small">Системний доступ</span>
+                </td>
+                <td>admin@radiologyos.com</td>
+                <td>
+                  <span class="badge role-admin">Адміністратор</span>
+                </td>
+                <td>21.07.2026 10:14</td>
+                <td>
+                  <span class="badge active-status">Активний</span>
+                </td>
+                <td class="actions">
+                  <button class="edit-button" onclick="editUser(this)">
+                    Редагувати
+                  </button>
+                  <button class="status-button" onclick="toggleStatus(this)">
+                    Блокувати
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-role="Лікар" data-status="Активний">
+                <td>
+                  <span class="user-name">Адаменко Д.М.</span>
+                  <span class="small">Лікар-рентгенолог</span>
+                </td>
+                <td>doctor@radiologyos.com</td>
+                <td>
+                  <span class="badge role-doctor">Лікар</span>
+                </td>
+                <td>21.07.2026 08:03</td>
+                <td>
+                  <span class="badge active-status">Активний</span>
+                </td>
+                <td class="actions">
+                  <button class="edit-button" onclick="editUser(this)">
+                    Редагувати
+                  </button>
+                  <button class="status-button" onclick="toggleStatus(this)">
+                    Блокувати
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-role="Лікар" data-status="Заблокований">
+                <td>
+                  <span class="user-name">Микитенко К.М.</span>
+                  <span class="small">Лікар-рентгенолог</span>
+                </td>
+                <td>mykytenko@radiologyos.com</td>
+                <td>
+                  <span class="badge role-doctor">Лікар</span>
+                </td>
+                <td>15.07.2026 12:20</td>
+                <td>
+                  <span class="badge blocked-status">Заблокований</span>
+                </td>
+                <td class="actions">
+                  <button class="edit-button" onclick="editUser(this)">
+                    Редагувати
+                  </button>
+                  <button class="status-button" onclick="toggleStatus(this)">
+                    Активувати
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-role="Лаборант" data-status="Активний">
+                <td>
+                  <span class="user-name">Клімов Л.В.</span>
+                  <span class="small">Рентгенлаборант</span>
+                </td>
+                <td>klimov@radiologyos.com</td>
+                <td>
+                  <span class="badge role-tech">Лаборант</span>
+                </td>
+                <td>21.07.2026 07:56</td>
+                <td>
+                  <span class="badge active-status">Активний</span>
+                </td>
+                <td class="actions">
+                  <button class="edit-button" onclick="editUser(this)">
+                    Редагувати
+                  </button>
+                  <button class="status-button" onclick="toggleStatus(this)">
+                    Блокувати
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-role="Медична сестра" data-status="Активний">
+                <td>
+                  <span class="user-name">Медична сестра</span>
+                  <span class="small">Контрастні дослідження</span>
+                </td>
+                <td>nurse@radiologyos.com</td>
+                <td>
+                  <span class="badge role-nurse">Медична сестра</span>
+                </td>
+                <td>21.07.2026 08:12</td>
+                <td>
+                  <span class="badge active-status">Активний</span>
+                </td>
+                <td class="actions">
+                  <button class="edit-button" onclick="editUser(this)">
+                    Редагувати
+                  </button>
+                  <button class="status-button" onclick="toggleStatus(this)">
+                    Блокувати
+                  </button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="modal" id="userModal">
+
+    <div class="modal-box">
+
+      <h2>Новий користувач</h2>
+
+      <div class="field">
+        <label for="userName">ПІБ</label>
+        <input id="userName" type="text">
+      </div>
+
+      <div class="field">
+        <label for="userEmail">Електронна пошта</label>
+        <input id="userEmail" type="email">
+      </div>
+
+      <div class="row">
+
+        <div class="field">
+          <label for="userRole">Роль</label>
+
+          <select id="userRole">
+            <option>Адміністратор</option>
+            <option>Лікар</option>
+            <option>Лаборант</option>
+            <option>Медична сестра</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="userPosition">Посада</label>
+          <input id="userPosition" type="text">
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label for="userPassword">Тимчасовий пароль</label>
+        <input id="userPassword" type="password">
+      </div>
+
+      <div class="modal-actions">
+
+        <button class="secondary" onclick="closeModal()">
+          Скасувати
+        </button>
+
+        <button class="primary" onclick="addUser()">
+          Зберегти
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function roleClass(role) {
+      if (role === "Адміністратор") return "role-admin";
+      if (role === "Лаборант") return "role-tech";
+      if (role === "Медична сестра") return "role-nurse";
+
+      return "role-doctor";
+    }
+
+    function openModal() {
+      document.getElementById("userModal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("userModal").classList.remove("open");
+    }
+
+    function addUser() {
+      const name =
+        document.getElementById("userName").value.trim();
+
+      const email =
+        document.getElementById("userEmail").value.trim();
+
+      const role =
+        document.getElementById("userRole").value;
+
+      const position =
+        document.getElementById("userPosition").value.trim();
+
+      const password =
+        document.getElementById("userPassword").value;
+
+      if (!name || !email || !password) {
+        alert("Заповніть ПІБ, email та тимчасовий пароль.");
+        return;
+      }
+
+      const row = document.createElement("tr");
+
+      row.dataset.role = role;
+      row.dataset.status = "Активний";
+
+      row.innerHTML = `
+        <td>
+          <span class="user-name">${name}</span>
+          <span class="small">${position || "Посаду не вказано"}</span>
+        </td>
+        <td>${email}</td>
+        <td>
+          <span class="badge ${roleClass(role)}">
+            ${role}
+          </span>
+        </td>
+        <td>Ще не входив</td>
+        <td>
+          <span class="badge active-status">Активний</span>
+        </td>
+        <td class="actions">
+          <button class="edit-button" onclick="editUser(this)">
+            Редагувати
+          </button>
+          <button class="status-button" onclick="toggleStatus(this)">
+            Блокувати
+          </button>
+          <button class="delete-button" onclick="deleteUser(this)">
+            Видалити
+          </button>
+        </td>
+      `;
+
+      document.getElementById("usersTable").prepend(row);
+
+      document.getElementById("userName").value = "";
+      document.getElementById("userEmail").value = "";
+      document.getElementById("userPosition").value = "";
+      document.getElementById("userPassword").value = "";
+
+      updateStatistics();
+      closeModal();
+    }
+
+    function editUser(button) {
+      const row = button.closest("tr");
+
+      alert(
+        "Користувач: " + row.children[0].innerText +
+        "\nEmail: " + row.children[1].innerText +
+        "\nРоль: " + row.dataset.role
+      );
+    }
+
+    function toggleStatus(button) {
+      const row = button.closest("tr");
+
+      if (row.dataset.status === "Активний") {
+        row.dataset.status = "Заблокований";
+
+        row.children[4].innerHTML =
+          '<span class="badge blocked-status">Заблокований</span>';
+
+        button.textContent = "Активувати";
+      } else {
+        row.dataset.status = "Активний";
+
+        row.children[4].innerHTML =
+          '<span class="badge active-status">Активний</span>';
+
+        button.textContent = "Блокувати";
+      }
+
+      updateStatistics();
+      filterUsers();
+    }
+
+    function deleteUser(button) {
+      if (!confirm("Видалити цього користувача?")) return;
+
+      button.closest("tr").remove();
+
+      updateStatistics();
+      filterUsers();
+    }
+
+    function filterUsers() {
+      const search =
+        document.getElementById("searchInput").value.toLowerCase();
+
+      const role =
+        document.getElementById("roleFilter").value;
+
+      const status =
+        document.getElementById("statusFilter").value;
+
+      document.querySelectorAll("#usersTable tr").forEach((row) => {
+        const visible =
+          row.textContent.toLowerCase().includes(search) &&
+          (!role || row.dataset.role === role) &&
+          (!status || row.dataset.status === status);
+
+        row.style.display = visible ? "" : "none";
+      });
+    }
+
+    function updateStatistics() {
+      const rows = [
+        ...document.querySelectorAll("#usersTable tr")
+      ];
+
+      document.getElementById("totalCount").textContent =
+        rows.length;
+
+      document.getElementById("activeCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Активний"
+        ).length;
+
+      document.getElementById("adminCount").textContent =
+        rows.filter(
+          row => row.dataset.role === "Адміністратор"
+        ).length;
+
+      document.getElementById("blockedCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Заблокований"
+        ).length;
+    }
+
+    document
+      .getElementById("userModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+
+    updateStatistics();
+  </script>
+
+</body>
+</html>
