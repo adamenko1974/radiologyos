@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Реєстратура — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #1267d6;
+      --primary-light: #eaf2fc;
+      --background: #f3f6fa;
+      --surface: #ffffff;
+      --sidebar: #172033;
+      --text: #172033;
+      --muted: #667085;
+      --border: #dfe7f1;
+      --success: #14804a;
+      --success-light: #e7f7ef;
+      --warning: #b26a00;
+      --warning-light: #fff4df;
+      --danger: #b42318;
+      --danger-light: #fdecec;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: var(--background);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    header {
+      min-height: 72px;
+      padding: 13px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      color: var(--primary);
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .module-status {
+      padding: 7px 11px;
+      border-radius: 20px;
+      background: var(--success-light);
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .layout {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: var(--sidebar);
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    main {
+      min-width: 0;
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: var(--muted);
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .primary-button,
+    .secondary-button {
+      padding: 12px 17px;
+      border: none;
+      border-radius: 9px;
+      font-weight: 700;
+    }
+
+    .primary-button {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .secondary-button {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      padding: 17px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stat-card strong {
+      font-size: 26px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns:
+        minmax(220px, 1fr)
+        190px
+        190px;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    .registry-grid {
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1.6fr)
+        minmax(300px, 0.8fr);
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 17px 19px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-header h2 {
+      font-size: 18px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 13px;
+    }
+
+    .patient-name {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .patient-phone {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 20px;
+      background: #edf2f7;
+      color: #475467;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .badge.waiting {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .badge.active {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .badge.completed {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .row-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .row-actions button {
+      padding: 7px 9px;
+      border: none;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .open-button {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .status-button {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .lead-list {
+      max-height: 620px;
+      overflow-y: auto;
+    }
+
+    .lead-item {
+      padding: 15px 17px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lead-item:last-child {
+      border-bottom: none;
+    }
+
+    .lead-name {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .lead-service {
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .lead-actions {
+      display: flex;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .lead-actions button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .empty {
+      padding: 40px 20px;
+      color: #98a2b3;
+      text-align: center;
+    }
+
+    @media (max-width: 1150px) {
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .registry-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      header {
+        padding: 12px 16px;
+      }
+
+      .module-status {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">
+      RadiologyOS
+    </a>
+
+    <div class="header-right">
+      <span
+        class="module-status"
+        id="moduleStatus"
+      >
+        Реєстратура підключається...
+      </span>
+
+      <div id="currentUser"></div>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Реєстратура</h3>
+
+      <ul class="menu">
+
+        <li data-permission="dashboard">
+          <a href="executive-dashboard.html">
+            Панель керівника
+          </a>
+        </li>
+
+        <li data-permission="patients">
+          <a
+            href="registry.html"
+            class="active"
+          >
+            Реєстратура
+          </a>
+        </li>
+
+        <li data-permission="crm">
+          <a href="crm.html">
+            CRM-звернення
+          </a>
+        </li>
+
+        <li data-permission="patients">
+          <a href="patients.html">
+            Пацієнти
+          </a>
+        </li>
+
+        <li data-permission="studies">
+          <a href="studies.html">
+            Дослідження
+          </a>
+        </li>
+
+        <li data-permission="schedule">
+          <a href="schedule.html">
+            Розклад
+          </a>
+        </li>
+
+        <li data-permission="tasks">
+          <a href="tasks.html">
+            Завдання
+          </a>
+        </li>
+
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+
+        <div>
+          <h1>Реєстратура</h1>
+
+          <p>
+            Прийом пацієнтів, черга та нові звернення
+          </p>
+        </div>
+
+        <div class="top-actions">
+
+          <button
+            class="secondary-button"
+            type="button"
+            onclick="openCRM()"
+          >
+            CRM
+          </button>
+
+          <button
+            class="primary-button"
+            type="button"
+            onclick="openPatients()"
+          >
+            + Новий пацієнт
+          </button>
+
+        </div>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Пацієнтів сьогодні</span>
+          <strong id="todayPatientsCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Очікують</span>
+          <strong id="waitingCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>На дослідженні</span>
+          <strong id="activeCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Завершені</span>
+          <strong id="completedCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Нові звернення</span>
+          <strong id="newLeadsCount">0</strong>
+        </div>
+
+      </section>
+
+      <div class="toolbar">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Пошук за ПІБ, телефоном або дослідженням..."
+          oninput="renderRegistry()"
+        >
+
+        <select
+          id="statusFilter"
+          onchange="renderRegistry()"
+        >
+          <option value="">
+            Усі статуси
+          </option>
+
+          <option value="Очікує">
+            Очікує
+          </option>
+
+          <option value="На дослідженні">
+            На дослідженні
+          </option>
+
+          <option value="Завершено">
+            Завершено
+          </option>
+        </select>
+
+        <select
+          id="modalityFilter"
+          onchange="renderRegistry()"
+        >
+          <option value="">
+            Усі модальності
+          </option>
+
+          <option value="КТ">
+            КТ
+          </option>
+
+          <option value="Рентген">
+            Рентген
+          </option>
+
+          <option value="Флюорографія">
+            Флюорографія
+          </option>
+        </select>
+
+      </div>
+
+      <section class="registry-grid">
+
+        <div class="panel">
+
+          <div class="panel-header">
+            <h2>Черга на сьогодні</h2>
+
+            <span class="badge" id="currentDate"></span>
+          </div>
+
+          <div class="table-wrap">
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Час</th>
+                  <th>Пацієнт</th>
+                  <th>Дослідження</th>
+                  <th>Статус</th>
+                  <th>Дії</th>
+                </tr>
+              </thead>
+
+              <tbody id="registryTableBody"></tbody>
+            </table>
+
+          </div>
+        </div>
+
+        <div class="panel">
+
+          <div class="panel-header">
+            <h2>Нові CRM-звернення</h2>
+
+            <button
+              class="secondary-button"
+              type="button"
+              onclick="openCRM()"
+            >
+              Усі
+            </button>
+          </div>
+
+          <div
+            class="lead-list"
+            id="newLeadList"
+          ></div>
+
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script src="radiologyos-auth.js"></script>
+  <script src="radiologyos-page-guard.js"></script>
+  <script src="radiologyos-data.js"></script>
+  <script src="radiologyos-crm.js"></script>
+  <script src="radiologyos-tasks.js"></script>
+
+  <script>
+    const pageAllowed =
+      RadiologyGuard.initialize({
+        permission: "patients",
+        userContainerId: "currentUser"
+      });
+
+    if (!pageAllowed) {
+      throw new Error(
+        "Доступ до реєстратури заборонено"
+      );
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+        function formatDate(value) {
+      if (!value) {
+        return "";
+      }
+
+      const date = new Date(value);
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+        return value;
+      }
+
+      return date.toLocaleDateString(
+        "uk-UA"
+      );
+    }
+
+    function formatTime(value) {
+      if (!value) {
+        return "--:--";
+      }
+
+      const date = new Date(value);
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+        return String(value);
+      }
+
+      return date.toLocaleTimeString(
+        "uk-UA",
+        {
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+    }
+
+    function getTodayKey() {
+      const now = new Date();
+
+      const year =
+        now.getFullYear();
+
+      const month =
+        String(
+          now.getMonth() + 1
+        ).padStart(2, "0");
+
+      const day =
+        String(
+          now.getDate()
+        ).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    }
+
+    function getPatientName(patient) {
+      if (!patient) {
+        return "Пацієнт не вказаний";
+      }
+
+      return (
+        patient.fullName ||
+        patient.name ||
+        patient.patientName ||
+        "Пацієнт без ПІБ"
+      );
+    }
+
+    function getPatientPhone(patient) {
+      if (!patient) {
+        return "";
+      }
+
+      return (
+        patient.phone ||
+        patient.mobile ||
+        patient.telephone ||
+        ""
+      );
+    }
+
+    function getStudyPatientId(study) {
+      return (
+        study.patientId ||
+        study.patientID ||
+        study.patient_id ||
+        ""
+      );
+    }
+
+    function getStudyDate(study) {
+      return (
+        study.appointmentDate ||
+        study.scheduledAt ||
+        study.dateTime ||
+        study.studyDate ||
+        study.date ||
+        ""
+      );
+    }
+
+    function getStudyStatus(study) {
+      return (
+        study.registryStatus ||
+        study.queueStatus ||
+        study.status ||
+        "Очікує"
+      );
+    }
+
+    function getStudyTitle(study) {
+      return (
+        study.service ||
+        study.studyName ||
+        study.examination ||
+        study.protocol ||
+        study.title ||
+        "Дослідження"
+      );
+    }
+
+    function getStudyModality(study) {
+      return (
+        study.modality ||
+        study.type ||
+        study.department ||
+        ""
+      );
+    }
+
+    function getTodayStudies() {
+      const today =
+        getTodayKey();
+
+      let studies = [];
+
+      try {
+        studies =
+          RadiologyOS.getAll(
+            "studies"
+          ) || [];
+      } catch (error) {
+        studies = [];
+      }
+
+      return studies.filter(
+        study => {
+          const value =
+            getStudyDate(study);
+
+          if (!value) {
+            return false;
+          }
+
+          const date =
+            new Date(value);
+
+          if (
+            Number.isNaN(
+              date.getTime()
+            )
+          ) {
+            return String(value)
+              .slice(0, 10) === today;
+          }
+
+          const year =
+            date.getFullYear();
+
+          const month =
+            String(
+              date.getMonth() + 1
+            ).padStart(2, "0");
+
+          const day =
+            String(
+              date.getDate()
+            ).padStart(2, "0");
+
+          return (
+            `${year}-${month}-${day}` ===
+            today
+          );
+        }
+      );
+    }
+
+    function getPatientMap() {
+      const map = {};
+
+      try {
+        RadiologyOS
+          .getAll("patients")
+          .forEach(
+            patient => {
+              map[patient.id] =
+                patient;
+            }
+          );
+      } catch (error) {}
+
+      return map;
+    }
+
+    function renderRegistry() {
+      const search =
+        document
+          .getElementById(
+            "searchInput"
+          )
+          .value
+          .trim()
+          .toLowerCase();
+
+      const statusFilter =
+        document.getElementById(
+          "statusFilter"
+        ).value;
+
+      const modalityFilter =
+        document.getElementById(
+          "modalityFilter"
+        ).value;
+
+      const patients =
+        getPatientMap();
+
+      const studies =
+        getTodayStudies()
+          .filter(
+            study => {
+              const patient =
+                patients[
+                  getStudyPatientId(
+                    study
+                  )
+                ];
+
+              const text =
+                [
+                  getPatientName(
+                    patient
+                  ),
+                  getPatientPhone(
+                    patient
+                  ),
+                  getStudyTitle(
+                    study
+                  ),
+                  getStudyModality(
+                    study
+                  )
+                ]
+                  .join(" ")
+                  .toLowerCase();
+
+              if (
+                search &&
+                !text.includes(
+                  search
+                )
+              ) {
+                return false;
+              }
+
+              if (
+                statusFilter &&
+                getStudyStatus(
+                  study
+                ) !==
+                  statusFilter
+              ) {
+                return false;
+              }
+
+              if (
+                modalityFilter &&
+                getStudyModality(
+                  study
+                ) !==
+                  modalityFilter
+              ) {
+                return false;
+              }
+
+              return true;
+            }
+          )
+          .sort(
+            (first, second) => {
+              const firstDate =
+                new Date(
+                  getStudyDate(
+                    first
+                  )
+                );
+
+              const secondDate =
+                new Date(
+                  getStudyDate(
+                    second
+                  )
+                );
+
+              return (
+                firstDate -
+                secondDate
+              );
+            }
+          );
+
+      const body =
+        document.getElementById(
+          "registryTableBody"
+        );
+
+      if (!studies.length) {
+        body.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty">
+                На сьогодні записів не знайдено
+              </div>
+            </td>
+          </tr>
+        `;
+
+        updateStatistics();
+        return;
+      }
+
+      body.innerHTML =
+        studies
+          .map(
+            study => {
+              const patient =
+                patients[
+                  getStudyPatientId(
+                    study
+                  )
+                ];
+
+              const status =
+                getStudyStatus(
+                  study
+                );
+
+              return `
+                <tr>
+                  <td>
+                    ${escapeHtml(
+                      formatTime(
+                        getStudyDate(
+                          study
+                        )
+                      )
+                    )}
+                  </td>
+
+                  <td>
+                    <span class="patient-name">
+                      ${escapeHtml(
+                        getPatientName(
+                          patient
+                        )
+                      )}
+                    </span>
+
+                    <span class="patient-phone">
+                      ${escapeHtml(
+                        getPatientPhone(
+                          patient
+                        )
+                      )}
+                    </span>
+                  </td>
+
+                  <td>
+                    <strong>
+                      ${escapeHtml(
+                        getStudyTitle(
+                          study
+                        )
+                      )}
+                    </strong>
+
+                    <div class="patient-phone">
+                      ${escapeHtml(
+                        getStudyModality(
+                          study
+                        )
+                      )}
+                    </div>
+                  </td>
+
+                  <td>
+                    <span class="badge ${
+                      status ===
+                      "Завершено"
+                        ? "completed"
+                        : status ===
+                          "На дослідженні"
+                          ? "active"
+                          : "waiting"
+                    }">
+                      ${escapeHtml(
+                        status
+                      )}
+                    </span>
+                  </td>
+
+                  <td>
+                    <div class="row-actions">
+
+                      <button
+                        class="open-button"
+                        type="button"
+                        onclick="openPatient('${escapeHtml(
+                          getStudyPatientId(
+                            study
+                          )
+                        )}')"
+                      >
+                        Картка
+                      </button>
+
+                      <button
+                        class="status-button"
+                        type="button"
+                        onclick="moveStudyNext('${escapeHtml(
+                          study.id
+                        )}')"
+                      >
+                        Далі →
+                      </button>
+
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }
+          )
+          .join("");
+
+      updateStatistics();
+    }
+        function moveStudyNext(id) {
+      let study = null;
+
+      try {
+        study =
+          RadiologyOS.getById(
+            "studies",
+            id
+          );
+      } catch (error) {}
+
+      if (!study) {
+        alert(
+          "Дослідження не знайдено."
+        );
+        return;
+      }
+
+      const statuses = [
+        "Очікує",
+        "На дослідженні",
+        "Завершено"
+      ];
+
+      const currentStatus =
+        getStudyStatus(
+          study
+        );
+
+      const currentIndex =
+        statuses.indexOf(
+          currentStatus
+        );
+
+      const nextIndex =
+        currentIndex < 0
+          ? 0
+          : Math.min(
+              currentIndex + 1,
+              statuses.length - 1
+            );
+
+      const nextStatus =
+        statuses[nextIndex];
+
+      try {
+        RadiologyOS.update(
+          "studies",
+          id,
+          {
+            registryStatus:
+              nextStatus,
+            queueStatus:
+              nextStatus,
+            status:
+              nextStatus
+          }
+        );
+      } catch (error) {
+        alert(
+          "Не вдалося змінити статус дослідження."
+        );
+        return;
+      }
+
+      renderRegistry();
+    }
+
+    function getNewLeads() {
+      let leads = [];
+
+      try {
+        leads =
+          RadiologyCRM.getAll(
+            "leads"
+          ) || [];
+      } catch (error) {
+        leads = [];
+      }
+
+      return leads
+        .filter(
+          lead =>
+            lead.status ===
+              "Нове звернення" ||
+            lead.status ===
+              "Новий" ||
+            !lead.status
+        )
+        .sort(
+          (first, second) => {
+            const firstDate =
+              new Date(
+                first.createdAt ||
+                first.updatedAt ||
+                0
+              );
+
+            const secondDate =
+              new Date(
+                second.createdAt ||
+                second.updatedAt ||
+                0
+              );
+
+            return (
+              secondDate -
+              firstDate
+            );
+          }
+        );
+    }
+
+    function renderNewLeads() {
+      const leads =
+        getNewLeads();
+
+      const container =
+        document.getElementById(
+          "newLeadList"
+        );
+
+      if (!leads.length) {
+        container.innerHTML = `
+          <div class="empty">
+            Нових звернень немає
+          </div>
+        `;
+
+        return;
+      }
+
+      container.innerHTML =
+        leads
+          .slice(0, 12)
+          .map(
+            lead => `
+              <article class="lead-item">
+
+                <span class="lead-name">
+                  ${escapeHtml(
+                    lead.fullName ||
+                    lead.name ||
+                    "Пацієнт без ПІБ"
+                  )}
+                </span>
+
+                <div class="lead-service">
+                  ${escapeHtml(
+                    lead.service ||
+                    "Послуга не вказана"
+                  )}
+                </div>
+
+                <div class="patient-phone">
+                  ${escapeHtml(
+                    lead.phone ||
+                    "Телефон не вказаний"
+                  )}
+                </div>
+
+                <div class="lead-actions">
+
+                  <button
+                    class="open-button"
+                    type="button"
+                    onclick="openLead('${escapeHtml(
+                      lead.id
+                    )}')"
+                  >
+                    Відкрити
+                  </button>
+
+                  <button
+                    class="status-button"
+                    type="button"
+                    onclick="acceptLead('${escapeHtml(
+                      lead.id
+                    )}')"
+                  >
+                    Прийняти
+                  </button>
+
+                </div>
+
+              </article>
+            `
+          )
+          .join("");
+    }
+
+    function acceptLead(id) {
+      const lead =
+        RadiologyCRM.getById(
+          "leads",
+          id
+        );
+
+      if (!lead) {
+        alert(
+          "CRM-звернення не знайдено."
+        );
+        return;
+      }
+
+      RadiologyCRM.updateLead(
+        id,
+        {
+          status:
+            "Опрацьовується"
+        }
+      );
+
+      renderNewLeads();
+      updateStatistics();
+    }
+
+    function updateStatistics() {
+      const studies =
+        getTodayStudies();
+
+      const waiting =
+        studies.filter(
+          study =>
+            getStudyStatus(
+              study
+            ) ===
+            "Очікує"
+        ).length;
+
+      const active =
+        studies.filter(
+          study =>
+            getStudyStatus(
+              study
+            ) ===
+            "На дослідженні"
+        ).length;
+
+      const completed =
+        studies.filter(
+          study =>
+            getStudyStatus(
+              study
+            ) ===
+            "Завершено"
+        ).length;
+
+      document.getElementById(
+        "todayPatientsCount"
+      ).textContent =
+        studies.length;
+
+      document.getElementById(
+        "waitingCount"
+      ).textContent =
+        waiting;
+
+      document.getElementById(
+        "activeCount"
+      ).textContent =
+        active;
+
+      document.getElementById(
+        "completedCount"
+      ).textContent =
+        completed;
+
+      document.getElementById(
+        "newLeadsCount"
+      ).textContent =
+        getNewLeads().length;
+        }
+        function openPatient(id) {
+      if (!id) {
+        window.location.href =
+          "patients.html";
+        return;
+      }
+
+      window.location.href =
+        "patients.html?patientId=" +
+        encodeURIComponent(id);
+    }
+
+    function openLead(id) {
+      window.location.href =
+        "crm.html?leadId=" +
+        encodeURIComponent(id);
+    }
+
+    function openCRM() {
+      window.location.href =
+        "crm.html";
+    }
+
+    function openPatients() {
+      window.location.href =
+        "patients.html?action=new";
+    }
+
+    function initializePage() {
+      if (
+        !window.RadiologyOS ||
+        !window.RadiologyCRM
+      ) {
+        document.getElementById(
+          "moduleStatus"
+        ).textContent =
+          "Модуль недоступний";
+
+        alert(
+          "Не вдалося підключити базу даних або CRM."
+        );
+
+        return;
+      }
+
+      document.getElementById(
+        "moduleStatus"
+      ).textContent =
+        "Реєстратура підключена";
+
+      document.getElementById(
+        "currentDate"
+      ).textContent =
+        new Date().toLocaleDateString(
+          "uk-UA",
+          {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+          }
+        );
+
+      renderRegistry();
+      renderNewLeads();
+      updateStatistics();
+    }
+
+    window.addEventListener(
+      "radiologyos:data-changed",
+      function() {
+        renderRegistry();
+        updateStatistics();
+      }
+    );
+
+    window.addEventListener(
+      "radiologyos:crm-changed",
+      function() {
+        renderNewLeads();
+        updateStatistics();
+      }
+    );
+
+    initializePage();
+  </script>
+
+</body>
+</html>
