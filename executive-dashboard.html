@@ -22,7 +22,7 @@
 
     header {
       min-height: 72px;
-      padding: 14px 28px;
+      padding: 13px 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -41,7 +41,7 @@
     .header-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 13px;
       color: #667085;
       font-size: 13px;
     }
@@ -53,6 +53,7 @@
       color: #14804a;
       font-size: 12px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .layout {
@@ -192,7 +193,7 @@
 
     .list-item {
       display: grid;
-      grid-template-columns: 76px 1fr auto;
+      grid-template-columns: 72px 1fr auto;
       align-items: center;
       gap: 12px;
       padding: 13px 0;
@@ -243,7 +244,7 @@
       color: #1267d6;
     }
 
-    .progress {
+    .progress-status {
       background: #fff4d6;
       color: #8a5b00;
     }
@@ -259,7 +260,7 @@
     }
 
     .progress-row {
-      margin-bottom: 16px;
+      margin-bottom: 17px;
     }
 
     .progress-top {
@@ -280,10 +281,11 @@
       height: 100%;
       border-radius: 20px;
       background: #1267d6;
+      transition: width 0.25s ease;
     }
 
     .empty {
-      padding: 24px 8px;
+      padding: 25px 8px;
       color: #667085;
       text-align: center;
       font-size: 14px;
@@ -329,12 +331,12 @@
       }
     }
 
-    @media (max-width: 650px) {
+    @media (max-width: 680px) {
       header {
-        padding: 14px 16px;
+        padding: 12px 16px;
       }
 
-      .header-right #currentTime {
+      #currentTime {
         display: none;
       }
 
@@ -342,13 +344,12 @@
         flex-direction: column;
       }
 
-      .stats,
-      .quick-links {
-        grid-template-columns: 1fr 1fr;
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
       }
 
       .list-item {
-        grid-template-columns: 58px 1fr;
+        grid-template-columns: 55px 1fr;
       }
 
       .list-item .badge {
@@ -364,20 +365,34 @@
         grid-column: auto;
       }
     }
+
+    @media (max-width: 450px) {
+      .stats,
+      .quick-links {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 
 <body>
 
   <header>
-    <a class="logo" href="index.html">RadiologyOS</a>
+    <a class="logo" href="index.html">
+      RadiologyOS
+    </a>
 
     <div class="header-right">
       <span id="currentTime">—</span>
 
-      <span class="database-status" id="databaseStatus">
+      <span
+        class="database-status"
+        id="databaseStatus"
+      >
         Підключення...
       </span>
+
+      <div id="currentUser"></div>
     </div>
   </header>
 
@@ -387,20 +402,62 @@
       <h3>Керування</h3>
 
       <ul class="menu">
-        <li>
-          <a href="executive-dashboard.html" class="active">
+
+        <li data-permission="dashboard">
+          <a
+            href="executive-dashboard.html"
+            class="active"
+          >
             Панель керівника
           </a>
         </li>
-        <li><a href="index.html">Головна</a></li>
-        <li><a href="patients.html">Пацієнти</a></li>
-        <li><a href="studies.html">Дослідження</a></li>
-        <li><a href="protocols.html">Протоколи</a></li>
-        <li><a href="schedule.html">Графік роботи</a></li>
-        <li><a href="equipment.html">Обладнання</a></li>
-        <li><a href="inventory.html">Склад</a></li>
-        <li><a href="audit.html">Журнал аудиту</a></li>
-        <li><a href="data-center.html">Центр даних</a></li>
+
+        <li data-permission="dashboard">
+          <a href="index.html">Головна</a>
+        </li>
+
+        <li data-permission="patients">
+          <a href="patients.html">Пацієнти</a>
+        </li>
+
+        <li data-permission="studies">
+          <a href="studies.html">Дослідження</a>
+        </li>
+
+        <li data-permission="protocols">
+          <a href="protocols.html">Протоколи</a>
+        </li>
+
+        <li data-permission="protocols">
+          <a href="protocol-builder.html">
+            Конструктор протоколів
+          </a>
+        </li>
+
+        <li data-permission="schedule">
+          <a href="schedule.html">Графік роботи</a>
+        </li>
+
+        <li data-permission="equipment">
+          <a href="equipment.html">Обладнання</a>
+        </li>
+
+        <li data-permission="inventory">
+          <a href="inventory.html">Склад</a>
+        </li>
+
+        <li data-permission="audit">
+          <a href="audit.html">Журнал аудиту</a>
+        </li>
+
+        <li data-permission="settings">
+          <a href="data-center.html">Центр даних</a>
+        </li>
+
+        <li data-permission="settings">
+          <a href="settings.html">Налаштування</a>
+        </li>
+
       </ul>
     </aside>
 
@@ -416,7 +473,11 @@
           </p>
         </div>
 
-        <button class="refresh-button" onclick="loadDashboard()">
+        <button
+          class="refresh-button"
+          type="button"
+          onclick="loadDashboard()"
+        >
           Оновити дані
         </button>
 
@@ -495,7 +556,7 @@
               <div
                 class="progress-bar"
                 id="studyPercentBar"
-                style="width:0%"
+                style="width: 0%"
               ></div>
             </div>
           </div>
@@ -510,7 +571,7 @@
               <div
                 class="progress-bar"
                 id="protocolPercentBar"
-                style="width:0%"
+                style="width: 0%"
               ></div>
             </div>
           </div>
@@ -525,7 +586,7 @@
               <div
                 class="progress-bar"
                 id="contrastPercentBar"
-                style="width:0%"
+                style="width: 0%"
               ></div>
             </div>
           </div>
@@ -559,10 +620,33 @@
           </p>
 
           <div class="quick-links">
-            <a href="patients.html">Пацієнти</a>
-            <a href="studies.html">Дослідження</a>
-            <a href="protocols.html">Протоколи</a>
-            <a href="data-center.html">Центр даних</a>
+            <a
+              href="patients.html"
+              data-permission="patients"
+            >
+              Пацієнти
+            </a>
+
+            <a
+              href="studies.html"
+              data-permission="studies"
+            >
+              Дослідження
+            </a>
+
+            <a
+              href="protocol-builder.html"
+              data-permission="protocols"
+            >
+              Конструктор
+            </a>
+
+            <a
+              href="data-center.html"
+              data-permission="settings"
+            >
+              Центр даних
+            </a>
           </div>
         </article>
 
@@ -571,9 +655,22 @@
     </main>
   </div>
 
+  <script src="radiologyos-auth.js"></script>
+  <script src="radiologyos-page-guard.js"></script>
   <script src="radiologyos-data.js"></script>
 
   <script>
+    const pageAllowed = RadiologyGuard.initialize({
+      permission: "dashboard",
+      userContainerId: "currentUser"
+    });
+
+    if (!pageAllowed) {
+      throw new Error(
+        "Доступ до сторінки заборонено"
+      );
+    }
+
     function escapeHtml(value) {
       return String(value || "")
         .replaceAll("&", "&amp;")
@@ -581,26 +678,6 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
-    }
-
-    function formatDateTime(value) {
-      if (!value) return "—";
-
-      return new Date(value).toLocaleString("uk-UA", {
-        day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    }
-
-    function formatTime(value) {
-      if (!value) return "—";
-
-      return new Date(value).toLocaleTimeString("uk-UA", {
-        hour: "2-digit",
-        minute: "2-digit"
-      });
     }
 
     function updateClock() {
@@ -614,40 +691,81 @@
         });
     }
 
+    function formatTime(value) {
+      if (!value) {
+        return "—";
+      }
+
+      return new Date(value).toLocaleTimeString(
+        "uk-UA",
+        {
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+    }
+
+    function formatDateTime(value) {
+      if (!value) {
+        return "—";
+      }
+
+      return new Date(value).toLocaleString(
+        "uk-UA",
+        {
+          day: "2-digit",
+          month: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+    }
+
     function setDatabaseStatus(connected) {
       const element =
         document.getElementById("databaseStatus");
 
       element.textContent =
-        connected ? "База підключена" : "База недоступна";
+        connected
+          ? "База підключена"
+          : "База недоступна";
 
-      if (!connected) {
+      if (connected) {
+        element.style.background = "#e7f7ef";
+        element.style.color = "#14804a";
+      } else {
         element.style.background = "#fdecec";
         element.style.color = "#b42318";
       }
     }
 
     function percent(part, total) {
-      if (!total) return 0;
+      if (!total) {
+        return 0;
+      }
 
-      return Math.round((part / total) * 100);
+      return Math.round(
+        (part / total) * 100
+      );
     }
 
     function renderProgress(id, value) {
-      document.getElementById(id + "Text").textContent =
-        value + "%";
+      document.getElementById(
+        id + "Text"
+      ).textContent = value + "%";
 
-      document.getElementById(id + "Bar").style.width =
-        value + "%";
+      document.getElementById(
+        id + "Bar"
+      ).style.width = value + "%";
     }
 
-    function statusBadge(status) {
+    function statusClass(status) {
       if (status === "Завершено") {
         return "ready";
       }
 
       if (status === "У роботі") {
-        return "progress";
+        return "progress-status";
       }
 
       if (status === "Скасовано") {
@@ -657,25 +775,25 @@
       return "planned";
     }
 
-    function equipmentBadge(status) {
-      const normalized =
+    function equipmentClass(status) {
+      const value =
         String(status || "").toLowerCase();
 
       if (
-        normalized.includes("працює") ||
-        normalized.includes("онлайн")
+        value.includes("працює") ||
+        value.includes("онлайн")
       ) {
         return "ready";
       }
 
       if (
-        normalized.includes("ремонт") ||
-        normalized.includes("несправ")
+        value.includes("ремонт") ||
+        value.includes("несправ")
       ) {
         return "critical";
       }
 
-      return "progress";
+      return "progress-status";
     }
 
     function loadDashboard() {
@@ -726,17 +844,20 @@
 
       const completed =
         studies.filter(
-          study => study.status === "Завершено"
+          study =>
+            study.status === "Завершено"
         );
 
       const signed =
         protocols.filter(
-          protocol => protocol.status === "Підписаний"
+          protocol =>
+            protocol.status === "Підписаний"
         );
 
       const unsigned =
         protocols.filter(
-          protocol => protocol.status !== "Підписаний"
+          protocol =>
+            protocol.status !== "Підписаний"
         );
 
       const contrast =
@@ -744,37 +865,52 @@
           study => study.contrast === true
         );
 
-      document.getElementById("patientCount").textContent =
-        patients.length;
+      document.getElementById(
+        "patientCount"
+      ).textContent = patients.length;
 
-      document.getElementById("todayStudyCount").textContent =
-        todayStudies.length;
+      document.getElementById(
+        "todayStudyCount"
+      ).textContent = todayStudies.length;
 
-      document.getElementById("queueCount").textContent =
-        queue.length;
+      document.getElementById(
+        "queueCount"
+      ).textContent = queue.length;
 
-      document.getElementById("completedCount").textContent =
-        completed.length;
+      document.getElementById(
+        "completedCount"
+      ).textContent = completed.length;
 
-      document.getElementById("unsignedCount").textContent =
-        unsigned.length;
+      document.getElementById(
+        "unsignedCount"
+      ).textContent = unsigned.length;
 
-      document.getElementById("signedCount").textContent =
-        signed.length;
+      document.getElementById(
+        "signedCount"
+      ).textContent = signed.length;
 
       renderProgress(
         "studyPercent",
-        percent(completed.length, studies.length)
+        percent(
+          completed.length,
+          studies.length
+        )
       );
 
       renderProgress(
         "protocolPercent",
-        percent(signed.length, protocols.length)
+        percent(
+          signed.length,
+          protocols.length
+        )
       );
 
       renderProgress(
         "contrastPercent",
-        percent(contrast.length, studies.length)
+        percent(
+          contrast.length,
+          studies.length
+        )
       );
 
       renderQueue(database, queue);
@@ -789,11 +925,13 @@
 
       const patientMap = {};
 
-      database.patients.forEach((patient) => {
-        patientMap[patient.id] = patient;
-      });
+      (database.patients || []).forEach(
+        (patient) => {
+          patientMap[patient.id] = patient;
+        }
+      );
 
-      const items = queue
+      const items = [...queue]
         .sort(
           (a, b) =>
             new Date(a.scheduledAt || 0) -
@@ -808,37 +946,42 @@
         return;
       }
 
-      list.innerHTML = items.map((study) => {
-        const patient =
-          patientMap[study.patientId];
+      list.innerHTML = items
+        .map((study) => {
+          const patient =
+            patientMap[study.patientId];
 
-        return `
-          <li class="list-item">
-            <span class="time">
-              ${formatTime(study.scheduledAt)}
-            </span>
-
-            <span>
-              <span class="item-title">
-                ${escapeHtml(study.modality || "—")} ·
-                ${escapeHtml(study.region || "—")}
+          return `
+            <li class="list-item">
+              <span class="time">
+                ${formatTime(study.scheduledAt)}
               </span>
 
-              <span class="small">
+              <span>
+                <span class="item-title">
+                  ${escapeHtml(study.modality || "—")} ·
+                  ${escapeHtml(study.region || "—")}
+                </span>
+
+                <span class="small">
+                  ${escapeHtml(
+                    patient
+                      ? patient.fullName
+                      : "Пацієнта не знайдено"
+                  )}
+                </span>
+              </span>
+
+              <span class="badge ${statusClass(study.status)}">
                 ${escapeHtml(
-                  patient
-                    ? patient.fullName
-                    : "Пацієнта не знайдено"
+                  study.status || "Заплановано"
                 )}
               </span>
-            </span>
-
-            <span class="badge ${statusBadge(study.status)}">
-              ${escapeHtml(study.status || "Заплановано")}
-            </span>
-          </li>
-        `;
-      }).join("");
+            </li>
+          `;
+   
+        })
+        .join("");
     }
 
     function renderEquipment(database) {
@@ -857,23 +1000,32 @@
         return;
       }
 
-      list.innerHTML = equipment.map((item) => `
-        <li class="list-item equipment-item">
-          <span>
-            <span class="item-title">
-              ${escapeHtml(item.name || "Обладнання")}
+      list.innerHTML = equipment
+        .map((item) => `
+          <li class="list-item equipment-item">
+            <span>
+              <span class="item-title">
+                ${escapeHtml(
+                  item.name || "Обладнання"
+                )}
+              </span>
+
+              <span class="small">
+                ${escapeHtml(
+                  item.room ||
+                  "Приміщення не вказано"
+                )}
+              </span>
             </span>
 
-            <span class="small">
-              ${escapeHtml(item.room || "Приміщення не вказано")}
+            <span class="badge ${equipmentClass(item.status)}">
+              ${escapeHtml(
+                item.status || "Невідомо"
+              )}
             </span>
-          </span>
-
-          <span class="badge ${equipmentBadge(item.status)}">
-            ${escapeHtml(item.status || "Невідомо")}
-          </span>
-        </li>
-      `).join("");
+          </li>
+        `)
+        .join("");
     }
 
     function renderInventory(database) {
@@ -895,26 +1047,33 @@
       list.innerHTML = inventory
         .slice(0, 6)
         .map((item) => {
-          const low =
-            Number(item.quantity || 0) <=
+          const quantity =
+            Number(item.quantity || 0);
+
+          const minimum =
             Number(item.minimumQuantity || 0);
+
+          const low =
+            quantity <= minimum;
 
           return `
             <li class="list-item equipment-item">
               <span>
                 <span class="item-title">
-                  ${escapeHtml(item.name || "Матеріал")}
+                  ${escapeHtml(
+                    item.name || "Матеріал"
+                  )}
                 </span>
 
                 <span class="small">
                   Мінімум:
-                  ${escapeHtml(item.minimumQuantity || "0")}
+                  ${escapeHtml(minimum)}
                   ${escapeHtml(item.unit || "")}
                 </span>
               </span>
 
               <span class="badge ${low ? "critical" : "ready"}">
-                ${escapeHtml(item.quantity || "0")}
+                ${escapeHtml(quantity)}
                 ${escapeHtml(item.unit || "")}
               </span>
             </li>
@@ -928,9 +1087,9 @@
         document.getElementById("auditList");
 
       const audit =
-  Array.isArray(database.audit)
-    ? database.audit.slice(0, 6)
-    : [];
+        Array.isArray(database.audit)
+          ? database.audit.slice(0, 6)
+          : [];
 
       if (!audit.length) {
         list.innerHTML =
@@ -939,28 +1098,36 @@
         return;
       }
 
-      list.innerHTML = audit.map((item) => `
-        <li class="list-item">
-          <span class="time">
-            ${formatTime(item.createdAt)}
-          </span>
-
-          <span>
-            <span class="item-title">
-              ${escapeHtml(item.action || "Подія")}
+      list.innerHTML = audit
+        .map((item) => `
+          <li class="list-item">
+            <span class="time">
+              ${formatTime(item.createdAt)}
             </span>
 
-            <span class="small">
-              ${escapeHtml(item.module || "Система")} ·
-              ${escapeHtml(item.recordId || "—")}
-            </span>
-          </span>
+            <span>
+              <span class="item-title">
+                ${escapeHtml(
+                  item.action || "Подія"
+                )}
+              </span>
 
-          <span class="badge neutral">
-            ${formatDateTime(item.createdAt)}
-          </span>
-        </li>
-      `).join("");
+              <span class="small">
+                ${escapeHtml(
+                  item.module || "Система"
+                )} ·
+                ${escapeHtml(
+                  item.recordId || "—"
+                )}
+              </span>
+            </span>
+
+            <span class="badge neutral">
+              ${formatDateTime(item.createdAt)}
+            </span>
+          </li>
+        `)
+        .join("");
     }
 
     window.addEventListener(
