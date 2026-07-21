@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Заявки на запис — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+      color: #ffffff;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .refresh-button {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 28px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font-size: 15px;
+    }
+
+    .booking-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .booking-card {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 13px;
+      box-shadow: 0 6px 20px rgba(23, 32, 51, 0.04);
+    }
+
+    .booking-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .booking-header h2 {
+      margin-bottom: 5px;
+      font-size: 18px;
+    }
+
+    .booking-id {
+      color: #667085;
+      font-size: 13px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status-new {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .status-confirmed {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .status-cancelled {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .booking-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .detail {
+      padding: 12px;
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .detail span {
+      display: block;
+      margin-bottom: 5px;
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .detail strong {
+      font-size: 14px;
+    }
+
+    .notes {
+      margin-top: 12px;
+      padding: 13px;
+      border-left: 4px solid #1267d6;
+      background: #eef5ff;
+      color: #475467;
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 17px;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .confirm-button {
+      background: #14804a;
+      color: #ffffff;
+    }
+
+    .cancel-button {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .delete-button {
+      background: #edf2f7;
+      color: #475467;
+    }
+
+    .empty {
+      padding: 45px 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 13px;
+      text-align: center;
+      color: #667085;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .booking-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar,
+      .booking-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .booking-header {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Реєстр заявок на онлайн-запис
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="bookings-admin.html" class="active">Заявки</a></li>
+        <li><a href="ai.html">AI Assistant</a></li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="analytics.html">Аналітика</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Заявки на запис</h1>
+          <p>Заявки, створені пацієнтами через форму онлайн-запису</p>
+        </div>
+
+        <button class="refresh-button" onclick="renderBookings()">
+          Оновити
+        </button>
+      </div>
+
+      <section class="stats">
+        <div class="stat-card">
+          <span>Усього заявок</span>
+          <strong id="totalCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Нові</span>
+          <strong id="newCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Підтверджені</span>
+          <strong id="confirmedCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Скасовані</span>
+          <strong id="cancelledCount">0</strong>
+        </div>
+      </section>
+
+      <div class="toolbar">
+        <input
+          id="search"
+          type="search"
+          placeholder="Пошук за ПІБ, телефоном або дослідженням..."
+          oninput="renderBookings()"
+        >
+
+        <select id="statusFilter" onchange="renderBookings()">
+          <option value="">Усі статуси</option>
+          <option value="Нова заявка">Нова заявка</option>
+          <option value="Підтверджено">Підтверджено</option>
+          <option value="Скасовано">Скасовано</option>
+        </select>
+      </div>
+
+      <section class="booking-list" id="bookingList"></section>
+
+    </main>
+  </div>
+
+  <script>
+    function getBookings() {
+      return JSON.parse(
+        localStorage.getItem("radiologyosBookings") || "[]"
+      );
+    }
+
+    function saveBookings(bookings) {
+      localStorage.setItem(
+        "radiologyosBookings",
+        JSON.stringify(bookings)
+      );
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return "Не вказано";
+
+      return dateString
+        .split("-")
+        .reverse()
+        .join(".");
+    }
+
+    function getStatusClass(status) {
+      if (status === "Підтверджено") {
+        return "status-confirmed";
+      }
+
+      if (status === "Скасовано") {
+        return "status-cancelled";
+      }
+
+      return "status-new";
+    }
+
+    function updateStatus(id, newStatus) {
+      const bookings = getBookings();
+
+      const updated = bookings.map((booking) => {
+        if (booking.id === id) {
+          return {
+            ...booking,
+            status: newStatus
+          };
+        }
+
+        return booking;
+      });
+
+      saveBookings(updated);
+      renderBookings();
+    }
+
+    function deleteBooking(id) {
+      const confirmed = confirm(
+        "Видалити цю заявку?"
+      );
+
+      if (!confirmed) return;
+
+      const bookings = getBookings()
+        .filter((booking) => booking.id !== id);
+
+      saveBookings(bookings);
+      renderBookings();
+    }
+
+    function updateStatistics(bookings) {
+      document.getElementById("totalCount").textContent =
+        bookings.length;
+
+      document.getElementById("newCount").textContent =
+        bookings.filter(
+          (booking) => booking.status === "Нова заявка"
+        ).length;
+
+      document.getElementById("confirmedCount").textContent =
+        bookings.filter(
+          (booking) => booking.status === "Підтверджено"
+        ).length;
+
+      document.getElementById("cancelledCount").textContent =
+        bookings.filter(
+          (booking) => booking.status === "Скасовано"
+        ).length;
+    }
+
+    function renderBookings() {
+      const bookings = getBookings();
+
+      updateStatistics(bookings);
+
+      const searchValue =
+        document.getElementById("search").value.toLowerCase();
+
+      const statusValue =
+        document.getElementById("statusFilter").value;
+
+      const filtered = bookings
+        .filter((booking) => {
+          const searchText = `
+            ${booking.fullName || ""}
+            ${booking.phone || ""}
+            ${booking.service || ""}
+            ${booking.id || ""}
+          `.toLowerCase();
+
+          const matchesSearch =
+            searchText.includes(searchValue);
+
+          const matchesStatus =
+            !statusValue || booking.status === statusValue;
+
+          return matchesSearch && matchesStatus;
+        })
+        .reverse();
+
+      const list =
+        document.getElementById("bookingList");
+
+      if (filtered.length === 0) {
+        list.innerHTML = `
+          <div class="empty">
+            Заявок не знайдено. Для перевірки створіть тестову
+            заявку на сторінці онлайн-запису.
+          </div>
+        `;
+
+        return;
+      }
+
+      list.innerHTML = filtered.map((booking) => {
+        const noteParts = [
+          booking.referral,
+          booking.comment
+        ].filter(Boolean);
+
+        const notes = noteParts.length
+          ? `
+            <div class="notes">
+              ${noteParts.join("<br><br>")}
+            </div>
+          `
+          : "";
+
+        return `
+          <article class="booking-card">
+
+            <div class="booking-header">
+              <div>
+                <h2>${booking.fullName || "Пацієнт"}</h2>
+                <div class="booking-id">
+                  ${booking.id || "Без номера"}
+                </div>
+              </div>
+
+              <span class="status ${getStatusClass(booking.status)}">
+                ${booking.status || "Нова заявка"}
+              </span>
+            </div>
+
+            <div class="booking-grid">
+              <div class="detail">
+                <span>Дослідження</span>
+                <strong>${booking.service || "Не вказано"}</strong>
+              </div>
+
+              <div class="detail">
+                <span>Дата і час</span>
+                <strong>
+                  ${formatDate(booking.visitDate)}
+                  ${booking.visitTime || ""}
+                </strong>
+              </div>
+
+              <div class="detail">
+                <span>Телефон</span>
+                <strong>${booking.phone || "Не вказано"}</strong>
+              </div>
+
+              <div class="detail">
+                <span>Дата народження</span>
+                <strong>${formatDate(booking.birthDate)}</strong>
+              </div>
+
+              <div class="detail">
+                <span>Контрастування</span>
+                <strong>${booking.contrast || "Не вказано"}</strong>
+              </div>
+
+              <div class="detail">
+                <span>Email</span>
+                <strong>${booking.email || "Не вказано"}</strong>
+              </div>
+            </div>
+
+            ${notes}
+
+            <div class="actions">
+              <button
+                class="confirm-button"
+                onclick="updateStatus('${booking.id}', 'Підтверджено')"
+              >
+                Підтвердити
+              </button>
+
+              <button
+                class="cancel-button"
+                onclick="updateStatus('${booking.id}', 'Скасовано')"
+              >
+                Скасувати
+              </button>
+
+              <button
+                class="delete-button"
+                onclick="deleteBooking('${booking.id}')"
+              >
+                Видалити
+              </button>
+            </div>
+
+          </article>
+        `;
+      }).join("");
+    }
+
+    renderBookings();
+  </script>
+
+</body>
+</html>
