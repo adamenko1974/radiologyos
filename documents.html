@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Документи — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 30px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .add-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      padding: 19px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 27px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 220px 220px;
+      gap: 13px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .panel {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 950px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 13px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #667085;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .document-name {
+      font-weight: 700;
+    }
+
+    .small {
+      display: block;
+      margin-top: 4px;
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .active {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .review {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .archive {
+      background: #edf2f7;
+      color: #667085;
+    }
+
+    .actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .actions button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .open-button {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .status-button {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .delete-button {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 590px;
+      padding: 25px;
+      background: #ffffff;
+      border-radius: 14px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .secondary,
+    .primary {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .secondary {
+      background: #edf2f7;
+      color: #344054;
+    }
+
+    .primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar,
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+    <div class="header-info">Документи та внутрішні інструкції</div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="referrals.html">Направлення</a></li>
+        <li><a href="archive.html">Архів</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="schedule.html">Графік роботи</a></li>
+        <li><a href="tasks.html">Завдання</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+        <li><a href="rooms.html">Приміщення</a></li>
+        <li><a href="documents.html" class="active">Документи</a></li>
+        <li><a href="incidents.html">Журнал подій</a></li>
+        <li><a href="audit.html">Журнал аудиту</a></li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Документи відділення</h1>
+          <p>Інструкції, накази, пам’ятки та робочі форми</p>
+        </div>
+
+        <button class="add-button" onclick="openModal()">
+          + Додати документ
+        </button>
+      </div>
+
+      <section class="stats">
+        <div class="stat-card">
+          <span>Усього документів</span>
+          <strong id="totalCount">5</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Чинні</span>
+          <strong id="activeCount">3</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>На перегляді</span>
+          <strong id="reviewCount">1</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Архівні</span>
+          <strong id="archiveCount">1</strong>
+        </div>
+      </section>
+
+      <div class="toolbar">
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Пошук документа..."
+          oninput="filterDocuments()"
+        >
+
+        <select id="categoryFilter" onchange="filterDocuments()">
+          <option value="">Усі категорії</option>
+          <option value="Інструкція">Інструкція</option>
+          <option value="Наказ">Наказ</option>
+          <option value="Пам’ятка">Пам’ятка</option>
+          <option value="Форма">Форма</option>
+        </select>
+
+        <select id="statusFilter" onchange="filterDocuments()">
+          <option value="">Усі статуси</option>
+          <option value="Чинний">Чинний</option>
+          <option value="На перегляді">На перегляді</option>
+          <option value="Архівний">Архівний</option>
+        </select>
+      </div>
+
+      <section class="panel">
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Документ</th>
+                <th>Категорія</th>
+                <th>Дата</th>
+                <th>Відповідальний</th>
+                <th>Статус</th>
+                <th>Дії</th>
+              </tr>
+            </thead>
+
+            <tbody id="documentsTable">
+
+              <tr data-category="Інструкція" data-status="Чинний">
+                <td>
+                  <span class="document-name">Алгоритм опису КТ головного мозку</span>
+                  <span class="small">Робочий стандарт відділення</span>
+                </td>
+                <td>Інструкція</td>
+                <td>15.07.2026</td>
+                <td>Адаменко Д.М.</td>
+                <td><span class="badge active">Чинний</span></td>
+                <td class="actions">
+                  <button class="open-button" onclick="openDocument(this)">Відкрити</button>
+                  <button class="status-button" onclick="changeStatus(this)">Статус</button>
+                  <button class="delete-button" onclick="deleteDocument(this)">Видалити</button>
+                </td>
+              </tr>
+
+              <tr data-category="Пам’ятка" data-status="Чинний">
+                <td>
+                  <span class="document-name">Пам’ятка перед КТ з контрастуванням</span>
+                  <span class="small">Підготовка пацієнта та протипоказання</span>
+                </td>
+                <td>Пам’ятка</td>
+                <td>12.07.2026</td>
+                <td>Медична сестра</td>
+                <td><span class="badge active">Чинний</span></td>
+                <td class="actions">
+                  <button class="open-button" onclick="openDocument(this)">Відкрити</button>
+                  <button class="status-button" onclick="changeStatus(this)">Статус</button>
+                  <button class="delete-button" onclick="deleteDocument(this)">Видалити</button>
+                </td>
+              </tr>
+
+              <tr data-category="Форма" data-status="Чинний">
+                <td>
+                  <span class="document-name">Направлення на променеве дослідження</span>
+                  <span class="small">Уніфікована внутрішня форма</span>
+                </td>
+                <td>Форма</td>
+                <td>10.07.2026</td>
+                <td>Адміністратор</td>
+                <td><span class="badge active">Чинний</span></td>
+                <td class="actions">
+                  <button class="open-button" onclick="openDocument(this)">Відкрити</button>
+                  <button class="status-button" onclick="changeStatus(this)">Статус</button>
+                  <button class="delete-button" onclick="deleteDocument(this)">Видалити</button>
+                </td>
+              </tr>
+
+              <tr data-category="Наказ" data-status="На перегляді">
+                <td>
+                  <span class="document-name">Порядок роботи з невідкладними дослідженнями</span>
+                  <span class="small">Потребує погодження керівництвом</span>
+                </td>
+                <td>Наказ</td>
+                <td>08.07.2026</td>
+                <td>Начальник відділення</td>
+                <td><span class="badge review">На перегляді</span></td>
+                <td class="actions">
+                  <button class="open-button" onclick="openDocument(this)">Відкрити</button>
+                  <button class="status-button" onclick="changeStatus(this)">Статус</button>
+                  <button class="delete-button" onclick="deleteDocument(this)">Видалити</button>
+                </td>
+              </tr>
+
+              <tr data-category="Інструкція" data-status="Архівний">
+                <td>
+                  <span class="document-name">Стара інструкція з ведення журналу</span>
+                  <span class="small">Замінена електронним реєстром</span>
+                </td>
+                <td>Інструкція</td>
+                <td>01.06.2026</td>
+                <td>Адміністратор</td>
+                <td><span class="badge archive">Архівний</span></td>
+                <td class="actions">
+                  <button class="open-button" onclick="openDocument(this)">Відкрити</button>
+                  <button class="status-button" onclick="changeStatus(this)">Статус</button>
+                  <button class="delete-button" onclick="deleteDocument(this)">Видалити</button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="modal" id="documentModal">
+
+    <div class="modal-box">
+      <h2>Новий документ</h2>
+
+      <div class="field">
+        <label for="documentName">Назва документа</label>
+        <input id="documentName" type="text">
+      </div>
+
+      <div class="field">
+        <label for="documentDescription">Опис</label>
+        <textarea id="documentDescription"></textarea>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="documentCategory">Категорія</label>
+
+          <select id="documentCategory">
+            <option>Інструкція</option>
+            <option>Наказ</option>
+            <option>Пам’ятка</option>
+            <option>Форма</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="documentStatus">Статус</label>
+
+          <select id="documentStatus">
+            <option>Чинний</option>
+            <option>На перегляді</option>
+            <option>Архівний</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="documentResponsible">Відповідальний</label>
+        <input id="documentResponsible" type="text">
+      </div>
+
+      <div class="modal-actions">
+        <button class="secondary" onclick="closeModal()">Скасувати</button>
+        <button class="primary" onclick="addDocument()">Зберегти</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function statusClass(status) {
+      if (status === "На перегляді") return "review";
+      if (status === "Архівний") return "archive";
+      return "active";
+    }
+
+    function openModal() {
+      document.getElementById("documentModal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("documentModal").classList.remove("open");
+    }
+
+    function addDocument() {
+      const name =
+        document.getElementById("documentName").value.trim();
+
+      const description =
+        document.getElementById("documentDescription").value.trim();
+
+      const category =
+        document.getElementById("documentCategory").value;
+
+      const status =
+        document.getElementById("documentStatus").value;
+
+      const responsible =
+        document.getElementById("documentResponsible").value.trim();
+
+      if (!name || !responsible) {
+        alert("Вкажіть назву документа та відповідального.");
+        return;
+      }
+
+      const row = document.createElement("tr");
+
+      row.dataset.category = category;
+      row.dataset.status = status;
+
+      row.innerHTML = `
+        <td>
+          <span class="document-name">${name}</span>
+          <span class="small">${description || "Опис не вказано"}</span>
+        </td>
+        <td>${category}</td>
+        <td>${new Date().toLocaleDateString("uk-UA")}</td>
+        <td>${responsible}</td>
+        <td>
+          <span class="badge ${statusClass(status)}">
+            ${status}
+          </span>
+        </td>
+        <td class="actions">
+          <button class="open-button" onclick="openDocument(this)">
+            Відкрити
+          </button>
+          <button class="status-button" onclick="changeStatus(this)">
+            Статус
+          </button>
+          <button class="delete-button" onclick="deleteDocument(this)">
+            Видалити
+          </button>
+        </td>
+      `;
+
+      document.getElementById("documentsTable").prepend(row);
+
+      document.getElementById("documentName").value = "";
+      document.getElementById("documentDescription").value = "";
+      document.getElementById("documentResponsible").value = "";
+
+      updateStatistics();
+      closeModal();
+    }
+
+    function openDocument(button) {
+      const row = button.closest("tr");
+
+      alert(
+        "Документ: " + row.children[0].innerText +
+        "\nКатегорія: " + row.children[1].innerText +
+        "\nВідповідальний: " + row.children[3].innerText
+      );
+    }
+
+    function changeStatus(button) {
+      const row = button.closest("tr");
+
+      const statuses = [
+        "Чинний",
+        "На перегляді",
+        "Архівний"
+      ];
+
+      const index = statuses.indexOf(row.dataset.status);
+      const nextStatus = statuses[(index + 1) % statuses.length];
+
+      row.dataset.status = nextStatus;
+
+      row.children[4].innerHTML = `
+        <span class="badge ${statusClass(nextStatus)}">
+          ${nextStatus}
+        </span>
+      `;
+
+      updateStatistics();
+      filterDocuments();
+    }
+
+    function deleteDocument(button) {
+      if (!confirm("Видалити цей документ?")) return;
+
+      button.closest("tr").remove();
+
+      updateStatistics();
+      filterDocuments();
+    }
+
+    function filterDocuments() {
+      const search =
+        document.getElementById("searchInput").value.toLowerCase();
+
+      const category =
+        document.getElementById("categoryFilter").value;
+
+      const status =
+        document.getElementById("statusFilter").value;
+
+      document
+        .querySelectorAll("#documentsTable tr")
+        .forEach((row) => {
+          const visible =
+            row.textContent.toLowerCase().includes(search) &&
+            (!category || row.dataset.category === category) &&
+            (!status || row.dataset.status === status);
+
+          row.style.display = visible ? "" : "none";
+        });
+    }
+
+    function updateStatistics() {
+      const rows = [
+        ...document.querySelectorAll("#documentsTable tr")
+      ];
+
+      document.getElementById("totalCount").textContent =
+        rows.length;
+
+      document.getElementById("activeCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Чинний"
+        ).length;
+
+      document.getElementById("reviewCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "На перегляді"
+        ).length;
+
+      document.getElementById("archiveCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Архівний"
+        ).length;
+    }
+
+    document
+      .getElementById("documentModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+
+    updateStatistics();
+  </script>
+
+</body>
+</html>
