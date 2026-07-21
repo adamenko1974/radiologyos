@@ -2,7 +2,11 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>CRM — RadiologyOS</title>
 
@@ -13,11 +17,39 @@
       padding: 0;
     }
 
+    :root {
+      --primary: #1267d6;
+      --primary-light: #eaf2fc;
+      --background: #f3f6fa;
+      --surface: #ffffff;
+      --sidebar: #172033;
+      --text: #172033;
+      --muted: #667085;
+      --border: #dfe7f1;
+      --success: #14804a;
+      --success-light: #e7f7ef;
+      --warning: #b26a00;
+      --warning-light: #fff4df;
+      --danger: #b42318;
+      --danger-light: #fdecec;
+    }
+
     body {
       min-height: 100vh;
       font-family: Arial, sans-serif;
-      background: #f3f6fa;
-      color: #172033;
+      background: var(--background);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
     }
 
     header {
@@ -26,13 +58,13 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 15px;
-      background: #ffffff;
-      border-bottom: 1px solid #dce4ee;
+      gap: 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
     }
 
     .logo {
-      color: #1267d6;
+      color: var(--primary);
       font-size: 24px;
       font-weight: 700;
       text-decoration: none;
@@ -47,8 +79,8 @@
     .crm-status {
       padding: 7px 11px;
       border-radius: 20px;
-      background: #e7f7ef;
-      color: #14804a;
+      background: var(--success-light);
+      color: var(--success);
       font-size: 12px;
       font-weight: 700;
       white-space: nowrap;
@@ -57,12 +89,12 @@
     .layout {
       min-height: calc(100vh - 72px);
       display: grid;
-      grid-template-columns: 250px 1fr;
+      grid-template-columns: 250px minmax(0, 1fr);
     }
 
     aside {
       padding: 24px 16px;
-      background: #172033;
+      background: var(--sidebar);
     }
 
     aside h3 {
@@ -88,7 +120,7 @@
 
     .menu a:hover,
     .menu a.active {
-      background: #1267d6;
+      background: var(--primary);
       color: #ffffff;
     }
 
@@ -111,52 +143,51 @@
     }
 
     .page-top p {
-      color: #667085;
+      color: var(--muted);
     }
 
     .top-actions {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 10px;
     }
 
     .primary-button,
     .secondary-button {
-      padding: 13px 18px;
+      padding: 12px 17px;
       border: none;
       border-radius: 9px;
-      cursor: pointer;
       font-weight: 700;
     }
 
     .primary-button {
-      background: #1267d6;
+      background: var(--primary);
       color: #ffffff;
     }
 
     .secondary-button {
-      background: #eaf2fc;
-      color: #1267d6;
+      background: var(--primary-light);
+      color: var(--primary);
     }
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 14px;
       margin-bottom: 20px;
     }
 
     .stat-card {
-      padding: 18px;
-      background: #ffffff;
-      border: 1px solid #dfe7f1;
+      padding: 17px;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 12px;
     }
 
     .stat-card span {
       display: block;
       margin-bottom: 7px;
-      color: #667085;
+      color: var(--muted);
       font-size: 13px;
     }
 
@@ -164,13 +195,16 @@
       font-size: 26px;
     }
 
-    .danger {
-      color: #b42318;
+    .danger-text {
+      color: var(--danger);
     }
 
     .toolbar {
       display: grid;
-      grid-template-columns: 1fr 190px 190px;
+      grid-template-columns:
+        minmax(220px, 1fr)
+        190px
+        190px;
       gap: 12px;
       margin-bottom: 20px;
     }
@@ -183,30 +217,30 @@
       border: 1px solid #cdd8e5;
       border-radius: 8px;
       background: #ffffff;
-      font: inherit;
+      color: var(--text);
     }
 
     textarea {
-      min-height: 90px;
+      min-height: 100px;
       resize: vertical;
     }
 
     .board-wrap {
       overflow-x: auto;
-      padding-bottom: 10px;
+      padding-bottom: 12px;
     }
 
     .board {
       min-width: 1500px;
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(6, minmax(235px, 1fr));
       gap: 14px;
     }
 
     .column {
-      min-height: 420px;
+      min-height: 460px;
       padding: 13px;
-      border: 1px solid #dfe7f1;
+      border: 1px solid var(--border);
       border-radius: 13px;
       background: #eef2f7;
     }
@@ -214,6 +248,7 @@
     .column-header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 10px;
       margin-bottom: 13px;
     }
@@ -223,15 +258,15 @@
     }
 
     .column-count {
-      min-width: 25px;
-      height: 25px;
-      padding: 0 7px;
+      min-width: 26px;
+      height: 26px;
+      padding: 0 8px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       border-radius: 20px;
       background: #ffffff;
-      color: #667085;
+      color: var(--muted);
       font-size: 12px;
       font-weight: 700;
     }
@@ -243,18 +278,19 @@
 
     .lead-card {
       padding: 14px;
-      border: 1px solid #dfe7f1;
+      border: 1px solid var(--border);
       border-radius: 10px;
       background: #ffffff;
       box-shadow: 0 4px 14px rgba(23, 32, 51, 0.05);
     }
 
-    .lead-card.urgent {
-      border-left: 4px solid #b42318;
+    .lead-card.high {
+      border-left: 4px solid var(--warning);
     }
 
-    .lead-card.high {
-      border-left: 4px solid #b26a00;
+    .lead-card.urgent {
+      border-left: 4px solid var(--danger);
+      background: #fffafa;
     }
 
     .lead-name {
@@ -288,15 +324,31 @@
       font-weight: 700;
     }
 
-    .source {
-      background: #eef5ff;
-      color: #1267d6;
+    .badge.source {
+      background: var(--primary-light);
+      color: var(--primary);
     }
 
-    .phone {
-      margin-bottom: 10px;
-      color: #667085;
+    .badge.urgent {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .badge.high {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .lead-info {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 11px;
+      color: var(--muted);
       font-size: 12px;
+    }
+
+    .lead-info strong {
+      color: #344054;
     }
 
     .card-actions {
@@ -309,19 +361,18 @@
       padding: 8px;
       border: none;
       border-radius: 7px;
-      cursor: pointer;
       font-size: 11px;
       font-weight: 700;
     }
 
     .edit-button {
-      background: #eaf2fc;
-      color: #1267d6;
+      background: var(--primary-light);
+      color: var(--primary);
     }
 
     .next-button {
-      background: #e7f7ef;
-      color: #14804a;
+      background: var(--success-light);
+      color: var(--success);
     }
 
     .empty {
@@ -334,12 +385,12 @@
     .modal {
       position: fixed;
       inset: 0;
-      z-index: 30;
+      z-index: 50;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: rgba(15, 23, 42, 0.55);
+      background: rgba(15, 23, 42, 0.58);
     }
 
     .modal.open {
@@ -348,7 +399,7 @@
 
     .modal-box {
       width: 100%;
-      max-width: 690px;
+      max-width: 760px;
       max-height: 94vh;
       overflow-y: auto;
       padding: 25px;
@@ -377,6 +428,12 @@
       gap: 13px;
     }
 
+    .three-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 13px;
+    }
+
     .modal-actions {
       display: flex;
       justify-content: flex-end;
@@ -390,7 +447,6 @@
       padding: 11px 17px;
       border: none;
       border-radius: 8px;
-      cursor: pointer;
       font-weight: 700;
     }
 
@@ -400,14 +456,14 @@
     }
 
     .save-button {
-      background: #1267d6;
+      background: var(--primary);
       color: #ffffff;
     }
 
     .delete-button {
       margin-right: auto;
-      background: #fdecec;
-      color: #b42318;
+      background: var(--danger-light);
+      color: var(--danger);
     }
 
     @media (max-width: 1150px) {
@@ -445,7 +501,8 @@
 
       .stats,
       .toolbar,
-      .row {
+      .row,
+      .three-columns {
         grid-template-columns: 1fr;
       }
     }
@@ -455,10 +512,15 @@
 <body>
 
   <header>
-    <a class="logo" href="index.html">RadiologyOS</a>
+    <a class="logo" href="index.html">
+      RadiologyOS
+    </a>
 
     <div class="header-right">
-      <span class="crm-status" id="crmStatus">
+      <span
+        class="crm-status"
+        id="crmStatus"
+      >
         CRM підключається...
       </span>
 
@@ -472,52 +534,83 @@
       <h3>CRM</h3>
 
       <ul class="menu">
+
         <li data-permission="dashboard">
-          <a href="executive-dashboard.html">Панель керівника</a>
+          <a href="executive-dashboard.html">
+            Панель керівника
+          </a>
+        </li>
+
+        <li data-permission="crm">
+          <a
+            href="crm.html"
+            class="active"
+          >
+            CRM-звернення
+          </a>
+        </li>
+
+        <li data-permission="crm">
+          <a href="communications.html">
+            Комунікації
+          </a>
+        </li>
+
+        <li data-permission="crm">
+          <a href="follow-ups.html">
+            Нагадування
+          </a>
+        </li>
+
+        <li data-permission="tasks">
+          <a href="tasks.html">
+            Завдання
+          </a>
         </li>
 
         <li data-permission="patients">
-          <a href="patients.html">Пацієнти</a>
+          <a href="patients.html">
+            Пацієнти
+          </a>
         </li>
 
         <li data-permission="studies">
-          <a href="studies.html">Дослідження</a>
-        </li>
-
-        <li data-permission="crm">
-          <a href="crm.html" class="active">CRM</a>
-        </li>
-
-        <li data-permission="crm">
-          <a href="communications.html">Комунікації</a>
-        </li>
-
-        <li data-permission="crm">
-          <a href="follow-ups.html">Нагадування</a>
+          <a href="studies.html">
+            Дослідження
+          </a>
         </li>
 
         <li data-permission="analytics">
-          <a href="analytics.html">Аналітика</a>
+          <a href="analytics.html">
+            Аналітика
+          </a>
         </li>
 
-        <li data-permission="settings">
-          <a href="data-center.html">Центр даних</a>
-        </li>
       </ul>
     </aside>
 
     <main>
 
       <div class="page-top">
+
         <div>
           <h1>CRM відділення</h1>
 
           <p>
-            Звернення пацієнтів, записи, дзвінки та контроль етапів
+            Звернення пацієнтів, записи, комунікації та контроль етапів
           </p>
         </div>
 
         <div class="top-actions">
+
+          <button
+            class="secondary-button"
+            type="button"
+            onclick="openCommunications()"
+          >
+            Комунікації
+          </button>
+
           <button
             class="secondary-button"
             type="button"
@@ -533,7 +626,9 @@
           >
             + Нове звернення
           </button>
+
         </div>
+
       </div>
 
       <section class="stats">
@@ -560,7 +655,13 @@
 
         <div class="stat-card">
           <span>Прострочені нагадування</span>
-          <strong id="overdueCount" class="danger">0</strong>
+
+          <strong
+            id="overdueCount"
+            class="danger-text"
+          >
+            0
+          </strong>
         </div>
 
       </section>
@@ -574,54 +675,93 @@
           oninput="renderBoard()"
         >
 
-        <select id="sourceFilter" onchange="renderBoard()">
-          <option value="">Усі джерела</option>
+        <select
+          id="sourceFilter"
+          onchange="renderBoard()"
+        >
+          <option value="">
+            Усі джерела
+          </option>
         </select>
 
-        <select id="priorityFilter" onchange="renderBoard()">
-          <option value="">Усі пріоритети</option>
-          <option value="Низький">Низький</option>
-          <option value="Звичайний">Звичайний</option>
-          <option value="Високий">Високий</option>
-          <option value="Терміновий">Терміновий</option>
+        <select
+          id="priorityFilter"
+          onchange="renderBoard()"
+        >
+          <option value="">
+            Усі пріоритети
+          </option>
         </select>
 
       </div>
 
       <div class="board-wrap">
-        <section class="board" id="crmBoard"></section>
+        <section
+          class="board"
+          id="crmBoard"
+        ></section>
       </div>
 
     </main>
   </div>
 
-  <div class="modal" id="leadModal">
+  <div
+    class="modal"
+    id="leadModal"
+  >
 
     <div class="modal-box">
 
-      <h2 id="modalTitle">Нове звернення</h2>
+      <h2 id="modalTitle">
+        Нове звернення
+      </h2>
 
-      <input id="leadId" type="hidden">
+      <input
+        id="leadId"
+        type="hidden"
+      >
 
       <div class="field">
-        <label for="fullName">ПІБ</label>
-        <input id="fullName" type="text">
+        <label for="fullName">
+          ПІБ пацієнта
+        </label>
+
+        <input
+          id="fullName"
+          type="text"
+          placeholder="Прізвище, ім’я та по батькові"
+        >
       </div>
 
       <div class="row">
+
         <div class="field">
-          <label for="phone">Телефон</label>
-          <input id="phone" type="tel">
+          <label for="phone">
+            Телефон
+          </label>
+
+          <input
+            id="phone"
+            type="tel"
+            placeholder="+380..."
+          >
         </div>
 
         <div class="field">
-          <label for="source">Джерело</label>
+          <label for="source">
+            Джерело звернення
+          </label>
+
           <select id="source"></select>
         </div>
+
       </div>
 
       <div class="field">
-        <label for="service">Послуга або дослідження</label>
+        <label for="service">
+          Послуга або дослідження
+        </label>
+
         <input
           id="service"
           type="text"
@@ -629,38 +769,77 @@
         >
       </div>
 
-      <div class="row">
+      <div class="three-columns">
+
         <div class="field">
-          <label for="leadStatus">Етап</label>
+          <label for="leadStatus">
+            Етап
+          </label>
+
           <select id="leadStatus"></select>
         </div>
 
         <div class="field">
-          <label for="priority">Пріоритет</label>
+          <label for="priority">
+            Пріоритет
+          </label>
+
           <select id="priority"></select>
         </div>
-      </div>
 
-      <div class="field">
-        <label for="assignedTo">Відповідальний</label>
-        <input id="assignedTo" type="text">
+        <div class="field">
+          <label for="assignedTo">
+            Відповідальний
+          </label>
+
+          <input
+            id="assignedTo"
+            type="text"
+            list="employeeList"
+          >
+
+          <datalist id="employeeList"></datalist>
+        </div>
+
       </div>
 
       <div class="row">
+
         <div class="field">
-          <label for="patientId">Пацієнт у базі</label>
-          <select id="patientId"></select>
+          <label for="patientId">
+            Пацієнт у базі
+          </label>
+
+          <select id="patientId">
+            <option value="">
+              Не пов’язано
+            </option>
+          </select>
         </div>
 
         <div class="field">
-          <label for="studyId">Дослідження</label>
-          <select id="studyId"></select>
+          <label for="studyId">
+            Дослідження
+          </label>
+
+          <select id="studyId">
+            <option value="">
+              Не пов’язано
+            </option>
+          </select>
         </div>
+
       </div>
 
       <div class="field">
-        <label for="notes">Примітки</label>
-        <textarea id="notes"></textarea>
+        <label for="notes">
+          Примітки
+        </label>
+
+        <textarea
+          id="notes"
+          placeholder="Додаткова інформація про звернення"
+        ></textarea>
       </div>
 
       <div class="modal-actions">
@@ -700,15 +879,19 @@
   <script src="radiologyos-page-guard.js"></script>
   <script src="radiologyos-data.js"></script>
   <script src="radiologyos-crm.js"></script>
+  <script src="radiologyos-tasks.js"></script>
 
   <script>
-    const pageAllowed = RadiologyGuard.initialize({
-      permission: "crm",
-      userContainerId: "currentUser"
-    });
+    const pageAllowed =
+      RadiologyGuard.initialize({
+        permission: "crm",
+        userContainerId: "currentUser"
+      });
 
     if (!pageAllowed) {
-      throw new Error("Доступ до CRM заборонено");
+      throw new Error(
+        "Доступ до CRM заборонено"
+      );
     }
 
     const boardStatuses = [
@@ -728,230 +911,706 @@
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
     }
+        function formatDate(value) {
+      if (!value) {
+        return "";
+      }
+
+      const date =
+        new Date(value);
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+        return "";
+      }
+
+      return date.toLocaleString(
+        "uk-UA",
+        {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+    }
 
     function loadOptions() {
       const database =
         RadiologyCRM.readDatabase();
 
-      fillSelect(
-        "source",
+      document.getElementById(
+        "source"
+      ).innerHTML =
         database.settings.sources
-      );
+          .map(
+            source => `
+              <option value="${escapeHtml(source)}">
+                ${escapeHtml(source)}
+              </option>
+            `
+          )
+          .join("");
 
-      fillSelect(
-        "sourceFilter",
-        database.settings.sources,
-        true
-      );
+      document.getElementById(
+        "sourceFilter"
+      ).innerHTML =
+        `
+          <option value="">
+            Усі джерела
+          </option>
+        ` +
+        database.settings.sources
+          .map(
+            source => `
+              <option value="${escapeHtml(source)}">
+                ${escapeHtml(source)}
+              </option>
+            `
+          )
+          .join("");
 
-      fillSelect(
-        "leadStatus",
+      document.getElementById(
+        "leadStatus"
+      ).innerHTML =
         database.settings.statuses
-      );
+          .map(
+            status => `
+              <option value="${escapeHtml(status)}">
+                ${escapeHtml(status)}
+              </option>
+            `
+          )
+          .join("");
 
-      fillSelect(
-        "priority",
+      document.getElementById(
+        "priority"
+      ).innerHTML =
         database.settings.priorities
-      );
+          .map(
+            priority => `
+              <option value="${escapeHtml(priority)}">
+                ${escapeHtml(priority)}
+              </option>
+            `
+          )
+          .join("");
 
+      document.getElementById(
+        "priorityFilter"
+      ).innerHTML =
+        `
+          <option value="">
+            Усі пріоритети
+          </option>
+        ` +
+        database.settings.priorities
+          .map(
+            priority => `
+              <option value="${escapeHtml(priority)}">
+                ${escapeHtml(priority)}
+              </option>
+            `
+          )
+          .join("");
+
+      loadEmployees();
       loadPatients();
+      loadStudies();
     }
+        function loadEmployees() {
+      const employees = [];
 
-    function fillSelect(id, values, keepFirst) {
-      const select =
-        document.getElementById(id);
+      try {
+        RadiologyOS
+          .getAll("staff")
+          .forEach(employee => {
+            const name =
+              employee.fullName ||
+              employee.name;
 
-      const first =
-        keepFirst
-          ? select.options[0].outerHTML
-          : "";
+            if (
+              name &&
+              !employees.includes(name)
+            ) {
+              employees.push(name);
+            }
+          });
+      } catch (error) {}
 
-      select.innerHTML =
-        first +
-        values.map(
-          value =>
-            `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`
-        ).join("");
+      const list =
+        document.getElementById(
+          "employeeList"
+        );
+
+      list.innerHTML =
+        employees
+          .sort((a, b) =>
+            a.localeCompare(b, "uk")
+          )
+          .map(
+            employee => `
+              <option value="${escapeHtml(employee)}">
+            `
+          )
+          .join("");
     }
 
     function loadPatients() {
-      const patientSelect =
-        document.getElementById("patientId");
-
-      const studySelect =
-        document.getElementById("studyId");
-
-      patientSelect.innerHTML =
-        '<option value="">Не пов’язано</option>';
-
-      studySelect.innerHTML =
-        '<option value="">Не пов’язано</option>';
-
-      RadiologyOS.getAll("patients").forEach((patient) => {
-        patientSelect.insertAdjacentHTML(
-          "beforeend",
-          `<option value="${patient.id}">
-            ${escapeHtml(patient.fullName)} · ${patient.id}
-          </option>`
+      const select =
+        document.getElementById(
+          "patientId"
         );
-      });
 
-      RadiologyOS.getAll("studies").forEach((study) => {
-        studySelect.insertAdjacentHTML(
-          "beforeend",
-          `<option value="${study.id}">
-            ${escapeHtml(study.modality)} ·
-            ${escapeHtml(study.region)} ·
-            ${study.id}
-          </option>`
+      try {
+        const patients =
+          RadiologyOS.getAll(
+            "patients"
+          );
+
+        select.innerHTML =
+          `
+            <option value="">
+              Не пов'язано
+            </option>
+          ` +
+          patients
+            .map(
+              patient => `
+                <option value="${escapeHtml(patient.id)}">
+                  ${escapeHtml(
+                    patient.fullName ||
+                    patient.name
+                  )}
+                </option>
+              `
+            )
+            .join("");
+      } catch (error) {}
+    }
+
+    function loadStudies() {
+      const select =
+        document.getElementById(
+          "studyId"
         );
-      });
+
+      try {
+        const studies =
+          RadiologyOS.getAll(
+            "studies"
+          );
+
+        select.innerHTML =
+          `
+            <option value="">
+              Не пов'язано
+            </option>
+          ` +
+          studies
+            .map(
+              study => `
+                <option value="${escapeHtml(study.id)}">
+                  ${escapeHtml(
+                    study.protocol ||
+                    study.title ||
+                    study.id
+                  )}
+                </option>
+              `
+            )
+            .join("");
+      } catch (error) {}
+    }
+        function renderBoard() {
+      const search =
+        document.getElementById(
+          "searchInput"
+        ).value
+          .trim()
+          .toLowerCase();
+
+      const source =
+        document.getElementById(
+          "sourceFilter"
+        ).value;
+
+      const priority =
+        document.getElementById(
+          "priorityFilter"
+        ).value;
+
+      const leads =
+        RadiologyCRM
+          .getAll("leads")
+          .filter(lead => {
+
+            const text =
+              [
+                lead.fullName,
+                lead.phone,
+                lead.service,
+                lead.notes
+              ]
+                .join(" ")
+                .toLowerCase();
+
+            if (
+              search &&
+              !text.includes(search)
+            ) {
+              return false;
+            }
+
+            if (
+              source &&
+              lead.source !== source
+            ) {
+              return false;
+            }
+
+            if (
+              priority &&
+              lead.priority !== priority
+            ) {
+              return false;
+            }
+
+            return true;
+          });
+
+      const board =
+        document.getElementById(
+          "crmBoard"
+        );
+
+      board.innerHTML =
+        boardStatuses
+          .map(status => {
+
+            const items =
+              leads.filter(
+                lead =>
+                  lead.status === status
+              );
+
+            return `
+              <section class="column">
+
+                <div class="column-header">
+
+                  <h2>
+                    ${escapeHtml(status)}
+                  </h2>
+
+                  <span class="column-count">
+                    ${items.length}
+                  </span>
+
+                </div>
+
+                <div class="lead-list">
+
+                  ${
+                    items.length
+                      ? items
+                          .map(
+                            lead =>
+                              renderLeadCard(
+                                lead
+                              )
+                          )
+                          .join("")
+                      : `
+                        <div class="empty">
+                          Порожньо
+                        </div>
+                      `
+                  }
+
+                </div>
+
+              </section>
+            `;
+          })
+          .join("");
+    }
+
+    function renderLeadCard(lead) {
+
+      return `
+        <article class="lead-card ${
+          lead.priority ===
+          "Терміновий"
+            ? "urgent"
+            : lead.priority ===
+              "Високий"
+              ? "high"
+              : ""
+        }">
+
+          <span class="lead-name">
+            ${escapeHtml(
+              lead.fullName
+            )}
+          </span>
+
+          <span class="lead-service">
+            ${escapeHtml(
+              lead.service ||
+              ""
+            )}
+          </span>
+
+          <div class="lead-meta">
+
+            <span class="badge source">
+              ${escapeHtml(
+                lead.source ||
+                "-"
+              )}
+            </span>
+
+            <span class="badge ${
+              lead.priority ===
+              "Терміновий"
+                ? "urgent"
+                : lead.priority ===
+                  "Високий"
+                  ? "high"
+                  : ""
+            }">
+
+              ${escapeHtml(
+                lead.priority ||
+                "Звичайний"
+              )}
+
+            </span>
+
+          </div>
+
+          <div class="lead-info">
+
+            <div>
+              <strong>
+                Телефон:
+              </strong>
+              ${escapeHtml(
+                lead.phone ||
+                "-"
+              )}
+            </div>
+
+            <div>
+              <strong>
+                Відповідальний:
+              </strong>
+              ${escapeHtml(
+                lead.assignedTo ||
+                "-"
+              )}
+            </div>
+
+          </div>
+
+          <div class="card-actions">
+
+            <button
+              class="edit-button"
+              onclick="openModal('${lead.id}')">
+
+              Відкрити
+
+            </button>
+
+            <button
+              class="next-button"
+              onclick="moveNext('${lead.id}')">
+
+              Далі →
+
+            </button>
+
+          </div>
+
+        </article>
+      `;
+    }
+        function openModal(id) {
+      loadOptions();
+      clearForm();
+
+      if (id) {
+        const lead =
+          RadiologyCRM.getById(
+            "leads",
+            id
+          );
+
+        if (!lead) {
+          alert(
+            "Звернення не знайдено."
+          );
+          return;
+        }
+
+        document.getElementById(
+          "modalTitle"
+        ).textContent =
+          "Редагування звернення";
+
+        document.getElementById(
+          "leadId"
+        ).value =
+          lead.id;
+
+        document.getElementById(
+          "fullName"
+        ).value =
+          lead.fullName || "";
+
+        document.getElementById(
+          "phone"
+        ).value =
+          lead.phone || "";
+
+        document.getElementById(
+          "source"
+        ).value =
+          lead.source || "Інше";
+
+        document.getElementById(
+          "service"
+        ).value =
+          lead.service || "";
+
+        document.getElementById(
+          "leadStatus"
+        ).value =
+          lead.status ||
+          "Нове звернення";
+
+        document.getElementById(
+          "priority"
+        ).value =
+          lead.priority ||
+          "Звичайний";
+
+        document.getElementById(
+          "assignedTo"
+        ).value =
+          lead.assignedTo || "";
+
+        document.getElementById(
+          "patientId"
+        ).value =
+          lead.patientId || "";
+
+        document.getElementById(
+          "studyId"
+        ).value =
+          lead.studyId || "";
+
+        document.getElementById(
+          "notes"
+        ).value =
+          lead.notes || "";
+
+        document.getElementById(
+          "deleteLeadButton"
+        ).style.display =
+          "block";
+      }
+
+      document
+        .getElementById(
+          "leadModal"
+        )
+        .classList.add("open");
     }
 
     function clearForm() {
       const user =
         RadiologyAuth.getCurrentUser();
 
-      document.getElementById("modalTitle").textContent =
+      document.getElementById(
+        "modalTitle"
+      ).textContent =
         "Нове звернення";
 
-      document.getElementById("leadId").value = "";
-      document.getElementById("fullName").value = "";
-      document.getElementById("phone").value = "";
-      document.getElementById("service").value = "";
-      document.getElementById("notes").value = "";
-      document.getElementById("patientId").value = "";
-      document.getElementById("studyId").value = "";
+      document.getElementById(
+        "leadId"
+      ).value = "";
 
-      document.getElementById("leadStatus").value =
+      document.getElementById(
+        "fullName"
+      ).value = "";
+
+      document.getElementById(
+        "phone"
+      ).value = "";
+
+      document.getElementById(
+        "service"
+      ).value = "";
+
+      document.getElementById(
+        "notes"
+      ).value = "";
+
+      document.getElementById(
+        "patientId"
+      ).value = "";
+
+      document.getElementById(
+        "studyId"
+      ).value = "";
+
+      document.getElementById(
+        "leadStatus"
+      ).value =
         "Нове звернення";
 
-      document.getElementById("priority").value =
+      document.getElementById(
+        "priority"
+      ).value =
         "Звичайний";
 
-      document.getElementById("assignedTo").value =
-        user ? user.fullName : "";
+      document.getElementById(
+        "assignedTo"
+      ).value =
+        user
+          ? user.fullName ||
+            user.name ||
+            user.username ||
+            ""
+          : "";
 
       document.getElementById(
         "deleteLeadButton"
-      ).style.display = "none";
-    }
-
-    function openModal(id) {
-      loadOptions();
-      clearForm();
-
-      if (id) {
-        const lead =
-          RadiologyCRM.getById("leads", id);
-
-        if (!lead) {
-          alert("Звернення не знайдено.");
-          return;
-        }
-
-        document.getElementById("modalTitle").textContent =
-          "Редагування звернення";
-
-        document.getElementById("leadId").value =
-          lead.id;
-
-        document.getElementById("fullName").value =
-          lead.fullName || "";
-
-        document.getElementById("phone").value =
-          lead.phone || "";
-
-        document.getElementById("source").value =
-          lead.source || "Інше";
-
-        document.getElementById("service").value =
-          lead.service || "";
-
-        document.getElementById("leadStatus").value =
-          lead.status || "Нове звернення";
-
-        document.getElementById("priority").value =
-          lead.priority || "Звичайний";
-
-        document.getElementById("assignedTo").value =
-          lead.assignedTo || "";
-
-        document.getElementById("patientId").value =
-          lead.patientId || "";
-
-        document.getElementById("studyId").value =
-          lead.studyId || "";
-
-        document.getElementById("notes").value =
-          lead.notes || "";
-
-        document.getElementById(
-          "deleteLeadButton"
-        ).style.display = "block";
-      }
-
-      document
-        .getElementById("leadModal")
-        .classList.add("open");
+      ).style.display =
+        "none";
     }
 
     function closeModal() {
       document
-        .getElementById("leadModal")
+        .getElementById(
+          "leadModal"
+        )
         .classList.remove("open");
+
+      const url =
+        new URL(
+          window.location.href
+        );
+
+      if (
+        url.searchParams.has(
+          "leadId"
+        )
+      ) {
+        url.searchParams.delete(
+          "leadId"
+        );
+
+        window.history.replaceState(
+          {},
+          "",
+          url.pathname +
+          url.search
+        );
+      }
     }
 
     function saveLead() {
       const id =
-        document.getElementById("leadId").value;
+        document.getElementById(
+          "leadId"
+        ).value;
 
       const fullName =
-        document.getElementById("fullName")
-          .value
-          .trim();
+        document.getElementById(
+          "fullName"
+        ).value.trim();
 
       const phone =
-        document.getElementById("phone")
-          .value
-          .trim();
+        document.getElementById(
+          "phone"
+        ).value.trim();
 
-      if (!fullName || !phone) {
-        alert("Вкажіть ПІБ і телефон.");
+      if (!fullName) {
+        alert(
+          "Вкажіть ПІБ пацієнта."
+        );
+        return;
+      }
+
+      if (!phone) {
+        alert(
+          "Вкажіть номер телефону."
+        );
         return;
       }
 
       const data = {
         fullName,
         phone,
+
         source:
-          document.getElementById("source").value,
+          document.getElementById(
+            "source"
+          ).value,
+
         service:
-          document.getElementById("service")
-            .value
-            .trim(),
+          document.getElementById(
+            "service"
+          ).value.trim(),
+
         status:
-          document.getElementById("leadStatus").value,
+          document.getElementById(
+            "leadStatus"
+          ).value,
+
         priority:
-          document.getElementById("priority").value,
+          document.getElementById(
+            "priority"
+          ).value,
+
         assignedTo:
-          document.getElementById("assignedTo")
-            .value
-            .trim(),
+          document.getElementById(
+            "assignedTo"
+          ).value.trim(),
+
         patientId:
-          document.getElementById("patientId").value || null,
+          document.getElementById(
+            "patientId"
+          ).value || null,
+
         studyId:
-          document.getElementById("studyId").value || null,
+          document.getElementById(
+            "studyId"
+          ).value || null,
+
         notes:
-          document.getElementById("notes")
-            .value
-            .trim()
+          document.getElementById(
+            "notes"
+          ).value.trim()
       };
 
       if (id) {
-        RadiologyCRM.updateLead(id, data);
+        RadiologyCRM.updateLead(
+          id,
+          data
+        );
       } else {
-        RadiologyCRM.createLead(data);
+        RadiologyCRM.createLead(
+          data
+        );
       }
 
       closeModal();
@@ -961,178 +1620,59 @@
 
     function deleteLead() {
       const id =
-        document.getElementById("leadId").value;
+        document.getElementById(
+          "leadId"
+        ).value;
 
-      if (!id || !confirm("Видалити звернення?")) {
+      if (
+        !id ||
+        !confirm(
+          "Видалити це звернення?"
+        )
+      ) {
         return;
       }
 
       RadiologyCRM.removeLead(id);
-      closeModal();
-            renderBoard();
-      updateStatistics();
-    }
 
-    function moveNext(id) {
+      closeModal();
+      renderBoard();
+      updateStatistics();
+          }
+        function moveNext(id) {
       const lead =
-        RadiologyCRM.getById("leads", id);
+        RadiologyCRM.getById(
+          "leads",
+          id
+        );
 
       if (!lead) {
         return;
       }
 
-      const index =
-        boardStatuses.indexOf(lead.status);
+      const currentIndex =
+        boardStatuses.indexOf(
+          lead.status
+        );
 
-      const next =
-        boardStatuses[
-          Math.min(
-            index + 1,
-            boardStatuses.length - 1
-          )
-        ];
+      const nextIndex =
+        currentIndex < 0
+          ? 0
+          : Math.min(
+              currentIndex + 1,
+              boardStatuses.length - 1
+            );
 
       RadiologyCRM.updateLead(
         id,
-        { status: next }
+        {
+          status:
+            boardStatuses[nextIndex]
+        }
       );
     }
 
-    function renderBoard() {
-      const search =
-        document.getElementById("searchInput")
-          .value
-          .trim()
-          .toLowerCase();
-
-      const source =
-        document.getElementById("sourceFilter").value;
-
-      const priority =
-        document.getElementById("priorityFilter").value;
-
-      const leads =
-        RadiologyCRM.getAll("leads").filter((lead) => {
-          const matchesSearch =
-            !search ||
-            String(lead.fullName || "")
-              .toLowerCase()
-              .includes(search) ||
-            String(lead.phone || "")
-              .toLowerCase()
-              .includes(search) ||
-            String(lead.service || "")
-              .toLowerCase()
-              .includes(search);
-
-          return (
-            matchesSearch &&
-            (!source || lead.source === source) &&
-            (!priority || lead.priority === priority)
-          );
-        });
-
-      const board =
-        document.getElementById("crmBoard");
-
-      board.innerHTML =
-        boardStatuses.map((status) => {
-          const items =
-            leads.filter(
-              lead => lead.status === status
-            );
-
-          return `
-            <article class="column">
-              <div class="column-header">
-                <h2>${escapeHtml(status)}</h2>
-
-                <span class="column-count">
-                  ${items.length}
-                </span>
-              </div>
-
-              <div class="lead-list">
-                ${
-                  items.length
-                    ? items
-                        .map(renderLeadCard)
-                        .join("")
-                    : `
-                      <div class="empty">
-                        Звернень немає
-                      </div>
-                    `
-                }
-              </div>
-            </article>
-          `;
-        }).join("");
-    }
-
-    function renderLeadCard(lead) {
-      const cardClass =
-        lead.priority === "Терміновий"
-          ? "urgent"
-          : lead.priority === "Високий"
-            ? "high"
-            : "";
-
-      return `
-        <div class="lead-card ${cardClass}">
-          <span class="lead-name">
-            ${escapeHtml(lead.fullName)}
-          </span>
-
-          <span class="lead-service">
-            ${escapeHtml(
-              lead.service ||
-              "Послугу не вказано"
-            )}
-          </span>
-
-          <div class="lead-meta">
-            <span class="badge source">
-              ${escapeHtml(
-                lead.source || "Інше"
-              )}
-            </span>
-
-            <span class="badge">
-              ${escapeHtml(
-                lead.priority || "Звичайний"
-              )}
-            </span>
-          </div>
-
-          <div class="phone">
-            ${escapeHtml(
-              lead.phone ||
-              "Телефон не вказано"
-            )}
-          </div>
-
-          <div class="card-actions">
-            <button
-              class="edit-button"
-              type="button"
-              onclick="openModal('${lead.id}')"
-            >
-              Відкрити
-            </button>
-
-            <button
-              class="next-button"
-              type="button"
-              onclick="moveNext('${lead.id}')"
-            >
-              Далі →
-            </button>
-          </div>
-        </div>
-      `;
-    }
-        function updateStatistics() {
+    function updateStatistics() {
       const statistics =
         RadiologyCRM.getStatistics();
 
@@ -1166,6 +1706,11 @@
       RadiologyCRM.exportDatabase();
     }
 
+    function openCommunications() {
+      window.location.href =
+        "communications.html";
+    }
+
     function initializePage() {
       if (
         !window.RadiologyCRM ||
@@ -1191,10 +1736,32 @@
       loadOptions();
       renderBoard();
       updateStatistics();
+
+      const parameters =
+        new URLSearchParams(
+          window.location.search
+        );
+
+      const leadId =
+        parameters.get("leadId");
+
+      if (leadId) {
+        const lead =
+          RadiologyCRM.getById(
+            "leads",
+            leadId
+          );
+
+        if (lead) {
+          openModal(leadId);
+        }
+      }
     }
 
     document
-      .getElementById("leadModal")
+      .getElementById(
+        "leadModal"
+      )
       .addEventListener(
         "click",
         function(event) {
@@ -1209,6 +1776,15 @@
       function() {
         renderBoard();
         updateStatistics();
+      }
+    );
+
+    window.addEventListener(
+      "radiologyos:data-changed",
+      function() {
+        loadEmployees();
+        loadPatients();
+        loadStudies();
       }
     );
 
