@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Приміщення — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 30px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .add-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      padding: 19px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 27px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 220px 220px;
+      gap: 13px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .rooms-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 17px;
+    }
+
+    .room-card {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .room-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .room-number {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: #eef5ff;
+      color: #1267d6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .room-title {
+      flex: 1;
+    }
+
+    .room-title h2 {
+      margin-bottom: 5px;
+      font-size: 18px;
+    }
+
+    .room-title p {
+      color: #667085;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status-working {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .status-service {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .status-closed {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .room-details {
+      margin-bottom: 16px;
+      padding: 13px;
+      border-radius: 9px;
+      background: #f8fafc;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 7px 0;
+      border-bottom: 1px solid #e8edf3;
+      font-size: 13px;
+    }
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .detail-row span {
+      color: #667085;
+    }
+
+    .room-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .room-actions button {
+      flex: 1;
+      padding: 9px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .edit-button {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .status-button {
+      background: #edf2f7;
+      color: #344054;
+    }
+
+    .delete-button {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .empty-state {
+      display: none;
+      grid-column: 1 / -1;
+      padding: 45px;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      background: #ffffff;
+      color: #667085;
+      text-align: center;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 600px;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 25px;
+      background: #ffffff;
+      border-radius: 14px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .secondary,
+    .primary {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .secondary {
+      background: #edf2f7;
+      color: #344054;
+    }
+
+    .primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    @media (max-width: 1100px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .rooms-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar,
+      .rooms-grid,
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Кабінети та службові приміщення
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="referrals.html">Направлення</a></li>
+        <li><a href="bookings-admin.html">Заявки</a></li>
+        <li><a href="archive.html">Архів</a></li>
+        <li><a href="tasks.html">Завдання</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="schedule.html">Графік роботи</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+        <li><a href="rooms.html" class="active">Приміщення</a></li>
+        <li><a href="incidents.html">Журнал подій</a></li>
+        <li><a href="audit.html">Журнал аудиту</a></li>
+        <li><a href="notifications.html">Сповіщення</a></li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Приміщення відділення</h1>
+          <p>Облік кабінетів, обладнання та відповідальних працівників</p>
+        </div>
+
+        <button class="add-button" onclick="openModal()">
+          + Додати приміщення
+        </button>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Усього приміщень</span>
+          <strong id="totalCount">6</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Працюють</span>
+          <strong id="workingCount">4</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Обслуговування</span>
+          <strong id="serviceCount">1</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Тимчасово закриті</span>
+          <strong id="closedCount">1</strong>
+        </div>
+
+      </section>
+
+      <div class="toolbar">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Пошук кабінету або обладнання..."
+          oninput="filterRooms()"
+        >
+
+        <select id="floorFilter" onchange="filterRooms()">
+          <option value="">Усі поверхи</option>
+          <option value="1">1 поверх</option>
+          <option value="2">2 поверх</option>
+        </select>
+
+        <select id="statusFilter" onchange="filterRooms()">
+          <option value="">Усі статуси</option>
+          <option value="Працює">Працює</option>
+          <option value="Обслуговування">Обслуговування</option>
+          <option value="Закрито">Закрито</option>
+        </select>
+
+      </div>
+
+      <section class="rooms-grid" id="roomsGrid">
+
+        <article
+          class="room-card"
+          data-floor="1"
+          data-status="Працює"
+        >
+          <div class="room-top">
+            <div class="room-number">№1</div>
+
+            <div class="room-title">
+              <h2>Кабінет комп’ютерної томографії</h2>
+              <p>Основне приміщення для виконання КТ-досліджень</p>
+            </div>
+
+            <span class="badge status-working">Працює</span>
+          </div>
+
+          <div class="room-details">
+            <div class="detail-row">
+              <span>Поверх</span>
+              <strong>1</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Обладнання</span>
+              <strong>Siemens CT</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Відповідальний</span>
+              <strong>Адаменко Д.М.</strong>
+            </div>
+          </div>
+
+          <div class="room-actions">
+            <button class="edit-button" onclick="editRoom(this)">
+              Деталі
+            </button>
+
+            <button class="status-button" onclick="changeStatus(this)">
+              Статус
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="room-card"
+          data-floor="1"
+          data-status="Працює"
+        >
+          <div class="room-top">
+            <div class="room-number">1А</div>
+
+            <div class="room-title">
+              <h2>Пультова КТ</h2>
+              <p>Керування сканером та робоча станція лаборанта</p>
+            </div>
+
+            <span class="badge status-working">Працює</span>
+          </div>
+
+          <div class="room-details">
+            <div class="detail-row">
+              <span>Поверх</span>
+              <strong>1</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Обладнання</span>
+              <strong>Робоча станція КТ</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Відповідальний</span>
+              <strong>Клімов Л.В.</strong>
+            </div>
+          </div>
+
+          <div class="room-actions">
+            <button class="edit-button" onclick="editRoom(this)">
+              Деталі
+            </button>
+
+            <button class="status-button" onclick="changeStatus(this)">
+              Статус
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="room-card"
+          data-floor="1"
+          data-status="Працює"
+        >
+          <div class="room-top">
+            <div class="room-number">1Б</div>
+
+            <div class="room-title">
+              <h2>Приміщення інжектора</h2>
+              <p>Підготовка контрастної речовини та витратних матеріалів</p>
+            </div>
+
+            <span class="badge status-working">Працює</span>
+          </div>
+
+          <div class="room-details">
+            <div class="detail-row">
+              <span>Поверх</span>
+              <strong>1</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Обладнання</span>
+              <strong>Автоматичний інжектор</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Відповідальний</span>
+              <strong>Медична сестра</strong>
+            </div>
+          </div>
+
+          <div class="room-actions">
+            <button class="edit-button" onclick="editRoom(this)">
+              Деталі
+            </button>
+
+            <button class="status-button" onclick="changeStatus(this)">
+              Статус
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="room-card"
+          data-floor="1"
+          data-status="Закрито"
+        >
+          <div class="room-top">
+            <div class="room-number">1В</div>
+
+            <div class="room-title">
+              <h2>Технічне приміщення КТ</h2>
+              <p>Система охолодження та технічні блоки сканера</p>
+            </div>
+
+            <span class="badge status-closed">Закрито</span>
+          </div>
+
+          <div class="room-details">
+            <div class="detail-row">
+              <span>Поверх</span>
+              <strong>1</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Обладнання</span>
+              <strong>Система охолодження</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Відповідальний</span>
+              <strong>Інженер</strong>
+            </div>
+          </div>
+
+          <div class="room-actions">
+            <button class="edit-button" onclick="editRoom(this)">
+              Деталі
+            </button>
+
+            <button class="status-button" onclick="changeStatus(this)">
+              Статус
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="room-card"
+          data-floor="2"
+          data-status="Обслуговування"
+        >
+          <div class="room-top">
+            <div class="room-number">№2</div>
+
+            <div class="room-title">
+              <h2>Рентгенівський кабінет</h2>
+              <p>Рентгенографія органів грудної клітки та кісток</p>
+            </div>
+
+            <span class="badge status-service">
+              Обслуговування
+            </span>
+          </div>
+
+          <div class="room-details">
+            <div class="detail-row">
+              <span>Поверх</span>
+              <strong>2</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Обладнання</span>
+              <strong>AMAX 5000</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Відповідальний</span>
+              <strong>Інженер</strong>
+            </div>
+          </div>
+
+          <div class="room-actions">
+            <button class="edit-button" onclick="editRoom(this)">
+              Деталі
+            </button>
+
+            <button class="status-button" onclick="changeStatus(this)">
+              Статус
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="room-card"
+          data-floor="2"
+          data-status="Працює"
+        >
+          <div class="room-top">
+            <div class="room-number">№3</div>
+
+            <div class="room-title">
+              <h2>Кабінет рентгеноскопії</h2>
+              <p>Рентгеноскопічні дослідження та спеціальні укладки</p>
+            </div>
+
+            <span class="badge status-working">Працює</span>
+          </div>
+
+          <div class="room-details">
+            <div class="detail-row">
+              <span>Поверх</span>
+              <strong>2</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Обладнання</span>
+              <strong>Рентгеноскопічна система</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Відповідальний</span>
+              <strong>Черговий лаборант</strong>
+            </div>
+          </div>
+
+          <div class="room-actions">
+            <button class="edit-button" onclick="editRoom(this)">
+              Деталі
+            </button>
+
+            <button class="status-button" onclick="changeStatus(this)">
+              Статус
+            </button>
+          </div>
+        </article>
+
+        <div class="empty-state" id="emptyState">
+          Приміщень за заданими параметрами не знайдено.
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="modal" id="roomModal">
+
+    <div class="modal-box">
+
+      <h2>Нове приміщення</h2>
+
+      <div class="row">
+        <div class="field">
+          <label for="roomNumber">Номер</label>
+          <input id="roomNumber" type="text" placeholder="Наприклад: 1Г">
+        </div>
+
+        <div class="field">
+          <label for="roomFloor">Поверх</label>
+
+          <select id="roomFloor">
+            <option value="1">1 поверх</option>
+            <option value="2">2 поверх</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="roomName">Назва приміщення</label>
+        <input id="roomName" type="text">
+      </div>
+
+      <div class="field">
+        <label for="roomDescription">Призначення</label>
+        <textarea id="roomDescription"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="roomEquipment">Обладнання</label>
+        <input id="roomEquipment" type="text">
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="roomResponsible">Відповідальний</label>
+          <input id="roomResponsible" type="text">
+        </div>
+
+        <div class="field">
+          <label for="roomStatus">Статус</label>
+
+          <select id="roomStatus">
+            <option>Працює</option>
+            <option>Обслуговування</option>
+            <option>Закрито</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="secondary" onclick="closeModal()">
+          Скасувати
+        </button>
+
+        <button class="primary" onclick="addRoom()">
+          Зберегти
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function statusClass(status) {
+      if (status === "Обслуговування") {
+        return "status-service";
+      }
+
+      if (status === "Закрито") {
+        return "status-closed";
+      }
+
+      return "status-working";
+    }
+
+    function openModal() {
+      document.getElementById("roomModal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("roomModal").classList.remove("open");
+    }
+
+    function addRoom() {
+      const number =
+        document.getElementById("roomNumber").value.trim();
+
+      const floor =
+        document.getElementById("roomFloor").value;
+
+      const name =
+        document.getElementById("roomName").value.trim();
+
+      const description =
+        document.getElementById("roomDescription").value.trim();
+
+      const equipment =
+                document.getElementById("roomEquipment").value.trim();
+
+      const responsible =
+        document.getElementById("roomResponsible").value.trim();
+
+      const status =
+        document.getElementById("roomStatus").value;
+
+      if (!number || !name || !responsible) {
+        alert("Вкажіть номер, назву та відповідального.");
+        return;
+      }
+
+      const card = document.createElement("article");
+
+      card.className = "room-card";
+      card.dataset.floor = floor;
+      card.dataset.status = status;
+
+      card.innerHTML = `
+        <div class="room-top">
+          <div class="room-number">${number}</div>
+
+          <div class="room-title">
+            <h2>${name}</h2>
+            <p>${description || "Призначення не вказано"}</p>
+          </div>
+
+          <span class="badge ${statusClass(status)}">
+            ${status}
+          </span>
+        </div>
+
+        <div class="room-details">
+          <div class="detail-row">
+            <span>Поверх</span>
+            <strong>${floor}</strong>
+          </div>
+
+          <div class="detail-row">
+            <span>Обладнання</span>
+            <strong>${equipment || "Не вказано"}</strong>
+          </div>
+
+          <div class="detail-row">
+            <span>Відповідальний</span>
+            <strong>${responsible}</strong>
+          </div>
+        </div>
+
+        <div class="room-actions">
+          <button class="edit-button" onclick="editRoom(this)">
+            Деталі
+          </button>
+
+          <button class="status-button" onclick="changeStatus(this)">
+            Статус
+          </button>
+
+          <button class="delete-button" onclick="deleteRoom(this)">
+            Видалити
+          </button>
+        </div>
+      `;
+
+      document.getElementById("roomsGrid").prepend(card);
+
+      document.getElementById("roomNumber").value = "";
+      document.getElementById("roomName").value = "";
+      document.getElementById("roomDescription").value = "";
+      document.getElementById("roomEquipment").value = "";
+      document.getElementById("roomResponsible").value = "";
+
+      updateStatistics();
+      closeModal();
+    }
+
+    function editRoom(button) {
+      const card = button.closest(".room-card");
+      const title = card.querySelector("h2").textContent;
+
+      alert(
+        "Приміщення: " + title +
+        "\nПовне редагування буде підключене разом із базою даних."
+      );
+    }
+
+    function changeStatus(button) {
+      const card = button.closest(".room-card");
+
+      const statuses = [
+        "Працює",
+        "Обслуговування",
+        "Закрито"
+      ];
+
+      const currentIndex =
+        statuses.indexOf(card.dataset.status);
+
+      const nextStatus =
+        statuses[(currentIndex + 1) % statuses.length];
+
+      card.dataset.status = nextStatus;
+
+      const badge = card.querySelector(".badge");
+
+      badge.textContent = nextStatus;
+      badge.className =
+        "badge " + statusClass(nextStatus);
+
+      updateStatistics();
+      filterRooms();
+    }
+
+    function deleteRoom(button) {
+      const confirmed =
+        confirm("Видалити це приміщення зі списку?");
+
+      if (!confirmed) return;
+
+      button.closest(".room-card").remove();
+
+      updateStatistics();
+      filterRooms();
+    }
+
+    function filterRooms() {
+      const search =
+        document.getElementById("searchInput").value.toLowerCase();
+
+      const floor =
+        document.getElementById("floorFilter").value;
+
+      const status =
+        document.getElementById("statusFilter").value;
+
+      let visibleCount = 0;
+
+      document
+        .querySelectorAll(".room-card")
+        .forEach((card) => {
+          const matchesSearch =
+            card.textContent.toLowerCase().includes(search);
+
+          const matchesFloor =
+            !floor || card.dataset.floor === floor;
+
+          const matchesStatus =
+            !status || card.dataset.status === status;
+
+          const visible =
+            matchesSearch &&
+            matchesFloor &&
+            matchesStatus;
+
+          card.style.display = visible ? "" : "none";
+
+          if (visible) {
+            visibleCount++;
+          }
+        });
+
+      document.getElementById("emptyState").style.display =
+        visibleCount === 0 ? "block" : "none";
+    }
+
+    function updateStatistics() {
+      const rooms = [
+        ...document.querySelectorAll(".room-card")
+      ];
+
+      document.getElementById("totalCount").textContent =
+        rooms.length;
+
+      document.getElementById("workingCount").textContent =
+        rooms.filter(
+          room => room.dataset.status === "Працює"
+        ).length;
+
+      document.getElementById("serviceCount").textContent =
+        rooms.filter(
+          room => room.dataset.status === "Обслуговування"
+        ).length;
+
+      document.getElementById("closedCount").textContent =
+        rooms.filter(
+          room => room.dataset.status === "Закрито"
+        ).length;
+    }
+
+    document
+      .getElementById("roomModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+
+    updateStatistics();
+  </script>
+
+</body>
+</html>
