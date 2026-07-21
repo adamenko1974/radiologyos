@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Контакти — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #172033;
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 18px 7%;
+      background: #ffffff;
+      border-bottom: 1px solid #dfe7f1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      gap: 22px;
+    }
+
+    nav a {
+      color: #475467;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #1267d6;
+    }
+
+    .hero {
+      padding: 65px 7%;
+      text-align: center;
+      background:
+        radial-gradient(circle at top right, #dcecff, transparent 38%),
+        #f4f7fb;
+    }
+
+    .hero h1 {
+      margin-bottom: 16px;
+      font-size: 44px;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto;
+      color: #667085;
+      font-size: 18px;
+    }
+
+    main {
+      width: min(1100px, 92%);
+      margin: 0 auto;
+      padding: 50px 0 70px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .card {
+      padding: 28px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 15px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .card h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .contact-item {
+      margin-bottom: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #edf1f5;
+    }
+
+    .contact-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .contact-item strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #344054;
+    }
+
+    .contact-item span,
+    .contact-item a {
+      color: #667085;
+      text-decoration: none;
+    }
+
+    .contact-item a:hover {
+      color: #1267d6;
+    }
+
+    .schedule-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 11px 0;
+      border-bottom: 1px solid #edf1f5;
+    }
+
+    .schedule-row:last-child {
+      border-bottom: none;
+    }
+
+    .schedule-row span {
+      color: #667085;
+    }
+
+    .notice {
+      margin-top: 24px;
+      padding: 18px;
+      border-left: 4px solid #1267d6;
+      border-radius: 10px;
+      background: #eef5ff;
+      color: #344054;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 13px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .button-primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    .button-secondary {
+      border: 1px solid #cdd8e5;
+      background: #ffffff;
+      color: #1267d6;
+    }
+
+    footer {
+      padding: 30px 7%;
+      background: #111827;
+      color: #cbd5e1;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      header {
+        padding: 16px 4%;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .hero {
+        padding: 45px 4%;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 21px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <nav>
+      <a href="index.html">Головна</a>
+      <a href="services.html">Послуги</a>
+      <a href="booking.html">Онлайн-запис</a>
+      <a href="contacts.html" class="active">Контакти</a>
+      <a href="protocols.html">Робоча система</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Контакти відділення</h1>
+
+    <p>
+      Інформація про розташування, графік роботи
+      та способи запису на діагностичні дослідження.
+    </p>
+  </section>
+
+  <main>
+
+    <div class="grid">
+
+      <section class="card">
+        <h2>Контактна інформація</h2>
+
+        <div class="contact-item">
+          <strong>Заклад</strong>
+          <span>
+            Відділення променевої діагностики
+          </span>
+        </div>
+
+        <div class="contact-item">
+          <strong>Адреса</strong>
+          <span>
+            м. Чернігів, адреса уточнюється
+          </span>
+        </div>
+
+        <div class="contact-item">
+          <strong>Телефон реєстратури</strong>
+          <a href="tel:+380000000000">
+            +380 00 000 00 00
+          </a>
+        </div>
+
+        <div class="contact-item">
+          <strong>Електронна пошта</strong>
+          <a href="mailto:info@radiologyos.com">
+            info@radiologyos.com
+          </a>
+        </div>
+
+        <div class="buttons">
+          <a class="button button-primary" href="booking.html">
+            Записатися онлайн
+          </a>
+
+          <a class="button button-secondary" href="services.html">
+            Переглянути послуги
+          </a>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Графік роботи</h2>
+
+        <div class="schedule-row">
+          <span>Понеділок</span>
+          <strong>08:00–16:00</strong>
+        </div>
+
+        <div class="schedule-row">
+          <span>Вівторок</span>
+          <strong>08:00–16:00</strong>
+        </div>
+
+        <div class="schedule-row">
+          <span>Середа</span>
+          <strong>08:00–16:00</strong>
+        </div>
+
+        <div class="schedule-row">
+          <span>Четвер</span>
+          <strong>08:00–16:00</strong>
+        </div>
+
+        <div class="schedule-row">
+          <span>П’ятниця</span>
+          <strong>08:00–16:00</strong>
+        </div>
+
+        <div class="schedule-row">
+          <span>Субота</span>
+          <strong>За попереднім записом</strong>
+        </div>
+
+        <div class="schedule-row">
+          <span>Неділя</span>
+          <strong>Вихідний</strong>
+        </div>
+
+        <div class="notice">
+          Перед відвідуванням необхідно підтвердити дату
+          і час дослідження телефоном або через онлайн-запис.
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <footer>
+    © 2026 RadiologyOS · Відділення променевої діагностики
+  </footer>
+
+</body>
+</html>
