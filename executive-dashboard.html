@@ -21,13 +21,14 @@
     }
 
     header {
-      height: 72px;
-      padding: 0 30px;
-      background: #ffffff;
-      border-bottom: 1px solid #dce4ee;
+      min-height: 72px;
+      padding: 14px 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 15px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
     }
 
     .logo {
@@ -42,11 +43,11 @@
       align-items: center;
       gap: 12px;
       color: #667085;
-      font-size: 14px;
+      font-size: 13px;
     }
 
-    .live {
-      padding: 7px 10px;
+    .database-status {
+      padding: 7px 11px;
       border-radius: 20px;
       background: #e7f7ef;
       color: #14804a;
@@ -55,9 +56,9 @@
     }
 
     .layout {
+      min-height: calc(100vh - 72px);
       display: grid;
       grid-template-columns: 250px 1fr;
-      min-height: calc(100vh - 72px);
     }
 
     aside {
@@ -114,7 +115,7 @@
     }
 
     .refresh-button {
-      padding: 12px 17px;
+      padding: 13px 18px;
       border: none;
       border-radius: 9px;
       background: #1267d6;
@@ -162,7 +163,7 @@
 
     .dashboard-grid {
       display: grid;
-      grid-template-columns: 1.4fr 1fr;
+      grid-template-columns: 1.35fr 1fr;
       gap: 18px;
     }
 
@@ -180,48 +181,35 @@
     }
 
     .panel-description {
-      margin-bottom: 18px;
+      margin-bottom: 17px;
       color: #667085;
       font-size: 13px;
     }
 
-    .queue-list,
-    .event-list,
-    .equipment-list {
+    .list {
       list-style: none;
     }
 
-    .queue-item,
-    .event-item,
-    .equipment-item {
+    .list-item {
       display: grid;
+      grid-template-columns: 76px 1fr auto;
       align-items: center;
       gap: 12px;
       padding: 13px 0;
       border-bottom: 1px solid #edf1f5;
     }
 
-    .queue-item {
-      grid-template-columns: 70px 1fr auto;
-    }
-
-    .event-item {
-      grid-template-columns: 68px 1fr auto;
+    .list-item:last-child {
+      border-bottom: none;
     }
 
     .equipment-item {
       grid-template-columns: 1fr auto;
     }
 
-    .queue-item:last-child,
-    .event-item:last-child,
-    .equipment-item:last-child {
-      border-bottom: none;
-    }
-
     .time {
-      font-weight: 700;
       color: #1267d6;
+      font-weight: 700;
     }
 
     .item-title {
@@ -233,6 +221,7 @@
     .small {
       color: #667085;
       font-size: 12px;
+      line-height: 1.4;
     }
 
     .badge {
@@ -249,19 +238,24 @@
       color: #14804a;
     }
 
-    .waiting {
+    .planned {
       background: #eef5ff;
       color: #1267d6;
     }
 
-    .urgent {
+    .progress {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .critical {
       background: #fdecec;
       color: #b42318;
     }
 
-    .service {
-      background: #fff4d6;
-      color: #8a5b00;
+    .neutral {
+      background: #edf2f7;
+      color: #475467;
     }
 
     .progress-row {
@@ -275,7 +269,7 @@
       font-size: 13px;
     }
 
-    .progress {
+    .progress-track {
       height: 9px;
       overflow: hidden;
       border-radius: 20px;
@@ -288,53 +282,27 @@
       background: #1267d6;
     }
 
-    .staff-grid {
+    .empty {
+      padding: 24px 8px;
+      color: #667085;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .quick-links {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    .staff-card {
-      padding: 14px;
-      border: 1px solid #e3eaf2;
-      border-radius: 10px;
-      background: #f9fbfd;
-    }
-
-    .staff-card strong {
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .chart {
-      height: 210px;
-      display: flex;
-      align-items: flex-end;
       gap: 10px;
-      padding-top: 20px;
     }
 
-    .bar-wrap {
-      flex: 1;
+    .quick-links a {
+      padding: 13px;
+      border-radius: 9px;
+      background: #eef5ff;
+      color: #1267d6;
       text-align: center;
-    }
-
-    .bar {
-      width: 100%;
-      min-height: 15px;
-      border-radius: 7px 7px 0 0;
-      background: #1267d6;
-    }
-
-    .bar-label {
-      display: block;
-      margin-top: 7px;
-      color: #667085;
-      font-size: 11px;
-    }
-
-    .full-width {
-      grid-column: 1 / -1;
+      text-decoration: none;
+      font-weight: 700;
     }
 
     @media (max-width: 1250px) {
@@ -363,10 +331,10 @@
 
     @media (max-width: 650px) {
       header {
-        padding: 0 16px;
+        padding: 14px 16px;
       }
 
-      .header-right span:not(.live) {
+      .header-right #currentTime {
         display: none;
       }
 
@@ -375,19 +343,25 @@
       }
 
       .stats,
-      .staff-grid {
-        grid-template-columns: 1fr;
+      .quick-links {
+        grid-template-columns: 1fr 1fr;
       }
 
-      .queue-item,
-      .event-item {
+      .list-item {
         grid-template-columns: 58px 1fr;
       }
 
-      .queue-item .badge,
-      .event-item .badge {
+      .list-item .badge {
         grid-column: 2;
         justify-self: start;
+      }
+
+      .equipment-item {
+        grid-template-columns: 1fr auto;
+      }
+
+      .equipment-item .badge {
+        grid-column: auto;
       }
     }
   </style>
@@ -399,8 +373,11 @@
     <a class="logo" href="index.html">RadiologyOS</a>
 
     <div class="header-right">
-      <span id="currentTime">21.07.2026 12:00</span>
-      <span class="live">Система онлайн</span>
+      <span id="currentTime">—</span>
+
+      <span class="database-status" id="databaseStatus">
+        Підключення...
+      </span>
     </div>
   </header>
 
@@ -420,19 +397,17 @@
         <li><a href="studies.html">Дослідження</a></li>
         <li><a href="protocols.html">Протоколи</a></li>
         <li><a href="schedule.html">Графік роботи</a></li>
-        <li><a href="staff.html">Працівники</a></li>
         <li><a href="equipment.html">Обладнання</a></li>
         <li><a href="inventory.html">Склад</a></li>
-        <li><a href="finance.html">Фінанси</a></li>
-        <li><a href="reports.html">Звіти</a></li>
-        <li><a href="incidents.html">Журнал подій</a></li>
-        <li><a href="settings.html">Налаштування</a></li>
+        <li><a href="audit.html">Журнал аудиту</a></li>
+        <li><a href="data-center.html">Центр даних</a></li>
       </ul>
     </aside>
 
     <main>
 
       <div class="page-top">
+
         <div>
           <h1>Панель керівника</h1>
 
@@ -441,41 +416,42 @@
           </p>
         </div>
 
-        <button class="refresh-button" onclick="refreshDashboard()">
+        <button class="refresh-button" onclick="loadDashboard()">
           Оновити дані
         </button>
+
       </div>
 
       <section class="stats">
 
         <div class="stat-card">
+          <span>Пацієнтів у базі</span>
+          <strong id="patientCount">0</strong>
+        </div>
+
+        <div class="stat-card">
           <span>Досліджень сьогодні</span>
-          <strong id="studyCount">24</strong>
+          <strong id="todayStudyCount">0</strong>
         </div>
 
         <div class="stat-card">
-          <span>Пацієнтів у черзі</span>
-          <strong id="queueCount" class="warning">5</strong>
+          <span>У черзі</span>
+          <strong id="queueCount" class="warning">0</strong>
         </div>
 
         <div class="stat-card">
-          <span>Готових протоколів</span>
-          <strong class="positive">18</strong>
+          <span>Завершено</span>
+          <strong id="completedCount" class="positive">0</strong>
         </div>
 
         <div class="stat-card">
-          <span>Прострочених протоколів</span>
-          <strong class="danger">2</strong>
+          <span>Непідписані протоколи</span>
+          <strong id="unsignedCount" class="danger">0</strong>
         </div>
 
         <div class="stat-card">
-          <span>Дохід за день</span>
-          <strong>31 500 ₴</strong>
-        </div>
-
-        <div class="stat-card">
-          <span>Середній час КТ</span>
-          <strong>24 хв</strong>
+          <span>Підписані протоколи</span>
+          <strong id="signedCount" class="positive">0</strong>
         </div>
 
       </section>
@@ -483,244 +459,110 @@
       <section class="dashboard-grid">
 
         <article class="panel">
-          <h2>Черга пацієнтів</h2>
+          <h2>Черга досліджень</h2>
+
           <p class="panel-description">
-            Найближчі заплановані дослідження
+            Найближчі заплановані та активні дослідження
           </p>
 
-          <ul class="queue-list">
-            <li class="queue-item">
-              <span class="time">12:10</span>
-              <span>
-                <span class="item-title">КТ головного мозку</span>
-                <span class="small">Пацієнт №1048 · без контрасту</span>
-              </span>
-              <span class="badge ready">Готовий</span>
-            </li>
-
-            <li class="queue-item">
-              <span class="time">12:30</span>
-              <span>
-                <span class="item-title">КТ ОГК</span>
-                <span class="small">Пацієнт №1049 · контроль</span>
-              </span>
-              <span class="badge waiting">Очікує</span>
-            </li>
-
-            <li class="queue-item">
-              <span class="time">12:50</span>
-              <span>
-                <span class="item-title">КТ ОЧП з контрастом</span>
-                <span class="small">Пацієнт №1050 · креатинін перевірено</span>
-              </span>
-              <span class="badge ready">Готовий</span>
-            </li>
-
-            <li class="queue-item">
-              <span class="time">13:20</span>
-              <span>
-                <span class="item-title">КТ поперекового відділу</span>
-                <span class="small">Пацієнт №1051 · планове</span>
-              </span>
-              <span class="badge waiting">Очікує</span>
-            </li>
-          </ul>
+          <ul class="list" id="queueList"></ul>
         </article>
 
         <article class="panel">
           <h2>Стан обладнання</h2>
+
           <p class="panel-description">
-            Актуальний статус апаратів відділення
+            Дані зі спільної бази RadiologyOS
           </p>
 
-          <ul class="equipment-list">
-            <li class="equipment-item">
-              <span>
-                <span class="item-title">Siemens CT</span>
-                <span class="small">Кабінет №1</span>
-              </span>
-              <span class="badge ready">Працює</span>
-            </li>
-
-            <li class="equipment-item">
-              <span>
-                <span class="item-title">AMAX 5000</span>
-                <span class="small">Рентгенівський кабінет</span>
-              </span>
-              <span class="badge service">Контроль</span>
-            </li>
-
-            <li class="equipment-item">
-              <span>
-                <span class="item-title">Інжектор</span>
-                <span class="small">Приміщення 1Б</span>
-              </span>
-              <span class="badge ready">Працює</span>
-            </li>
-
-            <li class="equipment-item">
-              <span>
-                <span class="item-title">Orthanc PACS</span>
-                <span class="small">DICOM-сервер</span>
-              </span>
-              <span class="badge ready">Онлайн</span>
-            </li>
-          </ul>
+          <ul class="list" id="equipmentList"></ul>
         </article>
 
         <article class="panel">
-          <h2>Завантаження відділення</h2>
+          <h2>Виконання роботи</h2>
+
           <p class="panel-description">
-            Виконання денного плану
+            Поточні показники досліджень і протоколів
           </p>
 
           <div class="progress-row">
             <div class="progress-top">
-              <span>КТ-дослідження</span>
-              <strong>75%</strong>
+              <span>Завершені дослідження</span>
+              <strong id="studyPercentText">0%</strong>
             </div>
-            <div class="progress">
-              <div class="progress-bar" style="width:75%"></div>
+
+            <div class="progress-track">
+              <div
+                class="progress-bar"
+                id="studyPercentBar"
+                style="width:0%"
+              ></div>
             </div>
           </div>
 
           <div class="progress-row">
             <div class="progress-top">
-              <span>Рентгенографія</span>
-              <strong>62%</strong>
+              <span>Підписані протоколи</span>
+              <strong id="protocolPercentText">0%</strong>
             </div>
-            <div class="progress">
-              <div class="progress-bar" style="width:62%"></div>
-            </div>
-          </div>
 
-          <div class="progress-row">
-            <div class="progress-top">
-              <span>Готовність протоколів</span>
-              <strong>81%</strong>
-            </div>
-            <div class="progress">
-              <div class="progress-bar" style="width:81%"></div>
+            <div class="progress-track">
+              <div
+                class="progress-bar"
+                id="protocolPercentBar"
+                style="width:0%"
+              ></div>
             </div>
           </div>
 
           <div class="progress-row">
             <div class="progress-top">
-              <span>Використання робочого часу</span>
-              <strong>88%</strong>
-            </div>
-            <div class="progress">
-              <div class="progress-bar" style="width:88%"></div>
-            </div>
-          </div>
-        </article>
-
-        <article class="panel">
-          <h2>Персонал у зміні</h2>
-          <p class="panel-description">
-            Працівники, які зараз працюють
-          </p>
-
-          <div class="staff-grid">
-            <div class="staff-card">
-              <strong>Адаменко Д.М.</strong>
-              <span class="small">Лікар-рентгенолог</span>
+              <span>Дослідження з контрастом</span>
+              <strong id="contrastPercentText">0%</strong>
             </div>
 
-            <div class="staff-card">
-              <strong>Клімов Л.В.</strong>
-              <span class="small">Рентгенлаборант</span>
-            </div>
-
-            <div class="staff-card">
-              <strong>Черговий лікар</strong>
-              <span class="small">Рентгенографія</span>
-            </div>
-
-            <div class="staff-card">
-              <strong>Медична сестра</strong>
-              <span class="small">Контрастні дослідження</span>
+            <div class="progress-track">
+              <div
+                class="progress-bar"
+                id="contrastPercentBar"
+                style="width:0%"
+              ></div>
             </div>
           </div>
         </article>
 
         <article class="panel">
-          <h2>Критичні події</h2>
+          <h2>Склад і контраст</h2>
+
           <p class="panel-description">
-            Події, які потребують контролю керівника
+            Поточний залишок матеріалів
           </p>
 
-          <ul class="event-list">
-            <li class="event-item">
-              <span class="time">09:10</span>
-              <span>
-                <span class="item-title">Помилка E09 на AMAX 5000</span>
-                <span class="small">Інженер повідомлений</span>
-              </span>
-              <span class="badge urgent">Важливо</span>
-            </li>
-
-            <li class="event-item">
-              <span class="time">10:25</span>
-              <span>
-                <span class="item-title">Низький залишок контрасту</span>
-                <span class="small">Залишок на 8 досліджень</span>
-              </span>
-              <span class="badge service">Контроль</span>
-            </li>
-
-            <li class="event-item">
-              <span class="time">11:40</span>
-              <span>
-                <span class="item-title">Два протоколи прострочені</span>
-                <span class="small">Очікують підписання лікарем</span>
-              </span>
-              <span class="badge urgent">Терміново</span>
-            </li>
-          </ul>
+          <ul class="list" id="inventoryList"></ul>
         </article>
 
         <article class="panel">
-          <h2>Продуктивність за тиждень</h2>
+          <h2>Останні дії</h2>
+
           <p class="panel-description">
-            Кількість виконаних досліджень
+            Події журналу аудиту
           </p>
 
-          <div class="chart">
-            <div class="bar-wrap">
-              <div class="bar" style="height:55%"></div>
-              <span class="bar-label">Пн</span>
-            </div>
+          <ul class="list" id="auditList"></ul>
+        </article>
 
-            <div class="bar-wrap">
-              <div class="bar" style="height:72%"></div>
-              <span class="bar-label">Вт</span>
-            </div>
+        <article class="panel">
+          <h2>Швидкі переходи</h2>
 
-            <div class="bar-wrap">
-              <div class="bar" style="height:68%"></div>
-              <span class="bar-label">Ср</span>
-            </div>
+          <p class="panel-description">
+            Основні робочі модулі системи
+          </p>
 
-            <div class="bar-wrap">
-              <div class="bar" style="height:84%"></div>
-              <span class="bar-label">Чт</span>
-            </div>
-
-            <div class="bar-wrap">
-              <div class="bar" style="height:91%"></div>
-              <span class="bar-label">Пт</span>
-            </div>
-
-            <div class="bar-wrap">
-              <div class="bar" style="height:45%"></div>
-              <span class="bar-label">Сб</span>
-            </div>
-
-            <div class="bar-wrap">
-              <div class="bar" style="height:30%"></div>
-              <span class="bar-label">Нд</span>
-            </div>
+          <div class="quick-links">
+            <a href="patients.html">Пацієнти</a>
+            <a href="studies.html">Дослідження</a>
+            <a href="protocols.html">Протоколи</a>
+            <a href="data-center.html">Центр даних</a>
           </div>
         </article>
 
@@ -729,12 +571,41 @@
     </main>
   </div>
 
-  <script>
-    function updateClock() {
-      const now = new Date();
+  <script src="radiologyos-data.js"></script>
 
+  <script>
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "—";
+
+      return new Date(value).toLocaleString("uk-UA", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function formatTime(value) {
+      if (!value) return "—";
+
+      return new Date(value).toLocaleTimeString("uk-UA", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function updateClock() {
       document.getElementById("currentTime").textContent =
-        now.toLocaleString("uk-UA", {
+        new Date().toLocaleString("uk-UA", {
           day: "2-digit",
           month: "2-digit",
           year: "numeric",
@@ -743,26 +614,363 @@
         });
     }
 
-    function refreshDashboard() {
-      const studyCount =
-        document.getElementById("studyCount");
+    function setDatabaseStatus(connected) {
+      const element =
+        document.getElementById("databaseStatus");
 
-      const queueCount =
-        document.getElementById("queueCount");
+      element.textContent =
+        connected ? "База підключена" : "База недоступна";
 
-      studyCount.textContent =
-        24 + Math.floor(Math.random() * 3);
+      if (!connected) {
+        element.style.background = "#fdecec";
+        element.style.color = "#b42318";
+      }
+    }
 
-      queueCount.textContent =
-        4 + Math.floor(Math.random() * 3);
+    function percent(part, total) {
+      if (!total) return 0;
 
+      return Math.round((part / total) * 100);
+    }
+
+    function renderProgress(id, value) {
+      document.getElementById(id + "Text").textContent =
+        value + "%";
+
+      document.getElementById(id + "Bar").style.width =
+        value + "%";
+    }
+
+    function statusBadge(status) {
+      if (status === "Завершено") {
+        return "ready";
+      }
+
+      if (status === "У роботі") {
+        return "progress";
+      }
+
+      if (status === "Скасовано") {
+        return "critical";
+      }
+
+      return "planned";
+    }
+
+    function equipmentBadge(status) {
+      const normalized =
+        String(status || "").toLowerCase();
+
+      if (
+        normalized.includes("працює") ||
+        normalized.includes("онлайн")
+      ) {
+        return "ready";
+      }
+
+      if (
+        normalized.includes("ремонт") ||
+        normalized.includes("несправ")
+      ) {
+        return "critical";
+      }
+
+      return "progress";
+    }
+
+    function loadDashboard() {
+      if (!window.RadiologyOS) {
+        setDatabaseStatus(false);
+        return;
+      }
+
+      setDatabaseStatus(true);
       updateClock();
 
-      alert("Дані панелі оновлено.");
+      const database =
+        RadiologyOS.readDatabase();
+
+      const patients =
+        Array.isArray(database.patients)
+          ? database.patients
+          : [];
+
+      const studies =
+        Array.isArray(database.studies)
+          ? database.studies
+          : [];
+
+      const protocols =
+        Array.isArray(database.protocols)
+          ? database.protocols
+          : [];
+
+      const today =
+        new Date().toISOString().slice(0, 10);
+
+      const todayStudies =
+        studies.filter((study) =>
+          String(
+            study.scheduledAt ||
+            study.createdAt ||
+            ""
+          ).startsWith(today)
+        );
+
+      const queue =
+        studies.filter(
+          study =>
+            study.status === "Заплановано" ||
+            study.status === "У роботі"
+        );
+
+      const completed =
+        studies.filter(
+          study => study.status === "Завершено"
+        );
+
+      const signed =
+        protocols.filter(
+          protocol => protocol.status === "Підписаний"
+        );
+
+      const unsigned =
+        protocols.filter(
+          protocol => protocol.status !== "Підписаний"
+        );
+
+      const contrast =
+        studies.filter(
+          study => study.contrast === true
+        );
+
+      document.getElementById("patientCount").textContent =
+        patients.length;
+
+      document.getElementById("todayStudyCount").textContent =
+        todayStudies.length;
+
+      document.getElementById("queueCount").textContent =
+        queue.length;
+
+      document.getElementById("completedCount").textContent =
+        completed.length;
+
+      document.getElementById("unsignedCount").textContent =
+        unsigned.length;
+
+      document.getElementById("signedCount").textContent =
+        signed.length;
+
+      renderProgress(
+        "studyPercent",
+        percent(completed.length, studies.length)
+      );
+
+      renderProgress(
+        "protocolPercent",
+        percent(signed.length, protocols.length)
+      );
+
+      renderProgress(
+        "contrastPercent",
+        percent(contrast.length, studies.length)
+      );
+
+      renderQueue(database, queue);
+      renderEquipment(database);
+      renderInventory(database);
+      renderAudit(database);
     }
+
+    function renderQueue(database, queue) {
+      const list =
+        document.getElementById("queueList");
+
+      const patientMap = {};
+
+      database.patients.forEach((patient) => {
+        patientMap[patient.id] = patient;
+      });
+
+      const items = queue
+        .sort(
+          (a, b) =>
+            new Date(a.scheduledAt || 0) -
+            new Date(b.scheduledAt || 0)
+        )
+        .slice(0, 6);
+
+      if (!items.length) {
+        list.innerHTML =
+          '<li class="empty">Активної черги немає.</li>';
+
+        return;
+      }
+
+      list.innerHTML = items.map((study) => {
+        const patient =
+          patientMap[study.patientId];
+
+        return `
+          <li class="list-item">
+            <span class="time">
+              ${formatTime(study.scheduledAt)}
+            </span>
+
+            <span>
+              <span class="item-title">
+                ${escapeHtml(study.modality || "—")} ·
+                ${escapeHtml(study.region || "—")}
+              </span>
+
+              <span class="small">
+                ${escapeHtml(
+                  patient
+                    ? patient.fullName
+                    : "Пацієнта не знайдено"
+                )}
+              </span>
+            </span>
+
+            <span class="badge ${statusBadge(study.status)}">
+              ${escapeHtml(study.status || "Заплановано")}
+            </span>
+          </li>
+        `;
+      }).join("");
+    }
+
+    function renderEquipment(database) {
+      const list =
+        document.getElementById("equipmentList");
+
+      const equipment =
+        Array.isArray(database.equipment)
+          ? database.equipment
+          : [];
+
+      if (!equipment.length) {
+        list.innerHTML =
+          '<li class="empty">Обладнання не додано.</li>';
+
+        return;
+      }
+
+      list.innerHTML = equipment.map((item) => `
+        <li class="list-item equipment-item">
+          <span>
+            <span class="item-title">
+              ${escapeHtml(item.name || "Обладнання")}
+            </span>
+
+            <span class="small">
+              ${escapeHtml(item.room || "Приміщення не вказано")}
+            </span>
+          </span>
+
+          <span class="badge ${equipmentBadge(item.status)}">
+            ${escapeHtml(item.status || "Невідомо")}
+          </span>
+        </li>
+      `).join("");
+    }
+
+    function renderInventory(database) {
+      const list =
+        document.getElementById("inventoryList");
+
+      const inventory =
+        Array.isArray(database.inventory)
+          ? database.inventory
+          : [];
+
+      if (!inventory.length) {
+        list.innerHTML =
+          '<li class="empty">Матеріали не додано.</li>';
+
+        return;
+      }
+
+      list.innerHTML = inventory
+        .slice(0, 6)
+        .map((item) => {
+          const low =
+            Number(item.quantity || 0) <=
+            Number(item.minimumQuantity || 0);
+
+          return `
+            <li class="list-item equipment-item">
+              <span>
+                <span class="item-title">
+                  ${escapeHtml(item.name || "Матеріал")}
+                </span>
+
+                <span class="small">
+                  Мінімум:
+                  ${escapeHtml(item.minimumQuantity || "0")}
+                  ${escapeHtml(item.unit || "")}
+                </span>
+              </span>
+
+              <span class="badge ${low ? "critical" : "ready"}">
+                ${escapeHtml(item.quantity || "0")}
+                ${escapeHtml(item.unit || "")}
+              </span>
+            </li>
+          `;
+        })
+        .join("");
+    }
+
+    function renderAudit(database) {
+      const list =
+        document.getElementById("auditList");
+
+      const audit =
+        Array.isArray(database.audit
+                                ? database.audit.slice(0, 6)
+          : [];
+
+      if (!audit.length) {
+        list.innerHTML =
+          '<li class="empty">Подій аудиту ще немає.</li>';
+
+        return;
+      }
+
+      list.innerHTML = audit.map((item) => `
+        <li class="list-item">
+          <span class="time">
+            ${formatTime(item.createdAt)}
+          </span>
+
+          <span>
+            <span class="item-title">
+              ${escapeHtml(item.action || "Подія")}
+            </span>
+
+            <span class="small">
+              ${escapeHtml(item.module || "Система")} ·
+              ${escapeHtml(item.recordId || "—")}
+            </span>
+          </span>
+
+          <span class="badge neutral">
+            ${formatDateTime(item.createdAt)}
+          </span>
+        </li>
+      `).join("");
+    }
+
+    window.addEventListener(
+      "radiologyos:data-changed",
+      loadDashboard
+    );
 
     updateClock();
     setInterval(updateClock, 60000);
+    loadDashboard();
   </script>
 
 </body>
