@@ -161,79 +161,88 @@
       box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
     }
 
+    .notification-list {
+      list-style: none;
+    }
+
     .notification {
       display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 15px;
-      align-items: start;
-      padding: 17px;
-      margin-bottom: 12px;
-      border: 1px solid #e1e8f0;
-      border-radius: 11px;
-      background: #ffffff;
+      grid-template-columns: 14px 1fr auto;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 17px 6px;
+      border-bottom: 1px solid #edf1f5;
+    }
+
+    .notification:last-child {
+      border-bottom: none;
     }
 
     .notification.unread {
-      border-left: 4px solid #1267d6;
-      background: #f6f9fe;
+      background: #f8fbff;
     }
 
-    .icon {
-      width: 42px;
-      height: 42px;
+    .dot {
+      width: 10px;
+      height: 10px;
+      margin-top: 7px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: #c9d3df;
+    }
+
+    .notification.unread .dot {
+      background: #1267d6;
+    }
+
+    .notification-title {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 15px;
       font-weight: 700;
     }
 
-    .icon-info {
-      background: #eaf2fc;
-      color: #1267d6;
-    }
-
-    .icon-warning {
-      background: #fff4d6;
-      color: #8a5b00;
-    }
-
-    .icon-critical {
-      background: #fdecec;
-      color: #b42318;
-    }
-
-    .icon-success {
-      background: #e7f7ef;
-      color: #14804a;
-    }
-
-    .notification h3 {
-      margin-bottom: 6px;
-      font-size: 16px;
-    }
-
-    .notification p {
-      margin-bottom: 9px;
+    .notification-text {
+      display: block;
       color: #667085;
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 13px;
+      line-height: 1.45;
     }
 
-    .meta {
+    .notification-meta {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      color: #7c8798;
+      align-items: center;
+      gap: 9px;
+      margin-top: 8px;
+      color: #98a2b3;
       font-size: 12px;
     }
 
     .badge {
+      display: inline-block;
       padding: 5px 8px;
       border-radius: 20px;
-      background: #edf2f7;
-      color: #475467;
+      font-size: 11px;
       font-weight: 700;
+    }
+
+    .info {
+      background: #eef5ff;
+      color: #1267d6;
+    }
+
+    .warning {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .critical {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .success {
+      background: #e7f7ef;
+      color: #14804a;
     }
 
     .actions {
@@ -262,9 +271,9 @@
 
     .empty-state {
       display: none;
-      padding: 40px;
-      color: #667085;
+      padding: 45px 15px;
       text-align: center;
+      color: #667085;
     }
 
     @media (max-width: 1050px) {
@@ -291,7 +300,7 @@
       }
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 650px) {
       header {
         padding: 0 16px;
       }
@@ -310,7 +319,7 @@
       }
 
       .notification {
-        grid-template-columns: auto 1fr;
+        grid-template-columns: 12px 1fr;
       }
 
       .actions {
@@ -324,7 +333,10 @@
 
   <header>
     <a class="logo" href="index.html">RadiologyOS</a>
-    <div class="header-info">Центр системних сповіщень</div>
+
+    <div class="header-info">
+      Центр системних сповіщень
+    </div>
   </header>
 
   <div class="layout">
@@ -334,21 +346,14 @@
 
       <ul class="menu">
         <li><a href="index.html">Головна</a></li>
-        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="executive-dashboard.html">Панель керівника</a></li>
         <li><a href="patients.html">Пацієнти</a></li>
         <li><a href="studies.html">Дослідження</a></li>
-        <li><a href="referrals.html">Направлення</a></li>
-        <li><a href="bookings-admin.html">Заявки</a></li>
-        <li><a href="archive.html">Архів</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
         <li><a href="tasks.html">Завдання</a></li>
-        <li><a href="equipment.html">Обладнання</a></li>
         <li><a href="incidents.html">Журнал подій</a></li>
+        <li><a href="notifications.html" class="active">Сповіщення</a></li>
         <li><a href="audit.html">Журнал аудиту</a></li>
-        <li>
-          <a href="notifications.html" class="active">
-            Сповіщення
-          </a>
-        </li>
         <li><a href="settings.html">Налаштування</a></li>
       </ul>
     </aside>
@@ -358,18 +363,21 @@
       <div class="page-top">
         <div>
           <h1>Сповіщення</h1>
-          <p>Важливі повідомлення про заявки, обладнання та завдання</p>
+
+          <p>
+            Важливі повідомлення про дослідження, обладнання та роботу персоналу
+          </p>
         </div>
 
         <button class="read-all-button" onclick="markAllRead()">
-          Позначити все прочитаним
+          Позначити всі прочитаними
         </button>
       </div>
 
       <section class="stats">
 
         <div class="stat-card">
-          <span>Усього повідомлень</span>
+          <span>Усього сповіщень</span>
           <strong id="totalCount">6</strong>
         </div>
 
@@ -380,12 +388,12 @@
 
         <div class="stat-card">
           <span>Критичні</span>
-          <strong id="criticalCount">1</strong>
+          <strong id="criticalCount">2</strong>
         </div>
 
         <div class="stat-card">
-          <span>За сьогодні</span>
-          <strong id="todayCount">5</strong>
+          <span>Системні</span>
+          <strong id="systemCount">2</strong>
         </div>
 
       </section>
@@ -395,218 +403,238 @@
         <input
           id="searchInput"
           type="search"
-          placeholder="Пошук повідомлення..."
+          placeholder="Пошук сповіщення..."
           oninput="filterNotifications()"
         >
 
-        <select id="categoryFilter" onchange="filterNotifications()">
-          <option value="">Усі категорії</option>
-          <option value="Обладнання">Обладнання</option>
-          <option value="Заявки">Заявки</option>
-          <option value="Завдання">Завдання</option>
-          <option value="Склад">Склад</option>
-          <option value="Система">Система</option>
+        <select id="typeFilter" onchange="filterNotifications()">
+          <option value="">Усі типи</option>
+          <option value="Інформація">Інформація</option>
+          <option value="Попередження">Попередження</option>
+          <option value="Критичне">Критичне</option>
+          <option value="Успішне">Успішне</option>
         </select>
 
-        <select id="readFilter" onchange="filterNotifications()">
-          <option value="">Усі повідомлення</option>
-          <option value="unread">Непрочитані</option>
-          <option value="read">Прочитані</option>
+        <select id="statusFilter" onchange="filterNotifications()">
+          <option value="">Усі статуси</option>
+          <option value="Непрочитане">Непрочитані</option>
+          <option value="Прочитане">Прочитані</option>
         </select>
 
       </div>
 
-      <section class="panel" id="notificationList">
+      <section class="panel">
 
-        <article
-          class="notification unread"
-          data-category="Обладнання"
-          data-priority="critical"
-          data-read="unread"
-        >
-          <div class="icon icon-critical">!</div>
+        <ul class="notification-list" id="notificationList">
 
-          <div>
-            <h3>Критична несправність AMAX 5000</h3>
+          <li class="notification unread"
+              data-type="Критичне"
+              data-status="Непрочитане"
+              data-category="Обладнання">
 
-            <p>
-              Зареєстровано помилку E09 після перепаду напруги.
-              Потрібна перевірка інженером.
-            </p>
+            <span class="dot"></span>
 
-            <div class="meta">
-              <span class="badge">Обладнання</span>
-              <span>Сьогодні, 10:12</span>
+            <div>
+              <span class="notification-title">
+                Помилка E09 на AMAX 5000
+              </span>
+
+              <span class="notification-text">
+                Рентгенівський апарат потребує перевірки сервісним інженером.
+              </span>
+
+              <div class="notification-meta">
+                <span class="badge critical">Критичне</span>
+                <span>Обладнання</span>
+                <span>Сьогодні, 09:10</span>
+              </div>
             </div>
-          </div>
 
-          <div class="actions">
-            <button class="read-button" onclick="markRead(this)">
-              Прочитано
-            </button>
+            <div class="actions">
+              <button class="read-button" onclick="toggleRead(this)">
+                Прочитати
+              </button>
 
-            <button class="delete-button" onclick="deleteNotification(this)">
-              Видалити
-            </button>
-          </div>
-        </article>
-
-        <article
-          class="notification unread"
-          data-category="Заявки"
-          data-priority="info"
-          data-read="unread"
-        >
-          <div class="icon icon-info">i</div>
-
-          <div>
-            <h3>Нова заявка на КТ</h3>
-
-            <p>
-              Отримано онлайн-запис на КТ органів грудної клітки
-              на 22.07.2026 о 09:30.
-            </p>
-
-            <div class="meta">
-              <span class="badge">Заявки</span>
-              <span>Сьогодні, 09:48</span>
+              <button class="delete-button" onclick="deleteNotification(this)">
+                Видалити
+              </button>
             </div>
-          </div>
+          </li>
 
-          <div class="actions">
-            <button class="read-button" onclick="markRead(this)">
-              Прочитано
-            </button>
+          <li class="notification unread"
+              data-type="Попередження"
+              data-status="Непрочитане"
+              data-category="Склад">
 
-            <button class="delete-button" onclick="deleteNotification(this)">
-              Видалити
-            </button>
-          </div>
-        </article>
+            <span class="dot"></span>
 
-        <article
-          class="notification unread"
-          data-category="Склад"
-          data-priority="warning"
-          data-read="unread"
-        >
-          <div class="icon icon-warning">!</div>
+            <div>
+              <span class="notification-title">
+                Низький залишок контрастної речовини
+              </span>
 
-          <div>
-            <h3>Малий залишок шприців</h3>
+              <span class="notification-text">
+                Поточного залишку достатньо приблизно на 8 досліджень.
+              </span>
 
-            <p>
-              На складі залишилося 4 шприци об’ємом 20 мл.
-              Потрібно сформувати заявку на поповнення.
-            </p>
-
-            <div class="meta">
-              <span class="badge">Склад</span>
-              <span>Сьогодні, 09:20</span>
+              <div class="notification-meta">
+                <span class="badge warning">Попередження</span>
+                <span>Склад</span>
+                <span>Сьогодні, 10:25</span>
+              </div>
             </div>
-          </div>
 
-          <div class="actions">
-            <button class="read-button" onclick="markRead(this)">
-              Прочитано
-            </button>
+            <div class="actions">
+              <button class="read-button" onclick="toggleRead(this)">
+                Прочитати
+              </button>
 
-            <button class="delete-button" onclick="deleteNotification(this)">
-              Видалити
-            </button>
-          </div>
-        </article>
-
-        <article
-          class="notification unread"
-          data-category="Завдання"
-          data-priority="warning"
-          data-read="unread"
-        >
-          <div class="icon icon-warning">!</div>
-
-          <div>
-            <h3>Прострочене завдання</h3>
-
-            <p>
-              Не виконано перевірку резервного копіювання архіву Orthanc.
-            </p>
-
-            <div class="meta">
-              <span class="badge">Завдання</span>
-              <span>Сьогодні, 08:45</span>
+              <button class="delete-button" onclick="deleteNotification(this)">
+                Видалити
+              </button>
             </div>
-          </div>
+          </li>
 
-          <div class="actions">
-            <button class="read-button" onclick="markRead(this)">
-              Прочитано
-            </button>
+          <li class="notification unread"
+              data-type="Критичне"
+              data-status="Непрочитане"
+              data-category="Протоколи">
 
-            <button class="delete-button" onclick="deleteNotification(this)">
-              Видалити
-            </button>
-          </div>
-        </article>
+            <span class="dot"></span>
 
-        <article
-          class="notification"
-          data-category="Система"
-          data-priority="success"
-          data-read="read"
-        >
-          <div class="icon icon-success">✓</div>
+            <div>
+              <span class="notification-title">
+                Прострочено два медичні протоколи
+              </span>
 
-          <div>
-            <h3>Резервне копіювання завершено</h3>
+              <span class="notification-text">
+                Протоколи очікують перевірки та електронного підпису лікаря.
+              </span>
 
-            <p>
-              Системний архів протоколів успішно створено.
-            </p>
-
-            <div class="meta">
-              <span class="badge">Система</span>
-              <span>Сьогодні, 07:30</span>
+              <div class="notification-meta">
+                <span class="badge critical">Критичне</span>
+                <span>Протоколи</span>
+                <span>Сьогодні, 11:40</span>
+              </div>
             </div>
-          </div>
 
-          <div class="actions">
-            <button class="delete-button" onclick="deleteNotification(this)">
-              Видалити
-            </button>
-          </div>
-        </article>
+            <div class="actions">
+              <button class="read-button" onclick="toggleRead(this)">
+                Прочитати
+              </button>
 
-        <article
-          class="notification"
-          data-category="Обладнання"
-          data-priority="success"
-          data-read="read"
-        >
-          <div class="icon icon-success">✓</div>
-
-          <div>
-            <h3>Технічну перевірку КТ виконано</h3>
-
-            <p>
-              Siemens CT готовий до роботи. Критичних зауважень немає.
-            </p>
-
-            <div class="meta">
-              <span class="badge">Обладнання</span>
-              <span>20.07.2026, 16:10</span>
+              <button class="delete-button" onclick="deleteNotification(this)">
+                Видалити
+              </button>
             </div>
-          </div>
+          </li>
 
-          <div class="actions">
-            <button class="delete-button" onclick="deleteNotification(this)">
-              Видалити
-            </button>
-          </div>
-        </article>
+          <li class="notification unread"
+              data-type="Інформація"
+              data-status="Непрочитане"
+              data-category="Система">
+
+            <span class="dot"></span>
+
+            <div>
+              <span class="notification-title">
+                Заплановано резервне копіювання
+              </span>
+
+              <span class="notification-text">
+                Автоматичне резервне копіювання даних розпочнеться о 23:00.
+              </span>
+
+              <div class="notification-meta">
+                <span class="badge info">Інформація</span>
+                <span>Система</span>
+                <span>Сьогодні, 08:30</span>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="read-button" onclick="toggleRead(this)">
+                Прочитати
+              </button>
+
+              <button class="delete-button" onclick="deleteNotification(this)">
+                Видалити
+              </button>
+            </div>
+          </li>
+
+          <li class="notification"
+              data-type="Успішне"
+              data-status="Прочитане"
+              data-category="PACS">
+
+            <span class="dot"></span>
+
+            <div>
+              <span class="notification-title">
+                DICOM-передачу відновлено
+              </span>
+
+              <span class="notification-text">
+                Orthanc PACS приймає дослідження у штатному режимі.
+              </span>
+
+              <div class="notification-meta">
+                <span class="badge success">Успішне</span>
+                <span>PACS</span>
+                <span>Вчора, 16:20</span>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="read-button" onclick="toggleRead(this)">
+                Непрочитане
+              </button>
+
+              <button class="delete-button" onclick="deleteNotification(this)">
+                Видалити
+              </button>
+            </div>
+          </li>
+
+          <li class="notification"
+              data-type="Інформація"
+              data-status="Прочитане"
+              data-category="Система">
+
+            <span class="dot"></span>
+
+            <div>
+              <span class="notification-title">
+                Налаштування системи збережено
+              </span>
+
+              <span class="notification-text">
+                Параметри відділення та контактні дані успішно оновлено.
+              </span>
+
+              <div class="notification-meta">
+                <span class="badge info">Інформація</span>
+                <span>Система</span>
+                <span>Вчора, 14:05</span>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="read-button" onclick="toggleRead(this)">
+                Непрочитане
+              </button>
+
+              <button class="delete-button" onclick="deleteNotification(this)">
+                Видалити
+              </button>
+            </div>
+          </li>
+
+        </ul>
 
         <div class="empty-state" id="emptyState">
-          Повідомлень за заданими параметрами не знайдено.
+          Сповіщень за вибраними параметрами немає.
         </div>
 
       </section>
@@ -615,43 +643,69 @@
   </div>
 
   <script>
-    function markRead(button) {
-      const notification = button.closest(".notification");
+    const storageKey = "radiologyosNotifications";
 
-      notification.classList.remove("unread");
-      notification.dataset.read = "read";
-      button.remove();
+    function saveNotifications() {
+      const data = [
+        ...document.querySelectorAll(".notification")
+      ].map((item) => ({
+        title:
+          item.querySelector(".notification-title").textContent.trim(),
+        text:
+          item.querySelector(".notification-text").textContent.trim(),
+        meta:
+          item.querySelector(".notification-meta").innerHTML,
+        type: item.dataset.type,
+        status: item.dataset.status,
+        category: item.dataset.category
+      }));
 
+      localStorage.setItem(storageKey, JSON.stringify(data));
+    }
+
+    function toggleRead(button) {
+      const item = button.closest(".notification");
+
+      if (item.dataset.status === "Непрочитане") {
+        item.dataset.status = "Прочитане";
+        item.classList.remove("unread");
+        button.textContent = "Непрочитане";
+      } else {
+        item.dataset.status = "Непрочитане";
+        item.classList.add("unread");
+        button.textContent = "Прочитати";
+      }
+
+      saveNotifications();
       updateStatistics();
       filterNotifications();
     }
 
     function markAllRead() {
-      document
-        .querySelectorAll(".notification[data-read='unread']")
-        .forEach((notification) => {
-          notification.classList.remove("unread");
-          notification.dataset.read = "read";
+      document.querySelectorAll(".notification").forEach((item) => {
+        item.dataset.status = "Прочитане";
+        item.classList.remove("unread");
 
-          const button =
-            notification.querySelector(".read-button");
+        const button = item.querySelector(".read-button");
 
-          if (button) {
-            button.remove();
-          }
-        });
+        if (button) {
+          button.textContent = "Непрочитане";
+        }
+      });
 
+      saveNotifications();
       updateStatistics();
       filterNotifications();
     }
 
     function deleteNotification(button) {
-      const confirmed = confirm("Видалити це повідомлення?");
-
-      if (!confirmed) return;
+      if (!confirm("Видалити це сповіщення?")) {
+        return;
+      }
 
       button.closest(".notification").remove();
 
+      saveNotifications();
       updateStatistics();
       filterNotifications();
     }
@@ -660,65 +714,52 @@
       const search =
         document.getElementById("searchInput").value.toLowerCase();
 
-      const category =
-        document.getElementById("categoryFilter").value;
+      const type =
+        document.getElementById("typeFilter").value;
 
-      const readStatus =
-        document.getElementById("readFilter").value;
+      const status =
+        document.getElementById("statusFilter").value;
 
       let visibleCount = 0;
 
-      document
-        .querySelectorAll(".notification")
-        .forEach((notification) => {
-          const matchesSearch =
-            notification.textContent.toLowerCase().includes(search);
+      document.querySelectorAll(".notification").forEach((item) => {
+        const visible =
+          item.textContent.toLowerCase().includes(search) &&
+          (!type || item.dataset.type === type) &&
+          (!status || item.dataset.status === status);
 
-          const matchesCategory =
-            !category ||
-            notification.dataset.category === category;
+        item.style.display = visible ? "" : "none";
 
-          const matchesRead =
-            !readStatus ||
-            notification.dataset.read === readStatus;
-
-          const visible =
-            matchesSearch &&
-            matchesCategory &&
-            matchesRead;
-
-          notification.style.display = visible ? "" : "none";
-
-          if (visible) {
-            visibleCount++;
-          }
-        });
+        if (visible) {
+          visibleCount++;
+        }
+      });
 
       document.getElementById("emptyState").style.display =
-        visibleCount === 0 ? "block" : "none";
+        visibleCount ? "none" : "block";
     }
 
     function updateStatistics() {
-      const notifications = [
+      const items = [
         ...document.querySelectorAll(".notification")
       ];
 
       document.getElementById("totalCount").textContent =
-        notifications.length;
+        items.length;
 
       document.getElementById("unreadCount").textContent =
-        notifications.filter(
-          item => item.dataset.read === "unread"
+        items.filter(
+          item => item.dataset.status === "Непрочитане"
         ).length;
 
       document.getElementById("criticalCount").textContent =
-        notifications.filter(
-          item => item.dataset.priority === "critical"
+        items.filter(
+          item => item.dataset.type === "Критичне"
         ).length;
 
-      document.getElementById("todayCount").textContent =
-        notifications.filter(
-          item => item.textContent.includes("Сьогодні")
+      document.getElementById("systemCount").textContent =
+        items.filter(
+          item => item.dataset.category === "Система"
         ).length;
     }
 
