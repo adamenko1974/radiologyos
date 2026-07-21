@@ -1,201 +1,377 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RadiologyOS</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>RadiologyOS — цифрова платформа променевої діагностики</title>
+
   <meta
     name="description"
-    content="RadiologyOS — цифрова платформа для роботи відділення променевої діагностики."
-  />
+    content="RadiologyOS — система для організації роботи відділення променевої діагностики, ведення пацієнтів, досліджень та рентгенологічних протоколів."
+  >
+
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f7fb;
+      background: #f5f8fc;
       color: #172033;
+      line-height: 1.6;
     }
 
     header {
-      padding: 24px 8%;
+      background: #ffffff;
+      border-bottom: 1px solid #dfe7f1;
+      padding: 18px 8%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #ffffff;
-      border-bottom: 1px solid #e3e8ef;
     }
 
     .logo {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 700;
-      color: #1456d9;
+      color: #1267d6;
     }
 
-    .badge {
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: #e8f0ff;
-      color: #1456d9;
-      font-size: 14px;
+    nav a {
+      margin-left: 24px;
+      color: #344054;
+      text-decoration: none;
       font-weight: 600;
     }
 
-    main {
-      min-height: calc(100vh - 150px);
-      display: grid;
-      place-items: center;
-      padding: 60px 8%;
+    .hero {
+      min-height: 620px;
+      padding: 90px 8%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 50px;
+      background:
+        radial-gradient(circle at top right, #dcecff, transparent 40%),
+        #f5f8fc;
     }
 
-    .hero {
-      max-width: 900px;
-      text-align: center;
+    .hero-content {
+      max-width: 650px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      background: #e5f0ff;
+      color: #1267d6;
+      border-radius: 20px;
+      margin-bottom: 22px;
+      font-weight: 700;
     }
 
     h1 {
-      margin: 0 0 20px;
-      font-size: clamp(42px, 7vw, 78px);
-      line-height: 1.05;
+      font-size: 56px;
+      line-height: 1.1;
+      margin-bottom: 24px;
     }
 
-    .accent {
-      color: #1456d9;
-    }
-
-    .subtitle {
-      max-width: 760px;
-      margin: 0 auto 36px;
+    .hero p {
       font-size: 21px;
-      line-height: 1.6;
-      color: #556070;
+      color: #526078;
+      margin-bottom: 34px;
     }
 
     .buttons {
       display: flex;
-      justify-content: center;
       gap: 14px;
       flex-wrap: wrap;
     }
 
     .button {
       display: inline-block;
-      padding: 15px 24px;
-      border-radius: 10px;
+      padding: 14px 24px;
+      border-radius: 9px;
       text-decoration: none;
       font-weight: 700;
     }
 
-    .primary {
-      background: #1456d9;
+    .button-primary {
+      background: #1267d6;
       color: white;
     }
 
-    .secondary {
+    .button-secondary {
       background: white;
-      color: #172033;
-      border: 1px solid #d6dde8;
+      color: #1267d6;
+      border: 1px solid #b9c9dc;
     }
 
-    .modules {
-      margin-top: 60px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+    .hero-card {
+      width: 420px;
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 18px;
+      box-shadow: 0 20px 60px rgba(23, 32, 51, 0.12);
     }
 
-    .card {
-      padding: 22px;
-      background: white;
-      border: 1px solid #e1e6ee;
-      border-radius: 14px;
-      text-align: left;
+    .hero-card h2 {
+      margin-bottom: 18px;
     }
 
-    .card h3 {
-      margin: 0 0 10px;
+    .stat {
+      padding: 16px 0;
+      border-bottom: 1px solid #e7edf5;
+      display: flex;
+      justify-content: space-between;
     }
 
-    .card p {
-      margin: 0;
+    .stat:last-child {
+      border-bottom: none;
+    }
+
+    .features {
+      padding: 80px 8%;
+      background: #ffffff;
+    }
+
+    .section-title {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 50px;
+    }
+
+    .section-title h2 {
+      font-size: 38px;
+      margin-bottom: 14px;
+    }
+
+    .section-title p {
       color: #667085;
-      line-height: 1.5;
+      font-size: 18px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      padding: 28px;
+      background: #f7f9fc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 10px;
+      color: #1267d6;
+    }
+
+    .feature-card p {
+      color: #5d687b;
+    }
+
+    .about {
+      padding: 80px 8%;
+      text-align: center;
+    }
+
+    .about h2 {
+      font-size: 38px;
+      margin-bottom: 18px;
+    }
+
+    .about p {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 19px;
+      color: #5d687b;
     }
 
     footer {
-      padding: 24px;
+      background: #111827;
+      color: #cbd5e1;
+      padding: 30px 8%;
       text-align: center;
-      color: #77808f;
     }
 
-    @media (max-width: 800px) {
-      .modules {
-        grid-template-columns: 1fr;
-      }
-
+    @media (max-width: 900px) {
       header {
-        padding: 18px 6%;
+        padding: 16px 5%;
       }
 
-      main {
-        padding: 45px 6%;
+      nav {
+        display: none;
+      }
+
+      .hero {
+        padding: 65px 5%;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+
+      .hero-card {
+        width: 100%;
+      }
+
+      .features,
+      .about {
+        padding: 60px 5%;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
+
 <body>
+
   <header>
     <div class="logo">RadiologyOS</div>
-    <div class="badge">Система в розробці</div>
+
+    <nav>
+      <a href="#platform">Платформа</a>
+      <a href="protocols.html">Протоколи</a>
+      <a href="#about">Про проєкт</a>
+    </nav>
   </header>
 
   <main>
     <section class="hero">
-      <h1>
-        Операційна система для
-        <span class="accent">променевої діагностики</span>
-      </h1>
+      <div class="hero-content">
+        <div class="badge">Intelligent Radiology Platform</div>
 
-      <p class="subtitle">
-        RadiologyOS об'єднає роботу відділення, пацієнтів, дослідження,
-        графіки, звіти, фінанси, конструктор протоколів та AI-помічника
-        рентгенолога в одній платформі.
-      </p>
+        <h1>Цифрова система для сучасної променевої діагностики</h1>
 
-      <div class="buttons">
-        <a class="button primary" href="#">Розпочати роботу</a>
-        <a class="button secondary" href="#">Про проєкт</a>
+        <p>
+          RadiologyOS об'єднує пацієнтів, дослідження,
+          рентгенологічні протоколи, робочі процеси та
+          інтелектуальні інструменти в одному середовищі.
+        </p>
+
+        <div class="buttons">
+          <a class="button button-primary" href="protocols.html">
+            Відкрити протоколи
+          </a>
+
+          <a class="button button-secondary" href="#platform">
+            Дізнатися більше
+          </a>
+        </div>
       </div>
 
-      <div class="modules">
-        <div class="card">
-          <h3>CRM</h3>
-          <p>Пацієнти, записи, графіки та керування дослідженнями.</p>
+      <div class="hero-card">
+        <h2>Робочий день</h2>
+
+        <div class="stat">
+          <span>Заплановано досліджень</span>
+          <strong>18</strong>
         </div>
 
-        <div class="card">
-          <h3>Протоколи</h3>
-          <p>Конструктор структурованих описів КТ, МРТ і рентгенографії.</p>
+        <div class="stat">
+          <span>Готові до опису</span>
+          <strong>7</strong>
         </div>
 
-        <div class="card">
-          <h3>AI-помічник</h3>
-          <p>Підготовка, перевірка та стандартизація рентгенологічних висновків.</p>
+        <div class="stat">
+          <span>Чернетки протоколів</span>
+          <strong>3</strong>
         </div>
 
-        <div class="card">
+        <div class="stat">
+          <span>Підписано сьогодні</span>
+          <strong>11</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="platform">
+      <div class="section-title">
+        <h2>Єдина платформа для відділення</h2>
+
+        <p>
+          Основні інструменти лікаря, лаборанта,
+          реєстратора та керівника в одній системі.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <h3>Пацієнти</h3>
+          <p>
+            Електронні картки, історія досліджень
+            та швидкий пошук інформації.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <h3>Дослідження</h3>
+          <p>
+            Черга КТ і рентгенологічних досліджень,
+            статуси та контроль виконання.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <h3>Protocol Builder</h3>
+          <p>
+            Структуроване створення протоколів,
+            шаблони та автоматичне формування тексту.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <h3>DICOM та PACS</h3>
+          <p>
+            Майбутня інтеграція з Orthanc
+            і засобами перегляду медичних зображень.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <h3>AI Assistant</h3>
+          <p>
+            Перевірка логічної відповідності опису
+            та висновку під контролем лікаря.
+          </p>
+        </article>
+
+        <article class="feature-card">
           <h3>Аналітика</h3>
-          <p>Навантаження, фінанси, продуктивність і звітність відділення.</p>
-        </div>
+          <p>
+            Навантаження відділення, кількість
+            досліджень та контроль робочих процесів.
+          </p>
+        </article>
       </div>
+    </section>
+
+    <section class="about" id="about">
+      <h2>Designed by radiologists. Powered by AI.</h2>
+
+      <p>
+        RadiologyOS створюється на основі реальних потреб
+        лікарів променевої діагностики. Штучний інтелект
+        допомагає у роботі, але остаточне клінічне рішення
+        завжди залишається за лікарем.
+      </p>
     </section>
   </main>
 
   <footer>
-    © 2026 RadiologyOS. Усі права захищені.
+    © 2026 RadiologyOS. Перша версія платформи перебуває в розробці.
   </footer>
+
 </body>
 </html>
