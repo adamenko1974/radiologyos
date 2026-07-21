@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Конструктор протоколів — RadiologyOS</title>
+  <title>Протоколи — RadiologyOS</title>
 
   <style>
     * {
@@ -22,7 +22,7 @@
 
     header {
       height: 72px;
-      padding: 0 32px;
+      padding: 0 28px;
       background: #ffffff;
       border-bottom: 1px solid #dce4ee;
       display: flex;
@@ -37,9 +37,13 @@
       text-decoration: none;
     }
 
-    .header-info {
-      color: #667085;
-      font-size: 14px;
+    .database-status {
+      padding: 7px 11px;
+      border-radius: 20px;
+      background: #e7f7ef;
+      color: #14804a;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .layout {
@@ -51,14 +55,13 @@
     aside {
       padding: 24px 16px;
       background: #172033;
-      color: #ffffff;
     }
 
     aside h3 {
       padding: 0 12px;
       margin-bottom: 18px;
-      font-size: 14px;
       color: #9fb0c7;
+      font-size: 13px;
       text-transform: uppercase;
     }
 
@@ -68,8 +71,8 @@
 
     .menu a {
       display: block;
-      padding: 12px;
-      margin-bottom: 6px;
+      padding: 11px 12px;
+      margin-bottom: 5px;
       border-radius: 8px;
       color: #dce6f3;
       text-decoration: none;
@@ -85,95 +88,263 @@
       padding: 30px;
     }
 
-    .page-header {
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
       margin-bottom: 24px;
     }
 
-    .page-header h1 {
-      margin-bottom: 8px;
+    .page-top h1 {
+      margin-bottom: 7px;
       font-size: 32px;
     }
 
-    .page-header p {
+    .page-top p {
       color: #667085;
     }
 
-    .workspace {
-      display: grid;
-      grid-template-columns: minmax(320px, 1fr) minmax(360px, 1fr);
-      gap: 24px;
-    }
-
-    .panel {
-      padding: 24px;
-      background: #ffffff;
-      border: 1px solid #dfe7f1;
-      border-radius: 14px;
-      box-shadow: 0 8px 30px rgba(23, 32, 51, 0.05);
-    }
-
-    .panel h2 {
-      margin-bottom: 20px;
-      font-size: 21px;
-    }
-
-    .field {
-      margin-bottom: 18px;
-    }
-
-    .field label {
-      display: block;
-      margin-bottom: 7px;
-      color: #344054;
-      font-size: 14px;
+    .add-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
       font-weight: 700;
     }
 
-    select,
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      padding: 19px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 27px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 210px;
+      gap: 13px;
+      margin-bottom: 20px;
+    }
+
     input,
+    select,
     textarea {
       width: 100%;
       padding: 12px 13px;
       border: 1px solid #cdd8e5;
       border-radius: 8px;
       background: #ffffff;
-      color: #172033;
-      font-family: inherit;
-      font-size: 15px;
-    }
-
-    select:focus,
-    input:focus,
-    textarea:focus {
-      border-color: #1267d6;
-      outline: 3px solid rgba(18, 103, 214, 0.12);
+      font: inherit;
     }
 
     textarea {
-      min-height: 125px;
+      min-height: 115px;
       resize: vertical;
+    }
+
+    .panel {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1050px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 13px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #667085;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 14px;
+      vertical-align: top;
+    }
+
+    .main-text {
+      font-weight: 700;
+    }
+
+    .small {
+      display: block;
+      margin-top: 4px;
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .draft {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .ready {
+      background: #eef5ff;
+      color: #1267d6;
+    }
+
+    .signed {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .actions button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .edit-button {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .sign-button {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .delete-button {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 40px;
+      text-align: center;
+      color: #667085;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 760px;
+      max-height: 94vh;
+      overflow-y: auto;
+      padding: 25px;
+      background: #ffffff;
+      border-radius: 14px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
     }
 
     .row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 13px;
     }
 
-    .actions {
+    .study-info {
+      padding: 14px;
+      margin-bottom: 15px;
+      border-radius: 9px;
+      background: #f8fafc;
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .modal-actions {
       display: flex;
-      gap: 12px;
-      margin-top: 22px;
-      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 20px;
     }
 
-    button {
-      padding: 12px 18px;
+    .secondary,
+    .primary {
+      padding: 11px 17px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 14px;
+    }
+
+    .secondary {
+      background: #edf2f7;
+      color: #344054;
     }
 
     .primary {
@@ -181,48 +352,10 @@
       color: #ffffff;
     }
 
-    .secondary {
-      background: #eaf2fc;
-      color: #1267d6;
-    }
-
-    .success {
-      background: #14804a;
-      color: #ffffff;
-    }
-
-    .report {
-      min-height: 500px;
-      padding: 24px;
-      border: 1px solid #d9e2ec;
-      border-radius: 10px;
-      background: #fbfcfe;
-      line-height: 1.7;
-    }
-
-    .report h3 {
-      margin-bottom: 18px;
-      text-align: center;
-    }
-
-    .report-section {
-      margin-bottom: 20px;
-    }
-
-    .report-section strong {
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .status {
-      display: inline-block;
-      margin-bottom: 18px;
-      padding: 7px 11px;
-      border-radius: 20px;
-      background: #fff4d6;
-      color: #8a5b00;
-      font-size: 13px;
-      font-weight: 700;
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     @media (max-width: 980px) {
@@ -234,34 +367,24 @@
         display: none;
       }
 
-      .workspace {
-        grid-template-columns: 1fr;
-      }
-
       main {
         padding: 20px;
       }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 650px) {
       header {
         padding: 0 16px;
       }
 
-      .header-info {
-        display: none;
+      .page-top {
+        flex-direction: column;
       }
 
+      .stats,
+      .toolbar,
       .row {
         grid-template-columns: 1fr;
-      }
-
-      main {
-        padding: 14px;
-      }
-
-      .panel {
-        padding: 17px;
       }
     }
   </style>
@@ -272,9 +395,9 @@
   <header>
     <a class="logo" href="index.html">RadiologyOS</a>
 
-    <div class="header-info">
-      Protocol Builder · Перша демонстраційна версія
-    </div>
+    <span class="database-status" id="databaseStatus">
+      Підключення...
+    </span>
   </header>
 
   <div class="layout">
@@ -284,312 +407,725 @@
 
       <ul class="menu">
         <li><a href="index.html">Головна</a></li>
-        <li><a href="#" class="active">Протоколи</a></li>
-        <li><a href="#">Пацієнти</a></li>
-        <li><a href="#">Дослідження</a></li>
-        <li><a href="#">База знань</a></li>
-        <li><a href="#">Аналітика</a></li>
+        <li><a href="executive-dashboard.html">Панель керівника</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="protocols.html" class="active">Протоколи</a></li>
+        <li><a href="archive.html">Архів</a></li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="ai.html">AI-помічник</a></li>
+        <li><a href="data-center.html">Центр даних</a></li>
       </ul>
     </aside>
 
     <main>
 
-      <div class="page-header">
-        <h1>Конструктор протоколу</h1>
+      <div class="page-top">
+        <div>
+          <h1>Протоколи</h1>
 
-        <p>
-          КТ головного мозку без внутрішньовенного контрастування
-        </p>
+          <p>
+            Створення, редагування та підписання медичних висновків
+          </p>
+        </div>
+
+        <button class="add-button" onclick="openModal()">
+          + Новий протокол
+        </button>
       </div>
 
-      <div class="workspace">
+      <section class="stats">
 
-        <section class="panel">
-          <h2>Параметри дослідження</h2>
+        <div class="stat-card">
+          <span>Усього протоколів</span>
+          <strong id="totalCount">0</strong>
+        </div>
 
-          <div class="field">
-            <label for="examType">Тип дослідження</label>
+        <div class="stat-card">
+          <span>Чернетки</span>
+          <strong id="draftCount">0</strong>
+        </div>
 
-            <select id="examType">
-              <option>КТ головного мозку</option>
-              <option>КТ приносових пазух</option>
-              <option>КТ органів грудної клітки</option>
-              <option>КТ органів черевної порожнини</option>
-            </select>
-          </div>
+        <div class="stat-card">
+          <span>Готові</span>
+          <strong id="readyCount">0</strong>
+        </div>
 
-          <div class="field">
-            <label for="contrast">Контрастування</label>
+        <div class="stat-card">
+          <span>Підписані</span>
+          <strong id="signedCount">0</strong>
+        </div>
 
-            <select id="contrast">
-              <option>Без внутрішньовенного контрастування</option>
-              <option>З внутрішньовенним контрастуванням</option>
-              <option>КТ-ангіографія</option>
-            </select>
-          </div>
+      </section>
 
-          <div class="field">
-            <label for="brain">Речовина головного мозку</label>
+      <div class="toolbar">
 
-            <select id="brain">
-              <option>Без видимих вогнищевих змін</option>
-              <option>Ішемічні зміни</option>
-              <option>Геморагічні зміни</option>
-              <option>Кістозно-атрофічні зміни</option>
-              <option>Післяопераційні зміни</option>
-            </select>
-          </div>
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Пошук за пацієнтом, ID або висновком..."
+          oninput="renderProtocols()"
+        >
 
-          <div class="row">
-            <div class="field">
-              <label for="ventricles">Шлуночкова система</label>
-
-              <select id="ventricles">
-                <option>Не розширена</option>
-                <option>Помірно розширена</option>
-                <option>Розширена</option>
-                <option>Асиметрична</option>
-                <option>Компримована</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="midline">Серединні структури</label>
-
-              <select id="midline">
-                <option>Не зміщені</option>
-                <option>Зміщені вправо</option>
-                <option>Зміщені вліво</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="field">
-              <label for="shift">Зміщення, мм</label>
-
-              <input
-                id="shift"
-                type="number"
-                min="0"
-                step="1"
-                value="0"
-              >
-            </div>
-
-            <div class="field">
-              <label for="spaces">Лікворні простори</label>
-
-              <select id="spaces">
-                <option>Не розширені</option>
-                <option>Помірно розширені</option>
-                <option>Розширені</option>
-                <option>Звужені</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="bones">Кістки черепа</label>
-
-            <select id="bones">
-              <option>Травматичних змін не виявлено</option>
-              <option>Перелом кісток черепа</option>
-              <option>Трепанаційний дефект</option>
-              <option>Післяопераційні зміни</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="sinuses">Приносові пазухи</label>
-
-            <select id="sinuses">
-              <option>Пневматизація збережена</option>
-              <option>Ознаки синуситу</option>
-              <option>Ретенційна кіста</option>
-              <option>Поліпозні зміни</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="additional">Додатковий опис</label>
-
-            <textarea
-              id="additional"
-              placeholder="Введіть додаткові знахідки..."
-            ></textarea>
-          </div>
-
-          <div class="actions">
-            <button class="primary" onclick="generateReport()">
-              Сформувати протокол
-            </button>
-
-            <button class="secondary" onclick="resetForm()">
-              Очистити
-            </button>
-          </div>
-        </section>
-
-        <section class="panel">
-          <span class="status">Чернетка</span>
-
-          <h2>Попередній перегляд</h2>
-
-          <div class="report" id="report">
-            <h3>КТ головного мозку</h3>
-
-            <div class="report-section">
-              <strong>Методика:</strong>
-
-              <p>
-                Дослідження виконано без внутрішньовенного
-                контрастування.
-              </p>
-            </div>
-
-            <div class="report-section">
-              <strong>Опис:</strong>
-
-              <p>
-                Речовина головного мозку без видимих
-                вогнищевих змін.
-              </p>
-
-              <p>
-                Шлуночкова система не розширена.
-                Серединні структури не зміщені.
-              </p>
-
-              <p>
-                Зовнішні лікворні простори не розширені.
-              </p>
-
-              <p>
-                Травматичних змін кісток черепа не виявлено.
-                Пневматизація приносових пазух збережена.
-              </p>
-            </div>
-
-            <div class="report-section">
-              <strong>Висновок:</strong>
-
-              <p>
-                КТ-ознак гострої внутрішньочерепної патології
-                не виявлено.
-              </p>
-            </div>
-          </div>
-
-          <div class="actions">
-            <button class="secondary" onclick="copyReport()">
-              Копіювати текст
-            </button>
-
-            <button class="success">
-              Підписати протокол
-            </button>
-          </div>
-        </section>
+        <select id="statusFilter" onchange="renderProtocols()">
+          <option value="">Усі статуси</option>
+          <option value="Чернетка">Чернетка</option>
+          <option value="Готовий">Готовий</option>
+          <option value="Підписаний">Підписаний</option>
+        </select>
 
       </div>
+
+      <section class="panel">
+
+        <div class="table-wrap">
+
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Пацієнт</th>
+                <th>Дослідження</th>
+                <th>Висновок</th>
+                <th>Лікар</th>
+                <th>Статус</th>
+                <th>Дії</th>
+              </tr>
+            </thead>
+
+            <tbody id="protocolsTable"></tbody>
+          </table>
+
+        </div>
+
+        <div class="empty-state" id="emptyState">
+          Протоколів за вибраними параметрами немає.
+        </div>
+
+      </section>
+
     </main>
   </div>
 
+  <div class="modal" id="protocolModal">
+
+    <div class="modal-box">
+
+      <h2 id="modalTitle">Новий протокол</h2>
+
+      <input id="protocolId" type="hidden">
+
+      <div class="field">
+        <label for="studyId">Дослідження</label>
+
+        <select id="studyId" onchange="showStudyInfo()"></select>
+      </div>
+
+      <div class="study-info" id="studyInfo">
+        Оберіть дослідження зі списку.
+      </div>
+
+      <div class="field">
+        <label for="description">Опис дослідження</label>
+
+        <textarea
+          id="description"
+          placeholder="Опишіть виявлені зміни..."
+        ></textarea>
+      </div>
+
+      <div class="field">
+        <label for="conclusion">Висновок</label>
+
+        <textarea
+          id="conclusion"
+          placeholder="Сформулюйте короткий висновок..."
+        ></textarea>
+      </div>
+
+      <div class="row">
+
+        <div class="field">
+          <label for="doctor">Лікар-рентгенолог</label>
+          <input id="doctor" type="text" value="Адаменко Д.М.">
+        </div>
+
+        <div class="field">
+          <label for="protocolStatus">Статус</label>
+
+          <select id="protocolStatus">
+            <option value="Чернетка">Чернетка</option>
+            <option value="Готовий">Готовий</option>
+            <option value="Підписаний">Підписаний</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+
+        <button class="secondary" onclick="closeModal()">
+          Скасувати
+        </button>
+
+        <button class="primary" onclick="saveProtocol()">
+          Зберегти
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script src="radiologyos-data.js"></script>
+
   <script>
-    function generateReport() {
-      const examType = document.getElementById("examType").value;
-      const contrast = document.getElementById("contrast").value;
-      const brain = document.getElementById("brain").value;
-      const ventricles = document.getElementById("ventricles").value;
-      const midline = document.getElementById("midline").value;
-      const shift = document.getElementById("shift").value;
-      const spaces = document.getElementById("spaces").value;
-      const bones = document.getElementById("bones").value;
-      const sinuses = document.getElementById("sinuses").value;
-      const additional = document.getElementById("additional").value;
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
 
-      let midlineText = midline;
+    function statusClass(status) {
+      if (status === "Підписаний") return "signed";
+      if (status === "Готовий") return "ready";
 
-      if (midline !== "Не зміщені" && Number(shift) > 0) {
-        midlineText += " на " + shift + " мм";
+      return "draft";
+    }
+
+    function setDatabaseStatus(connected) {
+      const element =
+        document.getElementById("databaseStatus");
+
+      element.textContent =
+        connected ? "База підключена" : "База недоступна";
+
+      if (!connected) {
+        element.style.background = "#fdecec";
+        element.style.color = "#b42318";
+      }
+    }
+
+    function getMaps() {
+      const patients = RadiologyOS.getAll("patients");
+      const studies = RadiologyOS.getAll("studies");
+
+      const patientMap = {};
+      const studyMap = {};
+
+      patients.forEach((patient) => {
+        patientMap[patient.id] = patient;
+      });
+
+      studies.forEach((study) => {
+        studyMap[study.id] = study;
+      });
+
+      return {
+        patients,
+        studies,
+        patientMap,
+        studyMap
+      };
+    }
+
+    function loadStudies() {
+      const select =
+        document.getElementById("studyId");
+
+      const currentValue = select.value;
+
+      const maps = getMaps();
+
+      select.innerHTML =
+        '<option value="">Оберіть дослідження</option>';
+
+      maps.studies.forEach((study) => {
+        const patient =
+          maps.patientMap[study.patientId];
+
+        const option =
+          document.createElement("option");
+
+        option.value = study.id;
+
+        option.textContent =
+          (patient ? patient.fullName : "Пацієнта не знайдено") +
+          " · " +
+          (study.modality || "—") +
+          " · " +
+          (study.region || "—");
+
+        select.appendChild(option);
+      });
+
+      if (currentValue) {
+        select.value = currentValue;
+      }
+    }
+
+    function showStudyInfo() {
+      const studyId =
+        document.getElementById("studyId").value;
+
+      const info =
+        document.getElementById("studyInfo");
+
+      if (!studyId) {
+        info.textContent =
+          "Оберіть дослідження зі списку.";
+
+        return;
       }
 
-      let conclusion =
-        "КТ-ознак гострої внутрішньочерепної патології не виявлено.";
+      const study =
+        RadiologyOS.getById("studies", studyId);
 
-      if (brain !== "Без видимих вогнищевих змін") {
-        conclusion = brain + ".";
+      if (!study) {
+        info.textContent =
+          "Дослідження не знайдено.";
+
+        return;
       }
 
-      const additionalText = additional
-        ? `<p>${additional}</p>`
-        : "";
+      const patient =
+        RadiologyOS.getById(
+          "patients",
+          study.patientId
+        );
 
-      document.getElementById("report").innerHTML = `
-        <h3>${examType}</h3>
+      info.innerHTML = `
+        <strong>
+          ${escapeHtml(
+            patient
+              ? patient.fullName
+              : "Пацієнта не знайдено"
+          )}
+        </strong><br>
 
-        <div class="report-section">
-          <strong>Методика:</strong>
-          <p>Дослідження виконано: ${contrast.toLowerCase()}.</p>
-        </div>
+        ${escapeHtml(study.modality || "—")} ·
+        ${escapeHtml(study.region || "—")}<br>
 
-        <div class="report-section">
-          <strong>Опис:</strong>
+        Контраст:
+        ${study.contrast ? "так" : "ні"} ·
 
-          <p>Речовина головного мозку: ${brain.toLowerCase()}.</p>
-
-          <p>
-            Шлуночкова система: ${ventricles.toLowerCase()}.
-            Серединні структури: ${midlineText.toLowerCase()}.
-          </p>
-
-          <p>
-            Зовнішні лікворні простори:
-            ${spaces.toLowerCase()}.
-          </p>
-
-          <p>
-            Кістки черепа: ${bones.toLowerCase()}.
-            Приносові пазухи: ${sinuses.toLowerCase()}.
-          </p>
-
-          ${additionalText}
-        </div>
-
-        <div class="report-section">
-          <strong>Висновок:</strong>
-          <p>${conclusion}</p>
-        </div>
+        Статус:
+        ${escapeHtml(study.status || "—")}
       `;
     }
 
-    function resetForm() {
-      document.querySelectorAll("select").forEach((select) => {
-        select.selectedIndex = 0;
-      });
+    function clearForm() {
+      document.getElementById("modalTitle").textContent =
+        "Новий протокол";
 
-      document.querySelectorAll("input").forEach((input) => {
-        input.value = 0;
-      });
+      document.getElementById("protocolId").value = "";
+      document.getElementById("studyId").value = "";
+      document.getElementById("description").value = "";
+      document.getElementById("conclusion").value = "";
+      document.getElementById("doctor").value =
+        "Адаменко Д.М.";
 
-      document.getElementById("additional").value = "";
+      document.getElementById("protocolStatus").value =
+        "Чернетка";
 
-      generateReport();
+      document.getElementById("studyInfo").textContent =
+        "Оберіть дослідження зі списку.";
     }
 
-    function copyReport() {
-      const reportText =
-        document.getElementById("report").innerText;
+    function openModal(protocolId) {
+      loadStudies();
+      clearForm();
 
-      navigator.clipboard.writeText(reportText)
-        .then(() => {
-          alert("Протокол скопійовано.");
-        })
-        .catch(() => {
-          alert("Не вдалося скопіювати текст.");
-        });
+      if (protocolId) {
+        const protocol =
+          RadiologyOS.getById(
+            "protocols",
+            protocolId
+          );
+
+        if (!protocol) {
+          alert("Протокол не знайдено.");
+          return;
+        }
+
+        document.getElementById("modalTitle").textContent =
+          "Редагування протоколу";
+
+        document.getElementById("protocolId").value =
+          protocol.id;
+
+        document.getElementById("studyId").value =
+          protocol.studyId || "";
+
+        document.getElementById("description").value =
+          protocol.description || "";
+
+        document.getElementById("conclusion").value =
+          protocol.conclusion || "";
+
+        document.getElementById("doctor").value =
+          protocol.doctor || "";
+
+        document.getElementById("protocolStatus").value =
+          protocol.status || "Чернетка";
+
+        showStudyInfo();
+      }
+
+      document
+        .getElementById("protocolModal")
+        .classList.add("open");
     }
+
+    function closeModal() {
+      document
+        .getElementById("protocolModal")
+        .classList.remove("open");
+    }
+
+    function saveProtocol() {
+      const id =
+        document.getElementById("protocolId").value;
+
+      const studyId =
+        document.getElementById("studyId").value;
+
+      const description =
+        document.getElementById("description")
+          .value
+          .trim();
+
+      const conclusion =
+        document.getElementById("conclusion")
+          .value
+          .trim();
+
+      const doctor =
+        document.getElementById("doctor")
+          .value
+          .trim();
+
+      const status =
+        document.getElementById("protocolStatus").value;
+
+      if (!studyId || !description || !conclusion) {
+        alert(
+          "Оберіть дослідження та заповніть опис і висновок."
+        );
+
+        return;
+      }
+
+      const existing =
+        RadiologyOS.getAll("protocols").find(
+          protocol =>
+            protocol.studyId === studyId &&
+            protocol.id !== id
+        );
+
+      if (existing) {
+        alert(
+          "Для цього дослідження протокол уже створено."
+        );
+
+        return;
+      }
+
+      const data = {
+        studyId,
+        description,
+        conclusion,
+        doctor,
+        status,
+        signedAt:
+          status === "Підписаний"
+            ? new Date().toISOString()
+            : null
+      };
+
+      const result = id
+        ? RadiologyOS.update(
+            "protocols",
+            id,
+            data
+          )
+        : RadiologyOS.create(
+            "protocols",
+            data,
+            "PRT"
+          );
+
+      if (!result) {
+        alert("Не вдалося зберегти протокол.");
+        return;
+      }
+
+      if (status === "Підписаний") {
+        RadiologyOS.update(
+          "studies",
+          studyId,
+          { status: "Завершено" }
+        );
+      }
+
+      closeModal();
+      renderProtocols();
+      updateStatistics();
+    }
+
+    function signProtocol(id) {
+      const protocol =
+        RadiologyOS.getById("protocols", id);
+
+      if (!protocol) return;
+
+      const confirmed = confirm(
+        "Підписати цей протокол?"
+      );
+
+      if (!confirmed) return;
+
+      RadiologyOS.update(
+        "protocols",
+        id,
+        {
+          status: "Підписаний",
+          signedAt: new Date().toISOString()
+        }
+      );
+
+      RadiologyOS.update(
+        "studies",
+        protocol.studyId,
+        { status: "Завершено" }
+      );
+
+      renderProtocols();
+      updateStatistics();
+    }
+
+    function deleteProtocol(id) {
+      if (!confirm("Видалити цей протокол?")) {
+        return;
+      }
+
+      RadiologyOS.remove("protocols", id);
+
+      renderProtocols();
+      updateStatistics();
+    }
+
+    function renderProtocols() {
+      const search =
+        document.getElementById("searchInput")
+          .value
+          .trim()
+          .toLowerCase();
+
+      const status =
+        document.getElementById("statusFilter").value;
+
+      const maps = getMaps();
+
+      const protocols =
+        RadiologyOS.getAll("protocols")
+          .filter((protocol) => {
+            const study =
+              maps.studyMap[protocol.studyId];
+
+            const patient =
+              study
+                ? maps.patientMap[study.patientId]
+                : null;
+
+            const patientName =
+              patient ? patient.fullName : "";
+
+            const matchesSearch =
+              !search ||
+              String(protocol.id || "")
+                .toLowerCase()
+                .includes(search) ||
+              String(protocol.conclusion || "")
+                .toLowerCase()
+                .includes(search) ||
+              String(patientName)
+                .toLowerCase()
+                .includes(search);
+
+            return (
+              matchesSearch &&
+              (!status || protocol.status === status)
+            );
+          });
+
+      const table =
+        document.getElementById("protocolsTable");
+
+      table.innerHTML = "";
+
+      protocols.forEach((protocol) => {
+        const study =
+          maps.studyMap[protocol.studyId];
+
+        const patient =
+          study
+            ? maps.patientMap[study.patientId]
+            : null;
+
+                const row =
+          document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${escapeHtml(protocol.id)}</td>
+
+          <td>
+            <span class="main-text">
+              ${escapeHtml(
+                patient
+                  ? patient.fullName
+                  : "Пацієнта не знайдено"
+              )}
+            </span>
+
+            <span class="small">
+              ${escapeHtml(
+                study ? study.patientId : "—"
+              )}
+            </span>
+          </td>
+
+          <td>
+            <span class="main-text">
+              ${escapeHtml(
+                study ? study.modality : "—"
+              )} ·
+              ${escapeHtml(
+                study ? study.region : "—"
+              )}
+            </span>
+
+            <span class="small">
+              ${escapeHtml(protocol.studyId)}
+            </span>
+          </td>
+
+          <td>
+            <span class="main-text">
+              ${escapeHtml(protocol.conclusion)}
+            </span>
+
+            <span class="small">
+              ${escapeHtml(protocol.description)}
+            </span>
+          </td>
+
+          <td>${escapeHtml(protocol.doctor || "—")}</td>
+
+          <td>
+            <span class="badge ${statusClass(protocol.status)}">
+              ${escapeHtml(protocol.status || "Чернетка")}
+            </span>
+          </td>
+
+          <td class="actions">
+            <button
+              class="edit-button"
+              onclick="openModal('${protocol.id}')"
+            >
+              Редагувати
+            </button>
+
+            ${
+              protocol.status !== "Підписаний"
+                ? `
+                  <button
+                    class="sign-button"
+                    onclick="signProtocol('${protocol.id}')"
+                  >
+                    Підписати
+                  </button>
+                `
+                : ""
+            }
+
+            <button
+              class="delete-button"
+              onclick="deleteProtocol('${protocol.id}')"
+            >
+              Видалити
+            </button>
+          </td>
+        `;
+
+        table.appendChild(row);
+      });
+
+      document.getElementById("emptyState").style.display =
+        protocols.length ? "none" : "block";
+    }
+
+    function updateStatistics() {
+      const protocols =
+        RadiologyOS.getAll("protocols");
+
+      document.getElementById("totalCount").textContent =
+        protocols.length;
+
+      document.getElementById("draftCount").textContent =
+        protocols.filter(
+          item => item.status === "Чернетка"
+        ).length;
+
+      document.getElementById("readyCount").textContent =
+        protocols.filter(
+          item => item.status === "Готовий"
+        ).length;
+
+      document.getElementById("signedCount").textContent =
+        protocols.filter(
+          item => item.status === "Підписаний"
+        ).length;
+    }
+
+    function initializePage() {
+      if (!window.RadiologyOS) {
+        setDatabaseStatus(false);
+
+        alert(
+          "Не вдалося підключити radiologyos-data.js."
+        );
+
+        return;
+      }
+
+      setDatabaseStatus(true);
+      loadStudies();
+      renderProtocols();
+      updateStatistics();
+    }
+
+    document
+      .getElementById("protocolModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+
+    window.addEventListener(
+      "radiologyos:data-changed",
+      function() {
+        loadStudies();
+        renderProtocols();
+        updateStatistics();
+      }
+    );
+
+    initializePage();
   </script>
 
 </body>
