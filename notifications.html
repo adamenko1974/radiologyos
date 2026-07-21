@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Сповіщення — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 30px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .read-all-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      padding: 19px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 27px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 220px 220px;
+      gap: 13px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    .panel {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .notification {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 15px;
+      align-items: start;
+      padding: 17px;
+      margin-bottom: 12px;
+      border: 1px solid #e1e8f0;
+      border-radius: 11px;
+      background: #ffffff;
+    }
+
+    .notification.unread {
+      border-left: 4px solid #1267d6;
+      background: #f6f9fe;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .icon-info {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .icon-warning {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .icon-critical {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .icon-success {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .notification h3 {
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    .notification p {
+      margin-bottom: 9px;
+      color: #667085;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: #7c8798;
+      font-size: 12px;
+    }
+
+    .badge {
+      padding: 5px 8px;
+      border-radius: 20px;
+      background: #edf2f7;
+      color: #475467;
+      font-weight: 700;
+    }
+
+    .actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .actions button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .read-button {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .delete-button {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 40px;
+      color: #667085;
+      text-align: center;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .notification {
+        grid-template-columns: auto 1fr;
+      }
+
+      .actions {
+        grid-column: 2;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+    <div class="header-info">Центр системних сповіщень</div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="referrals.html">Направлення</a></li>
+        <li><a href="bookings-admin.html">Заявки</a></li>
+        <li><a href="archive.html">Архів</a></li>
+        <li><a href="tasks.html">Завдання</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+        <li><a href="incidents.html">Журнал подій</a></li>
+        <li><a href="audit.html">Журнал аудиту</a></li>
+        <li>
+          <a href="notifications.html" class="active">
+            Сповіщення
+          </a>
+        </li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Сповіщення</h1>
+          <p>Важливі повідомлення про заявки, обладнання та завдання</p>
+        </div>
+
+        <button class="read-all-button" onclick="markAllRead()">
+          Позначити все прочитаним
+        </button>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Усього повідомлень</span>
+          <strong id="totalCount">6</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Непрочитані</span>
+          <strong id="unreadCount">4</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Критичні</span>
+          <strong id="criticalCount">1</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>За сьогодні</span>
+          <strong id="todayCount">5</strong>
+        </div>
+
+      </section>
+
+      <div class="toolbar">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Пошук повідомлення..."
+          oninput="filterNotifications()"
+        >
+
+        <select id="categoryFilter" onchange="filterNotifications()">
+          <option value="">Усі категорії</option>
+          <option value="Обладнання">Обладнання</option>
+          <option value="Заявки">Заявки</option>
+          <option value="Завдання">Завдання</option>
+          <option value="Склад">Склад</option>
+          <option value="Система">Система</option>
+        </select>
+
+        <select id="readFilter" onchange="filterNotifications()">
+          <option value="">Усі повідомлення</option>
+          <option value="unread">Непрочитані</option>
+          <option value="read">Прочитані</option>
+        </select>
+
+      </div>
+
+      <section class="panel" id="notificationList">
+
+        <article
+          class="notification unread"
+          data-category="Обладнання"
+          data-priority="critical"
+          data-read="unread"
+        >
+          <div class="icon icon-critical">!</div>
+
+          <div>
+            <h3>Критична несправність AMAX 5000</h3>
+
+            <p>
+              Зареєстровано помилку E09 після перепаду напруги.
+              Потрібна перевірка інженером.
+            </p>
+
+            <div class="meta">
+              <span class="badge">Обладнання</span>
+              <span>Сьогодні, 10:12</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="read-button" onclick="markRead(this)">
+              Прочитано
+            </button>
+
+            <button class="delete-button" onclick="deleteNotification(this)">
+              Видалити
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="notification unread"
+          data-category="Заявки"
+          data-priority="info"
+          data-read="unread"
+        >
+          <div class="icon icon-info">i</div>
+
+          <div>
+            <h3>Нова заявка на КТ</h3>
+
+            <p>
+              Отримано онлайн-запис на КТ органів грудної клітки
+              на 22.07.2026 о 09:30.
+            </p>
+
+            <div class="meta">
+              <span class="badge">Заявки</span>
+              <span>Сьогодні, 09:48</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="read-button" onclick="markRead(this)">
+              Прочитано
+            </button>
+
+            <button class="delete-button" onclick="deleteNotification(this)">
+              Видалити
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="notification unread"
+          data-category="Склад"
+          data-priority="warning"
+          data-read="unread"
+        >
+          <div class="icon icon-warning">!</div>
+
+          <div>
+            <h3>Малий залишок шприців</h3>
+
+            <p>
+              На складі залишилося 4 шприци об’ємом 20 мл.
+              Потрібно сформувати заявку на поповнення.
+            </p>
+
+            <div class="meta">
+              <span class="badge">Склад</span>
+              <span>Сьогодні, 09:20</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="read-button" onclick="markRead(this)">
+              Прочитано
+            </button>
+
+            <button class="delete-button" onclick="deleteNotification(this)">
+              Видалити
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="notification unread"
+          data-category="Завдання"
+          data-priority="warning"
+          data-read="unread"
+        >
+          <div class="icon icon-warning">!</div>
+
+          <div>
+            <h3>Прострочене завдання</h3>
+
+            <p>
+              Не виконано перевірку резервного копіювання архіву Orthanc.
+            </p>
+
+            <div class="meta">
+              <span class="badge">Завдання</span>
+              <span>Сьогодні, 08:45</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="read-button" onclick="markRead(this)">
+              Прочитано
+            </button>
+
+            <button class="delete-button" onclick="deleteNotification(this)">
+              Видалити
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="notification"
+          data-category="Система"
+          data-priority="success"
+          data-read="read"
+        >
+          <div class="icon icon-success">✓</div>
+
+          <div>
+            <h3>Резервне копіювання завершено</h3>
+
+            <p>
+              Системний архів протоколів успішно створено.
+            </p>
+
+            <div class="meta">
+              <span class="badge">Система</span>
+              <span>Сьогодні, 07:30</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="delete-button" onclick="deleteNotification(this)">
+              Видалити
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="notification"
+          data-category="Обладнання"
+          data-priority="success"
+          data-read="read"
+        >
+          <div class="icon icon-success">✓</div>
+
+          <div>
+            <h3>Технічну перевірку КТ виконано</h3>
+
+            <p>
+              Siemens CT готовий до роботи. Критичних зауважень немає.
+            </p>
+
+            <div class="meta">
+              <span class="badge">Обладнання</span>
+              <span>20.07.2026, 16:10</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="delete-button" onclick="deleteNotification(this)">
+              Видалити
+            </button>
+          </div>
+        </article>
+
+        <div class="empty-state" id="emptyState">
+          Повідомлень за заданими параметрами не знайдено.
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    function markRead(button) {
+      const notification = button.closest(".notification");
+
+      notification.classList.remove("unread");
+      notification.dataset.read = "read";
+      button.remove();
+
+      updateStatistics();
+      filterNotifications();
+    }
+
+    function markAllRead() {
+      document
+        .querySelectorAll(".notification[data-read='unread']")
+        .forEach((notification) => {
+          notification.classList.remove("unread");
+          notification.dataset.read = "read";
+
+          const button =
+            notification.querySelector(".read-button");
+
+          if (button) {
+            button.remove();
+          }
+        });
+
+      updateStatistics();
+      filterNotifications();
+    }
+
+    function deleteNotification(button) {
+      const confirmed = confirm("Видалити це повідомлення?");
+
+      if (!confirmed) return;
+
+      button.closest(".notification").remove();
+
+      updateStatistics();
+      filterNotifications();
+    }
+
+    function filterNotifications() {
+      const search =
+        document.getElementById("searchInput").value.toLowerCase();
+
+      const category =
+        document.getElementById("categoryFilter").value;
+
+      const readStatus =
+        document.getElementById("readFilter").value;
+
+      let visibleCount = 0;
+
+      document
+        .querySelectorAll(".notification")
+        .forEach((notification) => {
+          const matchesSearch =
+            notification.textContent.toLowerCase().includes(search);
+
+          const matchesCategory =
+            !category ||
+            notification.dataset.category === category;
+
+          const matchesRead =
+            !readStatus ||
+            notification.dataset.read === readStatus;
+
+          const visible =
+            matchesSearch &&
+            matchesCategory &&
+            matchesRead;
+
+          notification.style.display = visible ? "" : "none";
+
+          if (visible) {
+            visibleCount++;
+          }
+        });
+
+      document.getElementById("emptyState").style.display =
+        visibleCount === 0 ? "block" : "none";
+    }
+
+    function updateStatistics() {
+      const notifications = [
+        ...document.querySelectorAll(".notification")
+      ];
+
+      document.getElementById("totalCount").textContent =
+        notifications.length;
+
+      document.getElementById("unreadCount").textContent =
+        notifications.filter(
+          item => item.dataset.read === "unread"
+        ).length;
+
+      document.getElementById("criticalCount").textContent =
+        notifications.filter(
+          item => item.dataset.priority === "critical"
+        ).length;
+
+      document.getElementById("todayCount").textContent =
+        notifications.filter(
+          item => item.textContent.includes("Сьогодні")
+        ).length;
+    }
+
+    updateStatistics();
+  </script>
+
+</body>
+</html>
