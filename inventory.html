@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Склад — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .add-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 28px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    .panel {
+      padding: 22px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 950px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #667085;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .status-ok {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .status-low {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .status-critical {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .actions button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .use-button {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .supply-button {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 560px;
+      padding: 26px;
+      background: #ffffff;
+      border-radius: 14px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .secondary,
+    .primary {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .secondary {
+      background: #edf2f7;
+      color: #344054;
+    }
+
+    .primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar,
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Склад і витратні матеріали
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="bookings-admin.html">Заявки</a></li>
+        <li><a href="ai.html">AI Assistant</a></li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="analytics.html">Аналітика</a></li>
+        <li><a href="reports.html">Звіти</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+        <li><a href="inventory.html" class="active">Склад</a></li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Склад</h1>
+          <p>Контроль контрасту, катетерів, плівки та інших матеріалів</p>
+        </div>
+
+        <button class="add-button" onclick="openModal()">
+          + Додати матеріал
+        </button>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Найменувань</span>
+          <strong id="itemCount">7</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Достатній запас</span>
+          <strong id="okCount">4</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Малий залишок</span>
+          <strong id="lowCount">2</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Критичний залишок</span>
+          <strong id="criticalCount">1</strong>
+        </div>
+
+      </section>
+
+      <div class="toolbar">
+        <input
+          id="search"
+          type="search"
+          placeholder="Пошук матеріалу..."
+          oninput="filterRows()"
+        >
+
+        <select id="statusFilter" onchange="filterRows()">
+          <option value="">Усі статуси</option>
+          <option value="Достатньо">Достатньо</option>
+          <option value="Малий залишок">Малий залишок</option>
+          <option value="Критично">Критично</option>
+        </select>
+      </div>
+
+      <section class="panel">
+
+        <div class="table-wrap">
+
+          <table>
+            <thead>
+              <tr>
+                <th>Матеріал</th>
+                <th>Категорія</th>
+                <th>Залишок</th>
+                <th>Мінімум</th>
+                <th>Термін придатності</th>
+                <th>Статус</th>
+                <th>Дії</th>
+              </tr>
+            </thead>
+
+            <tbody id="inventoryTable">
+
+              <tr data-status="Достатньо">
+                <td>Контрастна речовина 100 мл</td>
+                <td>Контраст</td>
+                <td class="quantity">24</td>
+                <td>10</td>
+                <td>12.2027</td>
+                <td>
+                  <span class="status status-ok">Достатньо</span>
+                </td>
+                <td class="actions">
+                  <button class="use-button" onclick="changeQuantity(this, -1)">
+                    Списати
+                  </button>
+                  <button class="supply-button" onclick="changeQuantity(this, 5)">
+                    +5
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-status="Малий залишок">
+                <td>Внутрішньовенні катетери 20G</td>
+                <td>Катетери</td>
+                <td class="quantity">12</td>
+                <td>10</td>
+                <td>08.2028</td>
+                <td>
+                  <span class="status status-low">Малий залишок</span>
+                </td>
+                <td class="actions">
+                  <button class="use-button" onclick="changeQuantity(this, -1)">
+                    Списати
+                  </button>
+                  <button class="supply-button" onclick="changeQuantity(this, 5)">
+                    +5
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-status="Критично">
+                <td>Шприци 20 мл</td>
+                <td>Ін’єкційні матеріали</td>
+                <td class="quantity">4</td>
+                <td>10</td>
+                <td>05.2029</td>
+                <td>
+                  <span class="status status-critical">Критично</span>
+                </td>
+                <td class="actions">
+                  <button class="use-button" onclick="changeQuantity(this, -1)">
+                    Списати
+                  </button>
+                  <button class="supply-button" onclick="changeQuantity(this, 5)">
+                    +5
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-status="Достатньо">
+                <td>Фізіологічний розчин 200 мл</td>
+                <td>Розчини</td>
+                <td class="quantity">36</td>
+                <td>12</td>
+                <td>03.2028</td>
+                <td>
+                  <span class="status status-ok">Достатньо</span>
+                </td>
+                <td class="actions">
+                  <button class="use-button" onclick="changeQuantity(this, -1)">
+                    Списати
+                  </button>
+                  <button class="supply-button" onclick="changeQuantity(this, 5)">
+                    +5
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-status="Достатньо">
+                <td>Рентгенівська плівка</td>
+                <td>Плівка</td>
+                <td class="quantity">80</td>
+                <td>25</td>
+                <td>11.2027</td>
+                <td>
+                  <span class="status status-ok">Достатньо</span>
+                </td>
+                <td class="actions">
+                  <button class="use-button" onclick="changeQuantity(this, -1)">
+                    Списати
+                  </button>
+                  <button class="supply-button" onclick="changeQuantity(this, 5)">
+                    +5
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-status="Малий залишок">
+                <td>Диски для запису досліджень</td>
+                <td>Носії</td>
+                <td class="quantity">18</td>
+                <td>15</td>
+                <td>Без обмежень</td>
+                <td>
+                  <span class="status status-low">Малий залишок</span>
+                </td>
+                <td class="actions">
+                  <button class="use-button" onclick="changeQuantity(this, -1)">
+                    Списати
+                  </button>
+                  <button class="supply-button" onclick="changeQuantity(this, 5)">
+                    +5
+                  </button>
+                </td>
+              </tr>
+
+              <tr data-status="Достатньо">
+                <td>Одноразові рукавички</td>
+                <td>Захисні матеріали</td>
+                <td class="quantity">140</td>
+                <td>50</td>
+                <td>09.2028</td>
+                <td>
+                  <span class="status status-ok">Достатньо</span>
+                </td>
+                <td class="actions">
+                  <button class="use-button" onclick="changeQuantity(this, -1)">
+                    Списати
+                  </button>
+                  <button class="supply-button" onclick="changeQuantity(this, 5)">
+                    +5
+                  </button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="modal" id="itemModal">
+
+    <div class="modal-box">
+
+      <h2>Новий матеріал</h2>
+
+      <div class="field">
+        <label for="itemName">Назва</label>
+        <input id="itemName" type="text">
+      </div>
+
+      <div class="field">
+        <label for="itemCategory">Категорія</label>
+        <input id="itemCategory" type="text">
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="itemQuantity">Кількість</label>
+          <input id="itemQuantity" type="number" min="0" value="1">
+        </div>
+
+        <div class="field">
+          <label for="itemMinimum">Мінімум</label>
+          <input id="itemMinimum" type="number" min="0" value="5">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="itemExpiry">Термін придатності</label>
+        <input id="itemExpiry" type="text" placeholder="Наприклад: 12.2028">
+      </div>
+
+      <div class="modal-actions">
+        <button class="secondary" onclick="closeModal()">
+          Скасувати
+        </button>
+
+        <button class="primary" onclick="addItem()">
+          Зберегти
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function getStatus(quantity, minimum) {
+      if (quantity < minimum / 2) {
+        return {
+          text: "Критично",
+          className: "status-critical"
+        };
+      }
+
+      if (quantity <= minimum * 1.5) {
+        return {
+          text: "Малий залишок",
+          className: "status-low"
+        };
+      }
+
+      return {
+        text: "Достатньо",
+        className: "status-ok"
+      };
+    }
+
+    function updateRowStatus(row) {
+      const quantity =
+        Number(row.querySelector(".quantity").textContent);
+
+      const minimum =
+        Number(row.children[3].textContent);
+
+      const status = getStatus(quantity, minimum);
+
+      row.dataset.status = status.text;
+
+      row.children[5].innerHTML = `
+        <span class="status ${status.className}">
+          ${status.text}
+        </span>
+      `;
+
+      updateStatistics();
+    }
+
+    function changeQuantity(button, amount) {
+      const row = button.closest("tr");
+      const cell = row.querySelector(".quantity");
+
+      const current = Number(cell.textContent);
+      const next = Math.max(0, current + amount);
+
+      cell.textContent = next;
+      updateRowStatus(row);
+    }
+
+    function updateStatistics() {
+      const rows = [
+        ...document.querySelectorAll("#inventoryTable tr")
+      ];
+
+      document.getElementById("itemCount").textContent =
+        rows.length;
+
+      document.getElementById("okCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Достатньо"
+        ).length;
+
+      document.getElementById("lowCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Малий залишок"
+        ).length;
+
+      document.getElementById("criticalCount").textContent =
+        rows.filter(
+          row => row.dataset.status === "Критично"
+        ).length;
+    }
+
+    function filterRows() {
+      const search =
+        document.getElementById("search").value.toLowerCase();
+
+      const status =
+        document.getElementById("statusFilter").value;
+
+      document
+        .querySelectorAll("#inventoryTable tr")
+        .forEach((row) => {
+          const matchesSearch =
+            row.textContent.toLowerCase().includes(search);
+
+          const matchesStatus =
+            !status || row.dataset.status === status;
+
+          row.style.display =
+            matchesSearch && matchesStatus ? "" : "none";
+        });
+    }
+
+    function openModal() {
+      document.getElementById("itemModal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("itemModal").classList.remove("open");
+    }
+
+    function addItem() {
+      const name =
+        document.getElementById("itemName").value.trim();
+
+      const category =
+        document.getElementById("itemCategory").value.trim();
+
+      const quantity =
+        Number(document.getElementById("itemQuantity").value);
+
+      const minimum =
+        Number(document.getElementById("itemMinimum").value);
+
+      const expiry =
+        document.getElementById("itemExpiry").value.trim()
+        || "Не вказано";
+
+      if (!name || !category) {
+        alert("Вкажіть назву та категорію.");
+        return;
+      }
+
+      const status = getStatus(quantity, minimum);
+      const row = document.createElement("tr");
+
+      row.dataset.status = status.text;
+
+      row.innerHTML = `
+        <td>${name}</td>
+        <td>${category}</td>
+        <td class="quantity">${quantity}</td>
+        <td>${minimum}</td>
+        <td>${expiry}</td>
+        <td>
+          <span class="status ${status.className}">
+            ${status.text}
+          </span>
+        </td>
+        <td class="actions">
+          <button class="use-button" onclick="changeQuantity(this, -1)">
+            Списати
+          </button>
+          <button class="supply-button" onclick="changeQuantity(this, 5)">
+            +5
+          </button>
+        </td>
+      `;
+
+      document.getElementById("inventoryTable").prepend(row);
+
+      document.getElementById("itemName").value = "";
+      document.getElementById("itemCategory").value = "";
+      document.getElementById("itemQuantity").value = "1";
+      document.getElementById("itemMinimum").value = "5";
+      document.getElementById("itemExpiry").value = "";
+
+      updateStatistics();
+      closeModal();
+    }
+
+    document
+      .getElementById("itemModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+
+    updateStatistics();
+  </script>
+
+</body>
+</html>
