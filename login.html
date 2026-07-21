@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Вхід — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, #dcecff, transparent 35%),
+        linear-gradient(135deg, #eef5ff, #f7f9fc);
+      color: #172033;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-layout {
+      width: min(1000px, 100%);
+      min-height: 610px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      overflow: hidden;
+      border: 1px solid #dbe5f0;
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: 0 24px 70px rgba(23, 32, 51, 0.14);
+    }
+
+    .info-panel {
+      padding: 54px;
+      background:
+        linear-gradient(rgba(16, 74, 150, 0.93), rgba(10, 54, 115, 0.96)),
+        #1267d6;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: inline-block;
+      margin-bottom: 50px;
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .info-panel h1 {
+      max-width: 480px;
+      margin-bottom: 18px;
+      font-size: 42px;
+      line-height: 1.15;
+    }
+
+    .info-panel p {
+      max-width: 480px;
+      color: #dceaff;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .features {
+      display: grid;
+      gap: 14px;
+      margin-top: 35px;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #edf5ff;
+      font-size: 14px;
+    }
+
+    .feature-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .info-footer {
+      margin-top: 40px;
+      color: #bfd6f5;
+      font-size: 13px;
+    }
+
+    .form-panel {
+      padding: 54px 45px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-panel h2 {
+      margin-bottom: 9px;
+      font-size: 30px;
+    }
+
+    .subtitle {
+      margin-bottom: 30px;
+      color: #667085;
+      line-height: 1.6;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      color: #344054;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 45px 13px 14px;
+      border: 1px solid #cdd8e5;
+      border-radius: 9px;
+      background: #ffffff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #1267d6;
+      box-shadow: 0 0 0 3px rgba(18, 103, 214, 0.12);
+    }
+
+    .show-password {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 7px;
+      border: none;
+      background: transparent;
+      color: #1267d6;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+      font-size: 14px;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #475467;
+    }
+
+    .remember input {
+      width: auto;
+    }
+
+    .forgot {
+      color: #1267d6;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .login-button:hover {
+      background: #0d56b5;
+    }
+
+    .demo-box {
+      margin-top: 24px;
+      padding: 15px;
+      border: 1px solid #d7e5f7;
+      border-radius: 9px;
+      background: #f2f7fd;
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .demo-box strong {
+      color: #1267d6;
+    }
+
+    .message {
+      display: none;
+      margin-bottom: 18px;
+      padding: 13px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .message.error {
+      display: block;
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .message.success {
+      display: block;
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .public-link {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .public-link a {
+      color: #667085;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .public-link a:hover {
+      color: #1267d6;
+    }
+
+    @media (max-width: 800px) {
+      .login-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .info-panel {
+        padding: 35px 28px;
+      }
+
+      .info-panel h1 {
+        font-size: 32px;
+      }
+
+      .features,
+      .info-footer {
+        display: none;
+      }
+
+      .logo {
+        margin-bottom: 28px;
+      }
+
+      .form-panel {
+        padding: 38px 28px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
+
+      .login-layout {
+        border-radius: 14px;
+      }
+
+      .info-panel {
+        padding: 28px 22px;
+      }
+
+      .form-panel {
+        padding: 30px 22px;
+      }
+
+      .options {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="login-layout">
+
+    <section class="info-panel">
+
+      <div>
+        <a class="logo" href="index.html">RadiologyOS</a>
+
+        <h1>
+          Єдине робоче середовище відділення
+        </h1>
+
+        <p>
+          Протоколи, пацієнти, дослідження, онлайн-записи,
+          персонал, обладнання та звітність в одній системі.
+        </p>
+
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Конструктор медичних протоколів</span>
+          </div>
+
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Реєстр пацієнтів і досліджень</span>
+          </div>
+
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Контроль обладнання та робочих процесів</span>
+          </div>
+
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>AI-помічник лікаря-рентгенолога</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-footer">
+        © 2026 RadiologyOS · Медична інформаційна система
+      </div>
+
+    </section>
+
+    <section class="form-panel">
+
+      <h2>Вхід у систему</h2>
+
+      <p class="subtitle">
+        Введіть свої дані для доступу до робочого середовища.
+      </p>
+
+      <div class="message" id="loginMessage"></div>
+
+      <form id="loginForm">
+
+        <div class="field">
+          <label for="email">Електронна пошта</label>
+
+          <input
+            id="email"
+            type="email"
+            autocomplete="username"
+            placeholder="doctor@radiologyos.com"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="password">Пароль</label>
+
+          <div class="input-wrap">
+            <input
+              id="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Введіть пароль"
+              required
+            >
+
+            <button
+              class="show-password"
+              type="button"
+              onclick="togglePassword()"
+            >
+              Показати
+            </button>
+          </div>
+        </div>
+
+        <div class="options">
+          <label class="remember">
+            <input id="remember" type="checkbox">
+            <span>Запам’ятати мене</span>
+          </label>
+
+          <a class="forgot" href="#" onclick="forgotPassword(event)">
+            Забули пароль?
+          </a>
+        </div>
+
+        <button class="login-button" type="submit">
+          Увійти
+        </button>
+
+      </form>
+
+      <div class="demo-box">
+        <strong>Демонстраційний вхід</strong><br>
+        Email: doctor@radiologyos.com<br>
+        Пароль: radiology2026
+      </div>
+
+      <div class="public-link">
+        <a href="index.html">
+          ← Повернутися на публічний сайт
+        </a>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    const demoEmail = "doctor@radiologyos.com";
+    const demoPassword = "radiology2026";
+
+    function togglePassword() {
+      const passwordInput =
+        document.getElementById("password");
+
+      const button =
+        document.querySelector(".show-password");
+
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        button.textContent = "Сховати";
+      } else {
+        passwordInput.type = "password";
+        button.textContent = "Показати";
+      }
+    }
+
+    function showMessage(text, type) {
+      const message =
+        document.getElementById("loginMessage");
+
+      message.textContent = text;
+      message.className = "message " + type;
+    }
+
+    function forgotPassword(event) {
+      event.preventDefault();
+
+      alert(
+        "Відновлення пароля буде доступне після підключення серверної авторизації."
+      );
+    }
+
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const email =
+          document.getElementById("email").value.trim();
+
+        const password =
+          document.getElementById("password").value;
+
+        const remember =
+          document.getElementById("remember").checked;
+
+        if (email !== demoEmail || password !== demoPassword) {
+          showMessage(
+            "Неправильна електронна пошта або пароль.",
+            "error"
+          );
+
+          return;
+        }
+
+        const session = {
+          email: email,
+          role: "Лікар-рентгенолог",
+          loggedIn: true,
+          loginTime: new Date().toISOString()
+        };
+
+        const storage = remember
+          ? localStorage
+          : sessionStorage;
+
+        storage.setItem(
+          "radiologyosSession",
+          JSON.stringify(session)
+        );
+
+        showMessage(
+          "Вхід виконано. Відкриваємо систему...",
+          "success"
+        );
+
+        setTimeout(() => {
+          window.location.href = "protocols.html";
+        }, 900);
+      });
+  </script>
+
+</body>
+</html>
