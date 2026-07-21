@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Онлайн-запис — RadiologyOS</title>
+
+  <meta
+    name="description"
+    content="Онлайн-запис на КТ та рентгенологічні дослідження."
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      min-height: 72px;
+      padding: 16px 6%;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    nav a {
+      color: #475467;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #1267d6;
+    }
+
+    .hero {
+      padding: 55px 6% 40px;
+      text-align: center;
+      background:
+        radial-gradient(circle at top right, #dcecff, transparent 38%),
+        #f3f6fa;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 8px 13px;
+      border-radius: 20px;
+      background: #e5f0ff;
+      color: #1267d6;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .hero h1 {
+      margin-bottom: 16px;
+      font-size: 42px;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 0 auto;
+      color: #667085;
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    main {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+      padding: 30px 0 70px;
+    }
+
+    .booking-layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 1.35fr) minmax(280px, 0.65fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 28px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 16px;
+      box-shadow: 0 10px 35px rgba(23, 32, 51, 0.06);
+    }
+
+    .panel h2 {
+      margin-bottom: 8px;
+      font-size: 24px;
+    }
+
+    .panel-description {
+      margin-bottom: 24px;
+      color: #667085;
+      line-height: 1.6;
+    }
+
+    .section-title {
+      margin: 26px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #edf1f5;
+      color: #344054;
+      font-size: 17px;
+    }
+
+    .section-title:first-of-type {
+      margin-top: 0;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      color: #344054;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .required {
+      color: #c62828;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #172033;
+      font-family: inherit;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #1267d6;
+      outline: 3px solid rgba(18, 103, 214, 0.12);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 18px;
+      color: #475467;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .consent input {
+      width: auto;
+      margin-top: 3px;
+    }
+
+    .submit-button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .submit-button:hover {
+      background: #0d56b5;
+    }
+
+    .submit-button:disabled {
+      background: #98a2b3;
+      cursor: not-allowed;
+    }
+
+    .info-card {
+      margin-bottom: 16px;
+      padding: 18px;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+      background: #f8fafc;
+    }
+
+    .info-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-card h3 {
+      margin-bottom: 9px;
+      font-size: 16px;
+    }
+
+    .info-card p,
+    .info-card li {
+      color: #667085;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .info-card ul {
+      padding-left: 20px;
+    }
+
+    .price {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .price-note {
+      display: block;
+      margin-top: 6px;
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .warning {
+      border-left: 4px solid #d97706;
+      background: #fff9e9;
+    }
+
+    .confirmation {
+      display: none;
+      padding: 32px;
+      border: 1px solid #b7e2c8;
+      border-radius: 14px;
+      background: #ecf9f1;
+      text-align: center;
+    }
+
+    .confirmation.open {
+      display: block;
+    }
+
+    .confirmation-icon {
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: #14804a;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    .confirmation h2 {
+      margin-bottom: 12px;
+      color: #146c43;
+    }
+
+    .confirmation p {
+      margin-bottom: 10px;
+      color: #3f5d4d;
+      line-height: 1.65;
+    }
+
+    .booking-number {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #146c43;
+      font-weight: 700;
+    }
+
+    .new-booking {
+      margin-top: 20px;
+      padding: 11px 17px;
+      border: 1px solid #14804a;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #14804a;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    footer {
+      padding: 30px 6%;
+      background: #111827;
+      color: #cbd5e1;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        display: none;
+      }
+
+      .booking-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 35px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 15px 4%;
+      }
+
+      .hero {
+        padding: 42px 4% 30px;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      main {
+        width: 94%;
+      }
+
+      .panel {
+        padding: 19px;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <nav>
+      <a href="index.html">Головна</a>
+      <a href="services.html">Послуги</a>
+      <a href="booking.html" class="active">Онлайн-запис</a>
+      <a href="protocols.html">Робоча система</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="badge">Онлайн-запис 24/7</div>
+
+    <h1>Запис на діагностичне дослідження</h1>
+
+    <p>
+      Заповніть форму, оберіть дослідження та зручний час.
+      Після надсилання заявки працівник відділення зв’яжеться
+      з вами для остаточного підтвердження запису.
+    </p>
+  </section>
+
+  <main>
+
+    <div class="booking-layout">
+
+      <section class="panel" id="bookingPanel">
+        <h2>Дані для запису</h2>
+
+        <p class="panel-description">
+          Поля, позначені зірочкою, є обов’язковими.
+        </p>
+
+        <form id="bookingForm">
+
+          <h3 class="section-title">Пацієнт</h3>
+
+          <div class="field">
+            <label for="fullName">
+              ПІБ пацієнта <span class="required">*</span>
+            </label>
+
+            <input
+              id="fullName"
+              name="fullName"
+              type="text"
+              placeholder="Наприклад: Іваненко Олександр Петрович"
+              autocomplete="name"
+              required
+            >
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="birthDate">
+                Дата народження <span class="required">*</span>
+              </label>
+
+              <input
+                id="birthDate"
+                name="birthDate"
+                type="date"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="sex">Стать</label>
+
+              <select id="sex" name="sex">
+                <option value="">Не вказано</option>
+                <option>Чоловіча</option>
+                <option>Жіноча</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="phone">
+                Номер телефону <span class="required">*</span>
+              </label>
+
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="+380 __ ___ __ __"
+                autocomplete="tel"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="email">Електронна пошта</label>
+
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="patient@example.com"
+                autocomplete="email"
+              >
+            </div>
+          </div>
+
+          <h3 class="section-title">Дослідження</h3>
+
+          <div class="field">
+            <label for="service">
+              Вид дослідження <span class="required">*</span>
+            </label>
+
+            <select
+              id="service"
+              name="service"
+              onchange="updateServiceInfo()"
+              required
+            >
+              <option value="">Оберіть дослідження</option>
+
+              <optgroup label="Комп’ютерна томографія">
+                <option value="КТ головного мозку">
+                  КТ головного мозку
+                </option>
+
+                <option value="КТ приносових пазух">
+                  КТ приносових пазух
+                </option>
+
+                <option value="КТ органів грудної клітки">
+                  КТ органів грудної клітки
+                </option>
+
+                <option value="КТ органів черевної порожнини">
+                  КТ органів черевної порожнини
+                </option>
+
+                <option value="КТ хребта">
+                  КТ відділу хребта
+                </option>
+
+                <option value="КТ з контрастуванням">
+                  КТ з внутрішньовенним контрастуванням
+                </option>
+              </optgroup>
+
+              <optgroup label="Рентгенографія">
+                <option value="Рентгенографія ОГК">
+                  Рентгенографія органів грудної клітки
+                </option>
+
+                <option value="Рентгенографія кісток та суглобів">
+                  Рентгенографія кісток та суглобів
+                </option>
+
+                <option value="Рентгенографія хребта">
+                  Рентгенографія хребта
+                </option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="visitDate">
+                Бажана дата <span class="required">*</span>
+              </label>
+
+              <input
+                id="visitDate"
+                name="visitDate"
+                type="date"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="visitTime">
+                Бажаний час <span class="required">*</span>
+              </label>
+
+              <select
+                id="visitTime"
+                name="visitTime"
+                required
+              >
+                <option value="">Оберіть час</option>
+                <option>08:00</option>
+                <option>08:30</option>
+                <option>09:00</option>
+                <option>09:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>11:30</option>
+                <option>12:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="contrast">Контрастування</label>
+
+            <select id="contrast" name="contrast">
+              <option>Без контрастування</option>
+              <option>Потрібне контрастування</option>
+              <option>Визначає лікар</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="referral">
+              Направлення або попередній діагноз
+            </label>
+
+            <textarea
+              id="referral"
+              name="referral"
+              placeholder="Вкажіть попередній діагноз, скарги або мету дослідження..."
+            ></textarea>
+          </div>
+
+          <div class="field">
+            <label for="comment">Додаткова інформація</label>
+
+            <textarea
+              id="comment"
+              name="comment"
+              placeholder="Алергічні реакції, попередні операції, особливі потреби..."
+            ></textarea>
+          </div>
+
+          <label class="consent">
+            <input
+              id="consent"
+              type="checkbox"
+              required
+            >
+
+            <span>
+              Я підтверджую правильність введених даних та погоджуюсь
+              на їх використання для організації запису на дослідження.
+            </span>
+          </label>
+
+          <button
+            class="submit-button"
+            id="submitButton"
+            type="submit"
+          >
+            Надіслати заявку
+          </button>
+
+        </form>
+      </section>
+
+      <aside>
+
+        <div class="info-card">
+          <h3>Обране дослідження</h3>
+
+          <p id="selectedService">
+            Оберіть вид дослідження у формі.
+          </p>
+
+          <div
+            class="price"
+            id="selectedPrice"
+            style="display: none;"
+          ></div>
+
+          <span
+            class="price-note"
+            id="priceNote"
+            style="display: none;"
+          >
+            Остаточна вартість уточнюється під час підтвердження.
+          </span>
+        </div>
+
+        <div class="info-card">
+          <h3>Що взяти із собою</h3>
+
+          <ul>
+            <li>Документ, що посвідчує особу.</li>
+            <li>Направлення лікаря, якщо воно є.</li>
+            <li>Попередні результати КТ, МРТ або рентгенографії.</li>
+            <li>Медичні виписки та результати аналізів.</li>
+          </ul>
+        </div>
+
+        <div class="info-card warning">
+          <h3>Контрастне дослідження</h3>
+
+          <p>
+            Для досліджень із контрастуванням можуть знадобитися
+            актуальні показники креатиніну та оцінка функції нирок.
+            Остаточне рішення щодо контрастування приймає лікар.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <h3>Підтвердження запису</h3>
+
+          <p>
+            Надсилання форми ще не є остаточним підтвердженням.
+            Працівник відділення зв’яжеться з пацієнтом для
+            узгодження дати, часу та підготовки.
+          </p>
+        </div>
+
+      </aside>
+
+    </div>
+
+    <section class="confirmation" id="confirmation">
+
+      <div class="confirmation-icon">✓</div>
+
+      <h2>Заявку прийнято</h2>
+
+      <p>
+        Дані запису збережено у демонстраційному режимі.
+      </p>
+
+      <p id="confirmationDetails"></p>
+
+      <div class="booking-number" id="bookingNumber"></div>
+
+      <br>
+
+      <button class="new-booking" onclick="createNewBooking()">
+        Створити нову заявку
+      </button>
+
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 RadiologyOS · Система онлайн-запису пацієнтів
+  </footer>
+
+  <script>
+    const prices = {
+      "КТ головного мозку": "Ціна уточнюється",
+      "КТ приносових пазух": "Ціна уточнюється",
+      "КТ органів грудної клітки": "Ціна уточнюється",
+      "КТ органів черевної порожнини": "Ціна уточнюється",
+      "КТ хребта": "Ціна уточнюється",
+      "КТ з контрастуванням": "від 4 700 грн",
+      "Рентгенографія ОГК": "Ціна уточнюється",
+      "Рентгенографія кісток та суглобів": "Ціна уточнюється",
+      "Рентгенографія хребта": "Ціна уточнюється"
+    };
+
+    const serviceDescriptions = {
+      "КТ головного мозку":
+        "Комп’ютерна томографія головного мозку без контрастування.",
+
+      "КТ приносових пазух":
+        "Комп’ютерна томографія приносових пазух.",
+
+      "КТ органів грудної клітки":
+        "Дослідження легенів, плеври та органів середостіння.",
+
+      "КТ органів черевної порожнини":
+        "Дослідження органів черевної порожнини та заочеревинного простору.",
+
+      "КТ хребта":
+        "Комп’ютерна томографія обраного відділу хребта.",
+
+      "КТ з контрастуванням":
+        "Комп’ютерна томографія з внутрішньовенним контрастним підсиленням.",
+
+      "Рентгенографія ОГК":
+        "Рентгенографія органів грудної клітки.",
+
+      "Рентгенографія кісток та суглобів":
+        "Рентгенографія кісток або суглобів у стандартних проєкціях.",
+
+      "Рентгенографія хребта":
+        "Рентгенографія обраного відділу хребта."
+    };
+
+    function setMinimumDates() {
+      const today = new Date();
+      const todayString = today.toISOString().split("T")[0];
+
+      document.getElementById("visitDate").min = todayString;
+
+      const maximumBirthDate = new Date();
+      maximumBirthDate.setDate(maximumBirthDate.getDate());
+
+      document.getElementById("birthDate").max =
+        maximumBirthDate.toISOString().split("T")[0];
+    }
+
+    function updateServiceInfo() {
+      const service =
+        document.getElementById("service").value;
+
+      const selectedService =
+        document.getElementById("selectedService");
+
+      const selectedPrice =
+        document.getElementById("selectedPrice");
+
+      const priceNote =
+        document.getElementById("priceNote");
+
+      if (!service) {
+        selectedService.textContent =
+          "Оберіть вид дослідження у формі.";
+
+        selectedPrice.style.display = "none";
+        priceNote.style.display = "none";
+
+        return;
+      }
+
+      selectedService.textContent =
+        serviceDescriptions[service] || service;
+
+      selectedPrice.textContent =
+        prices[service] || "Ціна уточнюється";
+
+      selectedPrice.style.display = "block";
+      priceNote.style.display = "block";
+
+      if (service === "КТ з контрастуванням") {
+        document.getElementById("contrast").value =
+          "Потрібне контрастування";
+      }
+    }
+
+    function generateBookingNumber() {
+      const datePart =
+        new Date().toISOString().slice(2, 10).replaceAll("-", "");
+
+      const randomPart =
+        Math.floor(1000 + Math.random() * 9000);
+
+      return `ROS-${datePart}-${randomPart}`;
+    }
+
+    function saveBooking(booking) {
+      const savedBookings =
+        JSON.parse(localStorage.getItem("radiologyosBookings") || "[]");
+
+      savedBookings.push(booking);
+
+      localStorage.setItem(
+        "radiologyosBookings",
+        JSON.stringify(savedBookings)
+      );
+    }
+
+    document.getElementById("bookingForm")
+      .addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const submitButton =
+          document.getElementById("submitButton");
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Збереження...";
+
+        const bookingNumber = generateBookingNumber();
+
+        const booking = {
+          id: bookingNumber,
+          createdAt: new Date().toISOString(),
+          fullName: document.getElementById("fullName").value.trim(),
+          birthDate: document.getElementById("birthDate").value,
+          sex: document.getElementById("sex").value,
+          phone: document.getElementById("phone").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          service: document.getElementById("service").value,
+          visitDate: document.getElementById("visitDate").value,
+          visitTime: document.getElementById("visitTime").value,
+          contrast: document.getElementById("contrast").value,
+          referral: document.getElementById("referral").value.trim(),
+          comment: document.getElementById("comment").value.trim(),
+          status: "Нова заявка"
+        };
+
+        saveBooking(booking);
+
+        setTimeout(() => {
+          document.getElementById("bookingPanel").style.display = "none";
+
+          document.querySelector(".booking-layout aside").style.display =
+            "none";
+
+          const confirmation =
+            document.getElementById("confirmation");
+
+          confirmation.classList.add("open");
+
+          document.getElementById("bookingNumber").textContent =
+            `Номер заявки: ${bookingNumber}`;
+
+          const formattedDate =
+            booking.visitDate.split("-").reverse().join(".");
+
+          document.getElementById("confirmationDetails").textContent =
+            `${booking.service}, ${formattedDate} о ${booking.visitTime}.`;
+
+          submitButton.disabled = false;
+          submitButton.textContent = "Надіслати заявку";
+
+          window.scrollTo({
+            top: confirmation.offsetTop - 30,
+            behavior: "smooth"
+          });
+        }, 500);
+      });
+
+    function createNewBooking() {
+      document.getElementById("bookingForm").reset();
+
+      document.getElementById("bookingPanel").style.display = "block";
+
+      document.querySelector(".booking-layout aside").style.display =
+        "block";
+
+      document.getElementById("confirmation").classList.remove("open");
+
+      updateServiceInfo();
+
+      window.scrollTo({
+        top: document.getElementById("bookingPanel").offsetTop - 30,
+        behavior: "smooth"
+      });
+    }
+
+    setMinimumDates();
+  </script>
+
+</body>
+</html>
