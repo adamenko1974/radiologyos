@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Нагадування — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #1267d6;
+      --primary-light: #eaf2fc;
+      --background: #f3f6fa;
+      --surface: #ffffff;
+      --sidebar: #172033;
+      --text: #172033;
+      --muted: #667085;
+      --border: #dfe7f1;
+      --success: #14804a;
+      --success-light: #e7f7ef;
+      --warning: #b26a00;
+      --warning-light: #fff4df;
+      --danger: #b42318;
+      --danger-light: #fdecec;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: var(--background);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    header {
+      min-height: 72px;
+      padding: 13px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      color: var(--primary);
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .module-status {
+      padding: 7px 11px;
+      border-radius: 20px;
+      background: var(--success-light);
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .layout {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: var(--sidebar);
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    main {
+      min-width: 0;
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: var(--muted);
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .primary-button,
+    .secondary-button {
+      padding: 12px 17px;
+      border: none;
+      border-radius: 9px;
+      font-weight: 700;
+    }
+
+    .primary-button {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .secondary-button {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      padding: 17px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stat-card strong {
+      font-size: 26px;
+    }
+
+    .danger-text {
+      color: var(--danger);
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns:
+        minmax(220px, 1fr)
+        190px
+        190px
+        190px;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .followup-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .followup-card {
+      display: grid;
+      grid-template-columns:
+        minmax(220px, 1.3fr)
+        minmax(180px, 1fr)
+        170px
+        160px
+        190px;
+      gap: 14px;
+      align-items: center;
+      padding: 17px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .followup-card.overdue {
+      border-left: 5px solid var(--danger);
+      background: #fff8f7;
+    }
+
+    .followup-card.today {
+      border-left: 5px solid var(--warning);
+    }
+
+    .followup-title {
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .followup-notes,
+    .followup-meta {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 20px;
+      background: #edf2f7;
+      color: #475467;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .badge.overdue {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .badge.today {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .badge.completed {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .card-actions button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .open-button {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .complete-button {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .delete-button-small {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .empty {
+      padding: 50px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: #98a2b3;
+      text-align: center;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.58);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 680px;
+      max-height: 94vh;
+      overflow-y: auto;
+      padding: 25px;
+      border-radius: 14px;
+      background: #ffffff;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .cancel-button,
+    .save-button,
+    .delete-button {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    .cancel-button {
+      background: #edf2f7;
+      color: #344054;
+    }
+
+    .save-button {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .delete-button {
+      margin-right: auto;
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    @media (max-width: 1200px) {
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .followup-card {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      header {
+        padding: 12px 16px;
+      }
+
+      .module-status {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar,
+      .row,
+      .followup-card {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">
+      RadiologyOS
+    </a>
+
+    <div class="header-right">
+      <span
+        class="module-status"
+        id="moduleStatus"
+      >
+        Нагадування підключаються...
+      </span>
+
+      <div id="currentUser"></div>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>CRM</h3>
+
+      <ul class="menu">
+
+        <li data-permission="dashboard">
+          <a href="executive-dashboard.html">
+            Панель керівника
+          </a>
+        </li>
+
+        <li data-permission="crm">
+          <a href="crm.html">
+            CRM-звернення
+          </a>
+        </li>
+
+        <li data-permission="crm">
+          <a href="communications.html">
+            Комунікації
+          </a>
+        </li>
+
+        <li data-permission="crm">
+          <a
+            href="follow-ups.html"
+            class="active"
+          >
+            Нагадування
+          </a>
+        </li>
+
+        <li data-permission="tasks">
+          <a href="tasks.html">
+            Завдання
+          </a>
+        </li>
+
+        <li data-permission="patients">
+          <a href="patients.html">
+            Пацієнти
+          </a>
+        </li>
+
+        <li data-permission="schedule">
+          <a href="schedule.html">
+            Розклад
+          </a>
+        </li>
+
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+
+        <div>
+          <h1>Нагадування CRM</h1>
+
+          <p>
+            Повторні контакти, дзвінки та контроль запланованих дій
+          </p>
+        </div>
+
+        <div class="top-actions">
+
+          <button
+            class="secondary-button"
+            type="button"
+            onclick="showToday()"
+          >
+            На сьогодні
+          </button>
+
+          <button
+            class="primary-button"
+            type="button"
+            onclick="openFollowUpModal()"
+          >
+            + Нове нагадування
+          </button>
+
+        </div>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Усього</span>
+          <strong id="totalCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Заплановані</span>
+          <strong id="plannedCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>На сьогодні</span>
+          <strong id="todayCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Виконані</span>
+          <strong id="completedCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Прострочені</span>
+
+          <strong
+            id="overdueCount"
+            class="danger-text"
+          >
+            0
+          </strong>
+        </div>
+
+      </section>
+
+      <div class="toolbar">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Пошук за пацієнтом, назвою або відповідальним..."
+          oninput="renderFollowUps()"
+        >
+
+        <select
+          id="statusFilter"
+          onchange="renderFollowUps()"
+        >
+          <option value="">
+            Усі статуси
+          </option>
+
+          <option value="Заплановано">
+            Заплановано
+          </option>
+
+          <option value="Виконано">
+            Виконано
+          </option>
+        </select>
+
+        <select
+          id="employeeFilter"
+          onchange="renderFollowUps()"
+        >
+          <option value="">
+            Усі відповідальні
+          </option>
+        </select>
+
+        <select
+          id="dateFilter"
+          onchange="renderFollowUps()"
+        >
+          <option value="">
+            Усі дати
+          </option>
+
+          <option value="today">
+            Сьогодні
+          </option>
+
+          <option value="overdue">
+            Прострочені
+          </option>
+
+          <option value="future">
+            Майбутні
+          </option>
+        </select>
+
+      </div>
+
+      <section
+        class="followup-list"
+        id="followUpList"
+      ></section>
+
+    </main>
+  </div>
+
+  <div
+    class="modal"
+    id="followUpModal"
+  >
+
+    <div class="modal-box">
+
+      <h2 id="modalTitle">
+        Нове нагадування
+      </h2>
+
+      <input
+        id="followUpId"
+        type="hidden"
+      >
+
+      <div class="field">
+        <label for="leadId">
+          CRM-звернення
+        </label>
+
+        <select id="leadId">
+          <option value="">
+            Оберіть звернення
+          </option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="followUpTitle">
+          Назва
+        </label>
+
+        <input
+          id="followUpTitle"
+          type="text"
+          placeholder="Наприклад, передзвонити пацієнту"
+        >
+      </div>
+
+      <div class="row">
+
+        <div class="field">
+          <label for="dueAt">
+            Дата і час
+          </label>
+
+          <input
+            id="dueAt"
+            type="datetime-local"
+          >
+        </div>
+
+        <div class="field">
+          <label for="assignedTo">
+            Відповідальний
+          </label>
+
+          <input
+            id="assignedTo"
+            type="text"
+            list="employeeList"
+          >
+
+          <datalist id="employeeList"></datalist>
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label for="followUpNotes">
+          Примітки
+        </label>
+
+        <textarea
+          id="followUpNotes"
+          placeholder="Додаткова інформація"
+        ></textarea>
+      </div>
+
+      <div class="modal-actions">
+
+        <button
+          class="delete-button"
+          id="deleteFollowUpButton"
+          type="button"
+          onclick="deleteFollowUp()"
+          style="display:none"
+        >
+          Видалити
+        </button>
+
+        <button
+          class="cancel-button"
+          type="button"
+          onclick="closeFollowUpModal()"
+        >
+          Скасувати
+        </button>
+
+        <button
+          class="save-button"
+          type="button"
+          onclick="saveFollowUp()"
+        >
+          Зберегти
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script src="radiologyos-auth.js"></script>
+  <script src="radiologyos-page-guard.js"></script>
+  <script src="radiologyos-data.js"></script>
+  <script src="radiologyos-crm.js"></script>
+  <script src="radiologyos-tasks.js"></script>
+
+  <script>
+    const pageAllowed =
+      RadiologyGuard.initialize({
+        permission: "crm",
+        userContainerId: "currentUser"
+      });
+
+    if (!pageAllowed) {
+      throw new Error(
+        "Доступ до нагадувань заборонено"
+      );
+    }
+
+    let todayOnly = false;
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatDate(value) {
+      if (!value) {
+        return "Дата не встановлена";
+      }
+
+      const date =
+        new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "Некоректна дата";
+      }
+
+      return date.toLocaleString(
+        "uk-UA",
+        {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+    }
+
+    function toInputDateTime(value) {
+      if (!value) {
+        return "";
+      }
+
+      const date =
+        new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "";
+      }
+
+      const local =
+        new Date(
+          date.getTime() -
+          date.getTimezoneOffset() * 60000
+        );
+
+      return local
+        .toISOString()
+        .slice(0, 16);
+    }
+
+    function isSameDay(first, second) {
+      return (
+        first.getFullYear() ===
+          second.getFullYear() &&
+        first.getMonth() ===
+          second.getMonth() &&
+        first.getDate() ===
+          second.getDate()
+      );
+    }
+
+    function getLead(id) {
+      return id
+        ? RadiologyCRM.getById(
+            "leads",
+            id
+          )
+        : null;
+    }
+    function loadEmployees() {
+      const employees = [];
+
+      try {
+        RadiologyOS
+          .getAll("staff")
+          .forEach((employee) => {
+            const name =
+              employee.fullName ||
+              employee.name;
+
+            if (
+              name &&
+              !employees.includes(name)
+            ) {
+              employees.push(name);
+            }
+          });
+      } catch (error) {}
+
+      RadiologyTasks
+        .getAllTasks()
+        .forEach((task) => {
+          if (
+            task.assignedTo &&
+            !employees.includes(
+              task.assignedTo
+            )
+          ) {
+            employees.push(
+              task.assignedTo
+            );
+          }
+        });
+
+      employees.sort(
+        (a, b) =>
+          a.localeCompare(b, "uk")
+      );
+
+      const datalist =
+        document.getElementById(
+          "employeeList"
+        );
+
+      const filter =
+        document.getElementById(
+          "employeeFilter"
+        );
+
+      datalist.innerHTML =
+        employees
+          .map(
+            employee => `
+              <option value="${escapeHtml(employee)}">
+            `
+          )
+          .join("");
+
+      filter.innerHTML =
+        `
+          <option value="">
+            Усі відповідальні
+          </option>
+        ` +
+        employees
+          .map(
+            employee => `
+              <option value="${escapeHtml(employee)}">
+                ${escapeHtml(employee)}
+              </option>
+            `
+          )
+          .join("");
+    }
+
+    function loadLeads() {
+      const select =
+        document.getElementById(
+          "leadId"
+        );
+
+      select.innerHTML =
+        `
+          <option value="">
+            Оберіть звернення
+          </option>
+        `;
+
+      RadiologyCRM
+        .getAll("leads")
+        .forEach((lead) => {
+          select.insertAdjacentHTML(
+            "beforeend",
+            `
+              <option value="${escapeHtml(lead.id)}">
+                ${escapeHtml(
+                  lead.fullName ||
+                  lead.id
+                )}
+              </option>
+            `
+          );
+        });
+    }
+
+    function openFollowUpModal() {
+      loadEmployees();
+      loadLeads();
+
+      document.getElementById(
+        "followUpModal"
+      ).classList.add("open");
+
+      document.getElementById(
+        "modalTitle"
+      ).textContent =
+        "Нове нагадування";
+
+      document.getElementById(
+        "followUpId"
+      ).value = "";
+
+      document.getElementById(
+        "followUpTitle"
+      ).value = "";
+
+      document.getElementById(
+        "followUpNotes"
+      ).value = "";
+
+      document.getElementById(
+        "leadId"
+      ).value = "";
+
+      document.getElementById(
+        "dueAt"
+      ).value = "";
+
+      const user =
+        RadiologyAuth.getCurrentUser();
+
+      document.getElementById(
+        "assignedTo"
+      ).value =
+        user
+          ? user.fullName ||
+            user.name ||
+            user.username ||
+            ""
+          : "";
+
+      document.getElementById(
+        "deleteFollowUpButton"
+      ).style.display =
+        "none";
+    }
+
+    function closeFollowUpModal() {
+      document
+        .getElementById(
+          "followUpModal"
+        )
+        .classList.remove("open");
+    }
+        function editFollowUp(id) {
+      const followUp =
+        RadiologyCRM.getById(
+          "followUps",
+          id
+        );
+
+      if (!followUp) {
+        alert(
+          "Нагадування не знайдено."
+        );
+        return;
+      }
+
+      loadEmployees();
+      loadLeads();
+
+      document.getElementById(
+        "modalTitle"
+      ).textContent =
+        "Редагування нагадування";
+
+      document.getElementById(
+        "followUpId"
+      ).value =
+        followUp.id;
+
+      document.getElementById(
+        "leadId"
+      ).value =
+        followUp.leadId || "";
+
+      document.getElementById(
+        "followUpTitle"
+      ).value =
+        followUp.title || "";
+
+      document.getElementById(
+        "dueAt"
+      ).value =
+        toInputDateTime(
+          followUp.dueAt
+        );
+
+      document.getElementById(
+        "assignedTo"
+      ).value =
+        followUp.assignedTo || "";
+
+      document.getElementById(
+        "followUpNotes"
+      ).value =
+        followUp.notes || "";
+
+      document.getElementById(
+        "deleteFollowUpButton"
+      ).style.display =
+        "block";
+
+      document
+        .getElementById(
+          "followUpModal"
+        )
+        .classList.add("open");
+    }
+
+    function saveFollowUp() {
+      const id =
+        document.getElementById(
+          "followUpId"
+        ).value;
+
+      const leadId =
+        document.getElementById(
+          "leadId"
+        ).value;
+
+      const title =
+        document.getElementById(
+          "followUpTitle"
+        ).value.trim();
+
+      const dueValue =
+        document.getElementById(
+          "dueAt"
+        ).value;
+
+      const assignedTo =
+        document.getElementById(
+          "assignedTo"
+        ).value.trim();
+
+      if (!leadId) {
+        alert(
+          "Оберіть CRM-звернення."
+        );
+        return;
+      }
+
+      if (!title) {
+        alert(
+          "Вкажіть назву нагадування."
+        );
+        return;
+      }
+
+      if (!dueValue) {
+        alert(
+          "Вкажіть дату і час."
+        );
+        return;
+      }
+
+      if (!assignedTo) {
+        alert(
+          "Вкажіть відповідального."
+        );
+        return;
+      }
+
+      const data = {
+        leadId,
+        title,
+        dueAt:
+          new Date(
+            dueValue
+          ).toISOString(),
+        assignedTo,
+        notes:
+          document.getElementById(
+            "followUpNotes"
+          ).value.trim()
+      };
+
+      if (id) {
+        RadiologyCRM.updateFollowUp(
+          id,
+          data
+        );
+      } else {
+        RadiologyCRM.createFollowUp(
+          data
+        );
+      }
+
+      closeFollowUpModal();
+      renderFollowUps();
+      updateStatistics();
+      loadEmployees();
+    }
+
+    function completeFollowUp(id) {
+      RadiologyCRM.completeFollowUp(id);
+    }
+
+    function deleteFollowUp() {
+      const id =
+        document.getElementById(
+          "followUpId"
+        ).value;
+
+      if (
+        !id ||
+        !confirm(
+          "Видалити це нагадування?"
+        )
+      ) {
+        return;
+      }
+
+      RadiologyCRM.removeFollowUp(id);
+
+      closeFollowUpModal();
+      renderFollowUps();
+      updateStatistics();
+      loadEmployees();
+    }
+
+    function showToday() {
+      todayOnly =
+        !todayOnly;
+
+      const button =
+        event.currentTarget;
+
+      button.textContent =
+        todayOnly
+          ? "Показати всі"
+          : "На сьогодні";
+
+      renderFollowUps();
+    }
+        function renderFollowUps() {
+      const search =
+        document.getElementById(
+          "searchInput"
+        ).value
+          .trim()
+          .toLowerCase();
+
+      const status =
+        document.getElementById(
+          "statusFilter"
+        ).value;
+
+      const employee =
+        document.getElementById(
+          "employeeFilter"
+        ).value;
+
+      const dateFilter =
+        document.getElementById(
+          "dateFilter"
+        ).value;
+
+      const now =
+        new Date();
+
+      let followUps =
+        RadiologyCRM
+          .getAll("followUps");
+
+      followUps =
+        followUps.filter(item => {
+
+          const lead =
+            getLead(item.leadId);
+
+          const text =
+            [
+              item.title,
+              item.notes,
+              item.assignedTo,
+              lead
+                ? lead.fullName
+                : ""
+            ]
+              .join(" ")
+              .toLowerCase();
+
+          if (
+            search &&
+            !text.includes(search)
+          ) {
+            return false;
+          }
+
+          if (
+            status &&
+            item.status !== status
+          ) {
+            return false;
+          }
+
+          if (
+            employee &&
+            item.assignedTo !== employee
+          ) {
+            return false;
+          }
+
+          const due =
+            item.dueAt
+              ? new Date(item.dueAt)
+              : null;
+
+          if (
+            todayOnly &&
+            due &&
+            !isSameDay(due, now)
+          ) {
+            return false;
+          }
+
+          if (
+            dateFilter === "today" &&
+            due &&
+            !isSameDay(due, now)
+          ) {
+            return false;
+          }
+
+          if (
+            dateFilter === "future" &&
+            due &&
+            due <= now
+          ) {
+            return false;
+          }
+
+          if (
+            dateFilter === "overdue" &&
+            (
+              !due ||
+              due >= now ||
+              item.status ===
+                "Виконано"
+            )
+          ) {
+            return false;
+          }
+
+          return true;
+        });
+
+      followUps.sort(
+        (a, b) =>
+          new Date(a.dueAt) -
+          new Date(b.dueAt)
+      );
+
+      const container =
+        document.getElementById(
+          "followUpList"
+        );
+
+      if (!followUps.length) {
+        container.innerHTML = `
+          <div class="empty">
+            Нагадувань не знайдено.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML =
+        followUps
+          .map(item => {
+
+            const lead =
+              getLead(item.leadId);
+
+            const due =
+              item.dueAt
+                ? new Date(item.dueAt)
+                : null;
+
+            const overdue =
+              due &&
+              due < now &&
+              item.status !==
+                "Виконано";
+
+            const today =
+              due &&
+              isSameDay(due, now);
+
+            return `
+              <div class="followup-card ${overdue ? "overdue" : today ? "today" : ""}">
+
+                <div>
+
+                  <div class="followup-title">
+                    ${escapeHtml(item.title)}
+                  </div>
+
+                  <div class="followup-meta">
+                    ${escapeHtml(
+                      lead
+                        ? lead.fullName
+                        : "Без CRM"
+                    )}
+                  </div>
+
+                  <div class="followup-notes">
+                    ${escapeHtml(
+                      item.notes || ""
+                    )}
+                  </div>
+
+                </div>
+
+                <div>
+
+                  <div>
+                    ${escapeHtml(
+                      formatDate(
+                        item.dueAt
+                      )
+                    )}
+                  </div>
+
+                  <div class="followup-meta">
+                    ${escapeHtml(
+                      item.assignedTo ||
+                      "-"
+                    )}
+                  </div>
+
+                </div>
+
+                <div>
+
+                  <span class="badge ${
+                    overdue
+                      ? "overdue"
+                      : today
+                      ? "today"
+                      : item.status ===
+                        "Виконано"
+                        ? "completed"
+                        : ""
+                  }">
+
+                    ${escapeHtml(
+                      item.status ||
+                      "Заплановано"
+                    )}
+
+                  </span>
+
+                </div>
+
+                <div class="card-actions">
+
+                  <button
+                    class="open-button"
+                    onclick="editFollowUp('${item.id}')">
+                    Відкрити
+                  </button>
+
+                  <button
+                    class="complete-button"
+                    onclick="completeFollowUp('${item.id}')">
+                    ✔
+                  </button>
+
+                </div>
+
+              </div>
+            `;
+          })
+          .join("");
+        }
+        function updateStatistics() {
+      const followUps =
+        RadiologyCRM.getAll(
+          "followUps"
+        );
+
+      const now =
+        new Date();
+
+      const today =
+        followUps.filter(
+          item =>
+            item.dueAt &&
+            isSameDay(
+              new Date(item.dueAt),
+              now
+            )
+        );
+
+      const overdue =
+        followUps.filter(
+          item =>
+            item.status !==
+              "Виконано" &&
+            item.dueAt &&
+            new Date(item.dueAt) <
+              now
+        );
+
+      document.getElementById(
+        "totalCount"
+      ).textContent =
+        followUps.length;
+
+      document.getElementById(
+        "plannedCount"
+      ).textContent =
+        followUps.filter(
+          item =>
+            item.status ===
+            "Заплановано"
+        ).length;
+
+      document.getElementById(
+        "todayCount"
+      ).textContent =
+        today.length;
+
+      document.getElementById(
+        "completedCount"
+      ).textContent =
+        followUps.filter(
+          item =>
+            item.status ===
+            "Виконано"
+        ).length;
+
+      document.getElementById(
+        "overdueCount"
+      ).textContent =
+        overdue.length;
+    }
+
+    function initializePage() {
+      if (
+        !window.RadiologyCRM ||
+        !window.RadiologyTasks
+      ) {
+        document.getElementById(
+          "moduleStatus"
+        ).textContent =
+          "Модуль недоступний";
+
+        alert(
+          "Не вдалося підключити CRM-нагадування."
+        );
+
+        return;
+      }
+
+      document.getElementById(
+        "moduleStatus"
+      ).textContent =
+        "Нагадування підключені";
+
+      loadEmployees();
+      loadLeads();
+      renderFollowUps();
+      updateStatistics();
+    }
+
+    document
+      .getElementById(
+        "followUpModal"
+      )
+      .addEventListener(
+        "click",
+        function(event) {
+          if (event.target === this) {
+            closeFollowUpModal();
+          }
+        }
+      );
+
+    window.addEventListener(
+      "radiologyos:crm-changed",
+      function() {
+        loadLeads();
+        renderFollowUps();
+        updateStatistics();
+      }
+    );
+
+    window.addEventListener(
+      "radiologyos:tasks-changed",
+      function() {
+        loadEmployees();
+      }
+    );
+
+    window.addEventListener(
+      "radiologyos:data-changed",
+      function() {
+        loadEmployees();
+      }
+    );
+
+    initializePage();
+  </script>
+
+</body>
+</html>
