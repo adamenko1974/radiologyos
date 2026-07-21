@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Комунікації — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #1267d6;
+      --primary-light: #eaf2fc;
+      --background: #f3f6fa;
+      --surface: #ffffff;
+      --sidebar: #172033;
+      --text: #172033;
+      --muted: #667085;
+      --border: #dfe7f1;
+      --success: #14804a;
+      --success-light: #e7f7ef;
+      --warning: #b26a00;
+      --warning-light: #fff4df;
+      --danger: #b42318;
+      --danger-light: #fdecec;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: var(--background);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    header {
+      min-height: 72px;
+      padding: 13px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      color: var(--primary);
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .module-status {
+      padding: 7px 11px;
+      border-radius: 20px;
+      background: var(--success-light);
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .layout {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: var(--sidebar);
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    main {
+      min-width: 0;
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: var(--muted);
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .primary-button,
+    .secondary-button {
+      padding: 12px 17px;
+      border: none;
+      border-radius: 9px;
+      font-weight: 700;
+    }
+
+    .primary-button {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .secondary-button {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      padding: 17px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stat-card strong {
+      font-size: 26px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns:
+        minmax(220px, 1fr)
+        190px
+        190px;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .communications-layout {
+      display: grid;
+      grid-template-columns:
+        minmax(280px, 360px)
+        minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .lead-panel,
+    .conversation-panel {
+      min-height: 560px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 17px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-header h2 {
+      font-size: 17px;
+    }
+
+    .lead-list {
+      max-height: 630px;
+      overflow-y: auto;
+    }
+
+    .lead-item {
+      padding: 15px 17px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .lead-item:hover,
+    .lead-item.active {
+      background: var(--primary-light);
+    }
+
+    .lead-name {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .lead-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 20px;
+      background: #edf2f7;
+      color: #475467;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .badge.channel {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .lead-phone {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .conversation-empty {
+      min-height: 560px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      color: #98a2b3;
+      text-align: center;
+    }
+
+    .conversation-content {
+      display: none;
+      min-height: 560px;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .conversation-content.open {
+      display: grid;
+    }
+
+    .conversation-header {
+      padding: 17px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .conversation-header h2 {
+      margin-bottom: 5px;
+      font-size: 19px;
+    }
+
+    .conversation-header p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .messages {
+      max-height: 470px;
+      overflow-y: auto;
+      padding: 20px;
+      background: #f8fafc;
+    }
+
+    .message {
+      max-width: 78%;
+      margin-bottom: 13px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+    }
+
+    .message.outgoing {
+      margin-left: auto;
+      background: var(--primary-light);
+      border-color: #cfe1f8;
+    }
+
+    .message-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .message-text {
+      white-space: pre-wrap;
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    .composer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+    }
+
+    .composer-row {
+      display: grid;
+      grid-template-columns: 150px 150px 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .composer-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 10px;
+    }
+
+    .empty {
+      padding: 30px 15px;
+      color: #98a2b3;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 1100px) {
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .communications-layout {
+        grid-template-columns: 320px 1fr;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      .communications-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .lead-panel,
+      .conversation-panel {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 680px) {
+      header {
+        padding: 12px 16px;
+      }
+
+      .module-status {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .toolbar,
+      .composer-row {
+        grid-template-columns: 1fr;
+      }
+
+      .message {
+        max-width: 94%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">
+      RadiologyOS
+    </a>
+
+    <div class="header-right">
+      <span
+        class="module-status"
+        id="moduleStatus"
+      >
+        Комунікації підключаються...
+      </span>
+
+      <div id="currentUser"></div>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>CRM</h3>
+
+      <ul class="menu">
+
+        <li data-permission="dashboard">
+          <a href="executive-dashboard.html">
+            Панель керівника
+          </a>
+        </li>
+
+        <li data-permission="crm">
+          <a href="crm.html">
+            CRM-звернення
+          </a>
+        </li>
+
+        <li data-permission="crm">
+          <a
+            href="communications.html"
+            class="active"
+          >
+            Комунікації
+          </a>
+        </li>
+
+        <li data-permission="tasks">
+          <a href="tasks.html">
+            Завдання
+          </a>
+        </li>
+
+        <li data-permission="patients">
+          <a href="patients.html">
+            Пацієнти
+          </a>
+        </li>
+
+        <li data-permission="schedule">
+          <a href="schedule.html">
+            Розклад
+          </a>
+        </li>
+
+        <li data-permission="analytics">
+          <a href="analytics.html">
+            Аналітика
+          </a>
+        </li>
+
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+
+        <div>
+          <h1>Центр комунікацій</h1>
+
+          <p>
+            Дзвінки, повідомлення та історія спілкування з пацієнтами
+          </p>
+        </div>
+
+        <div class="top-actions">
+
+          <button
+            class="secondary-button"
+            type="button"
+            onclick="exportCRM()"
+          >
+            Експорт історії
+          </button>
+
+          <button
+            class="primary-button"
+            type="button"
+            onclick="openCRM()"
+          >
+            + Нове звернення
+          </button>
+
+        </div>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Усього повідомлень</span>
+          <strong id="totalMessages">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Дзвінки</span>
+          <strong id="callsCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Месенджери</span>
+          <strong id="messengersCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Вхідні</span>
+          <strong id="incomingCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Вихідні</span>
+          <strong id="outgoingCount">0</strong>
+        </div>
+
+      </section>
+
+      <div class="toolbar">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Пошук пацієнта, телефону або послуги..."
+          oninput="renderLeadList()"
+        >
+
+        <select
+          id="sourceFilter"
+          onchange="renderLeadList()"
+        >
+          <option value="">
+            Усі джерела
+          </option>
+        </select>
+
+        <select
+          id="statusFilter"
+          onchange="renderLeadList()"
+        >
+          <option value="">
+            Усі етапи
+          </option>
+        </select>
+
+      </div>
+
+      <section class="communications-layout">
+
+        <div class="lead-panel">
+
+          <div class="panel-header">
+            <h2>Пацієнти та звернення</h2>
+          </div>
+
+          <div
+            class="lead-list"
+            id="leadList"
+          ></div>
+
+        </div>
+
+        <div class="conversation-panel">
+
+          <div
+            class="conversation-empty"
+            id="conversationEmpty"
+          >
+            Оберіть звернення, щоб переглянути історію комунікацій
+          </div>
+
+          <div
+            class="conversation-content"
+            id="conversationContent"
+          >
+
+            <div class="conversation-header">
+
+              <div>
+                <h2 id="conversationName">
+                  Пацієнт
+                </h2>
+
+                <p id="conversationInfo"></p>
+              </div>
+
+              <button
+                class="secondary-button"
+                type="button"
+                onclick="openSelectedLead()"
+              >
+                Відкрити CRM
+              </button>
+
+            </div>
+
+            <div
+              class="messages"
+              id="messages"
+            ></div>
+
+            <div class="composer">
+
+              <div class="composer-row">
+
+                <select id="communicationType">
+                  <option value="Дзвінок">
+                    Дзвінок
+                  </option>
+
+                  <option value="Telegram">
+                    Telegram
+                  </option>
+
+                  <option value="Viber">
+                    Viber
+                  </option>
+
+                  <option value="WhatsApp">
+                    WhatsApp
+                  </option>
+
+                  <option value="SMS">
+                    SMS
+                  </option>
+
+                  <option value="Email">
+                    Email
+                  </option>
+
+                  <option value="Примітка">
+                    Внутрішня примітка
+                  </option>
+                </select>
+
+                <select id="communicationDirection">
+                  <option value="Вихідний">
+                    Вихідний
+                  </option>
+
+                  <option value="Вхідний">
+                    Вхідний
+                  </option>
+                </select>
+
+                <input
+                  id="communicationAuthor"
+                  type="text"
+                  placeholder="Автор"
+                >
+
+              </div>
+
+              <textarea
+                id="communicationResult"
+                placeholder="Текст повідомлення або результат дзвінка..."
+              ></textarea>
+
+              <div class="composer-actions">
+
+                <button
+                  class="secondary-button"
+                  type="button"
+                  onclick="createCallbackTask()"
+                >
+                  Створити завдання
+                </button>
+
+                <button
+                  class="primary-button"
+                  type="button"
+                  onclick="saveCommunication()"
+                >
+                  Зберегти
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script src="radiologyos-auth.js"></script>
+  <script src="radiologyos-page-guard.js"></script>
+  <script src="radiologyos-data.js"></script>
+  <script src="radiologyos-crm.js"></script>
+  <script src="radiologyos-tasks.js"></script>
+
+  <script>
+    const pageAllowed =
+      RadiologyGuard.initialize({
+        permission: "crm",
+        userContainerId: "currentUser"
+      });
+
+    if (!pageAllowed) {
+      throw new Error(
+        "Доступ до комунікацій заборонено"
+      );
+    }
+
+    let selectedLeadId = null;
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatDate(value) {
+      if (!value) {
+        return "";
+      }
+
+      const date =
+        new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "";
+      }
+
+      return date.toLocaleString(
+        "uk-UA",
+        {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+    }
+
+    function fillFilterOptions() {
+      const database =
+        RadiologyCRM.readDatabase();
+
+      const sourceFilter =
+        document.getElementById(
+          "sourceFilter"
+        );
+
+      const statusFilter =
+        document.getElementById(
+          "statusFilter"
+        );
+
+      sourceFilter.innerHTML =
+        `
+          <option value="">
+            Усі джерела
+          </option>
+        ` +
+        database.settings.sources
+          .map(
+            source => `
+              <option value="${escapeHtml(source)}">
+                ${escapeHtml(source)}
+              </option>
+            `
+          )
+          .join("");
+
+      statusFilter.innerHTML =
+        `
+          <option value="">
+            Усі етапи
+          </option>
+        ` +
+        database.settings.statuses
+          .map(
+            status => `
+              <option value="${escapeHtml(status)}">
+                ${escapeHtml(status)}
+              </option>
+            `
+          )
+          .join("");
+    }
+    function renderLeadList() {
+      const search =
+        document.getElementById(
+          "searchInput"
+        ).value
+          .trim()
+          .toLowerCase();
+
+      const source =
+        document.getElementById(
+          "sourceFilter"
+        ).value;
+
+      const status =
+        document.getElementById(
+          "statusFilter"
+        ).value;
+
+      const leads =
+        RadiologyCRM
+          .getAll("leads")
+          .filter((lead) => {
+            const haystack = [
+              lead.fullName,
+              lead.phone,
+              lead.service,
+              lead.source,
+              lead.status
+            ]
+              .join(" ")
+              .toLowerCase();
+
+            return (
+              (!search ||
+                haystack.includes(search)) &&
+              (!source ||
+                lead.source === source) &&
+              (!status ||
+                lead.status === status)
+            );
+          });
+
+      const leadList =
+        document.getElementById(
+          "leadList"
+        );
+
+      if (!leads.length) {
+        leadList.innerHTML = `
+          <div class="empty">
+            Звернень не знайдено
+          </div>
+        `;
+
+        return;
+      }
+
+      leadList.innerHTML =
+        leads
+          .map((lead) => {
+            const communications =
+              RadiologyCRM
+                .getLeadCommunications(
+                  lead.id
+                );
+
+            const lastCommunication =
+              communications[0];
+
+            const channel =
+              lastCommunication
+                ? lastCommunication.type
+                : lead.source || "CRM";
+
+            const isActive =
+              lead.id === selectedLeadId
+                ? "active"
+                : "";
+
+            return `
+              <div
+                class="lead-item ${isActive}"
+                onclick="selectLead('${lead.id}')"
+              >
+                <span class="lead-name">
+                  ${escapeHtml(
+                    lead.fullName ||
+                    "Без імені"
+                  )}
+                </span>
+
+                <div class="lead-meta">
+                  <span class="badge channel">
+                    ${escapeHtml(channel)}
+                  </span>
+
+                  <span class="badge">
+                    ${escapeHtml(
+                      lead.status ||
+                      "Нове звернення"
+                    )}
+                  </span>
+                </div>
+
+                <div class="lead-phone">
+                  ${escapeHtml(
+                    lead.phone ||
+                    "Телефон не вказано"
+                  )}
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+    }
+
+    function selectLead(id) {
+      const lead =
+        RadiologyCRM.getById(
+          "leads",
+          id
+        );
+
+      if (!lead) {
+        alert(
+          "CRM-звернення не знайдено."
+        );
+        return;
+      }
+
+      selectedLeadId = id;
+
+      document.getElementById(
+        "conversationEmpty"
+      ).style.display =
+        "none";
+
+      document.getElementById(
+        "conversationContent"
+      ).classList.add("open");
+
+      document.getElementById(
+        "conversationName"
+      ).textContent =
+        lead.fullName ||
+        "Пацієнт";
+
+      document.getElementById(
+        "conversationInfo"
+      ).textContent =
+        [
+          lead.phone,
+          lead.service,
+          lead.status
+        ]
+          .filter(Boolean)
+          .join(" · ");
+
+      renderMessages();
+      renderLeadList();
+    }
+
+    function renderMessages() {
+      if (!selectedLeadId) {
+        return;
+      }
+
+      const communications =
+        RadiologyCRM
+          .getLeadCommunications(
+            selectedLeadId
+          );
+
+      const messages =
+        document.getElementById(
+          "messages"
+        );
+
+      if (!communications.length) {
+        messages.innerHTML = `
+          <div class="empty">
+            Історія комунікацій порожня
+          </div>
+        `;
+
+        return;
+      }
+
+      messages.innerHTML =
+        communications
+          .slice()
+          .reverse()
+          .map((item) => {
+            const outgoing =
+              item.direction ===
+              "Вихідний"
+                ? "outgoing"
+                : "";
+
+            return `
+              <div class="message ${outgoing}">
+
+                <div class="message-top">
+                  <span>
+                    ${escapeHtml(
+                      item.type ||
+                      "Комунікація"
+                    )}
+                    ·
+                    ${escapeHtml(
+                      item.direction ||
+                      ""
+                    )}
+                  </span>
+
+                  <span>
+                    ${escapeHtml(
+                      formatDate(
+                        item.createdAt
+                      )
+                    )}
+                  </span>
+                </div>
+
+                <div class="message-text">
+                  ${escapeHtml(
+                    item.result ||
+                    "Без тексту"
+                  )}
+                </div>
+
+                ${
+                  item.author
+                    ? `
+                      <div class="message-top">
+                        <span>
+                          Автор:
+                          ${escapeHtml(
+                            item.author
+                          )}
+                        </span>
+                      </div>
+                    `
+                    : ""
+                }
+
+              </div>
+            `;
+          })
+          .join("");
+
+      messages.scrollTop =
+        messages.scrollHeight;
+    }
+
+    function saveCommunication() {
+      if (!selectedLeadId) {
+        alert(
+          "Спочатку оберіть CRM-звернення."
+        );
+        return;
+      }
+
+      const result =
+        document.getElementById(
+          "communicationResult"
+        ).value.trim();
+
+      if (!result) {
+        alert(
+          "Введіть текст повідомлення або результат дзвінка."
+        );
+        return;
+      }
+
+      const user =
+        RadiologyAuth.getCurrentUser();
+
+      const authorField =
+        document.getElementById(
+          "communicationAuthor"
+        );
+
+      const author =
+        authorField.value.trim() ||
+        (
+          user
+            ? user.fullName ||
+              user.name ||
+              user.username ||
+              ""
+            : ""
+        );
+
+      RadiologyCRM.addCommunication({
+        leadId: selectedLeadId,
+
+        type:
+          document.getElementById(
+            "communicationType"
+          ).value,
+
+        direction:
+          document.getElementById(
+            "communicationDirection"
+          ).value,
+
+        result,
+        author
+      });
+
+      document.getElementById(
+        "communicationResult"
+      ).value = "";
+
+      renderMessages();
+      renderLeadList();
+      updateStatistics();
+    }
+        function createCallbackTask() {
+      if (!selectedLeadId) {
+        alert(
+          "Спочатку оберіть CRM-звернення."
+        );
+        return;
+      }
+
+      const lead =
+        RadiologyCRM.getById(
+          "leads",
+          selectedLeadId
+        );
+
+      if (!lead) {
+        alert(
+          "CRM-звернення не знайдено."
+        );
+        return;
+      }
+
+      const user =
+        RadiologyAuth.getCurrentUser();
+
+      const createdBy =
+        user
+          ? user.fullName ||
+            user.name ||
+            user.username ||
+            ""
+          : "";
+
+      const assignedTo =
+        lead.assignedTo ||
+        createdBy;
+
+      const tomorrow =
+        new Date();
+
+      tomorrow.setDate(
+        tomorrow.getDate() + 1
+      );
+
+      tomorrow.setHours(
+        10,
+        0,
+        0,
+        0
+      );
+
+      RadiologyTasks.createTaskFromLead(
+        selectedLeadId,
+        {
+          title:
+            "Передзвонити пацієнту " +
+            (
+              lead.fullName ||
+              ""
+            ),
+
+          description:
+            "Уточнити звернення щодо: " +
+            (
+              lead.service ||
+              "медичного дослідження"
+            ),
+
+          status:
+            "Нове",
+
+          priority:
+            lead.priority ===
+            "Терміновий"
+              ? "Критичний"
+              : lead.priority ===
+                "Високий"
+                ? "Високий"
+                : "Звичайний",
+
+          createdBy,
+          assignedTo,
+
+          dueAt:
+            tomorrow.toISOString(),
+
+          patientId:
+            lead.patientId ||
+            null,
+
+          studyId:
+            lead.studyId ||
+            null
+        }
+      );
+
+      alert(
+        "Завдання на зворотний дзвінок створено."
+      );
+    }
+
+    function updateStatistics() {
+      const communications =
+        RadiologyCRM.getAll(
+          "communications"
+        );
+
+      const messengerTypes = [
+        "Telegram",
+        "Viber",
+        "WhatsApp",
+        "SMS",
+        "Email"
+      ];
+
+      document.getElementById(
+        "totalMessages"
+      ).textContent =
+        communications.length;
+
+      document.getElementById(
+        "callsCount"
+      ).textContent =
+        communications.filter(
+          item =>
+            item.type === "Дзвінок"
+        ).length;
+
+      document.getElementById(
+        "messengersCount"
+      ).textContent =
+        communications.filter(
+          item =>
+            messengerTypes.includes(
+              item.type
+            )
+        ).length;
+
+      document.getElementById(
+        "incomingCount"
+      ).textContent =
+        communications.filter(
+          item =>
+            item.direction ===
+            "Вхідний"
+        ).length;
+
+      document.getElementById(
+        "outgoingCount"
+      ).textContent =
+        communications.filter(
+          item =>
+            item.direction ===
+            "Вихідний"
+        ).length;
+    }
+
+    function exportCRM() {
+      RadiologyCRM.exportDatabase();
+    }
+
+    function openCRM() {
+      window.location.href =
+        "crm.html";
+    }
+
+    function openSelectedLead() {
+      if (!selectedLeadId) {
+        alert(
+          "Спочатку оберіть звернення."
+        );
+        return;
+      }
+
+      window.location.href =
+        "crm.html?leadId=" +
+        encodeURIComponent(
+          selectedLeadId
+        );
+    }
+
+    function setDefaultAuthor() {
+      const user =
+        RadiologyAuth.getCurrentUser();
+
+      document.getElementById(
+        "communicationAuthor"
+      ).value =
+        user
+          ? user.fullName ||
+            user.name ||
+            user.username ||
+            ""
+          : "";
+    }
+
+    function initializePage() {
+      if (
+        !window.RadiologyCRM ||
+        !window.RadiologyTasks
+      ) {
+        document.getElementById(
+          "moduleStatus"
+        ).textContent =
+          "Модуль недоступний";
+
+        alert(
+          "Не вдалося підключити центр комунікацій."
+        );
+
+        return;
+      }
+
+      document.getElementById(
+        "moduleStatus"
+      ).textContent =
+        "Комунікації підключені";
+
+      fillFilterOptions();
+      setDefaultAuthor();
+      renderLeadList();
+      updateStatistics();
+
+      const leads =
+        RadiologyCRM.getAll(
+          "leads"
+        );
+
+      if (leads.length) {
+        selectLead(
+          leads[0].id
+        );
+      }
+    }
+
+    window.addEventListener(
+      "radiologyos:crm-changed",
+      function() {
+        renderLeadList();
+        updateStatistics();
+
+        if (selectedLeadId) {
+          renderMessages();
+        }
+      }
+    );
+
+    initializePage();
+  </script>
+
+</body>
+</html>
