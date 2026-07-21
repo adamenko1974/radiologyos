@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Чек-листи — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 30px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .reset-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      padding: 19px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 27px;
+    }
+
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 21px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 17px;
+    }
+
+    .panel-header h2 {
+      margin-bottom: 5px;
+      font-size: 20px;
+    }
+
+    .panel-header p {
+      color: #667085;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .badge {
+      padding: 6px 9px;
+      border-radius: 20px;
+      background: #eef5ff;
+      color: #1267d6;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .check-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      padding: 13px 0;
+      border-bottom: 1px solid #edf1f5;
+    }
+
+    .check-item:last-of-type {
+      border-bottom: none;
+    }
+
+    .check-item input {
+      width: 19px;
+      height: 19px;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    .check-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .check-item span {
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .progress-wrap {
+      margin-top: 18px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 7px;
+      font-size: 13px;
+    }
+
+    .progress {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #e8edf3;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      border-radius: 20px;
+      background: #1267d6;
+      transition: width 0.2s ease;
+    }
+
+    .save-button {
+      width: 100%;
+      margin-top: 17px;
+      padding: 11px;
+      border: none;
+      border-radius: 8px;
+      background: #eaf2fc;
+      color: #1267d6;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .save-button:hover {
+      background: #dceafb;
+    }
+
+    .message {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      display: none;
+      padding: 14px 18px;
+      border-radius: 9px;
+      background: #172033;
+      color: #ffffff;
+      box-shadow: 0 10px 30px rgba(23, 32, 51, 0.2);
+      font-size: 14px;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .checklist-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Щоденний контроль роботи відділення
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="referrals.html">Направлення</a></li>
+        <li><a href="contrast.html">Контраст</a></li>
+        <li><a href="equipment.html">Обладнання</a></li>
+        <li><a href="maintenance.html">Технічне обслуговування</a></li>
+        <li><a href="quality.html">Якість</a></li>
+        <li><a href="checklists.html" class="active">Чек-листи</a></li>
+        <li><a href="incidents.html">Журнал подій</a></li>
+        <li><a href="documents.html">Документи</a></li>
+        <li><a href="settings.html">Налаштування</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Чек-листи відділення</h1>
+
+          <p>
+            Контроль готовності обладнання, персоналу та робочих процесів
+          </p>
+        </div>
+
+        <button class="reset-button" onclick="resetAll()">
+          Скинути чек-листи
+        </button>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Усього пунктів</span>
+          <strong id="totalItems">16</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Виконано</span>
+          <strong id="completedItems">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Залишилося</span>
+          <strong id="remainingItems">16</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Загальна готовність</span>
+          <strong id="overallProgress">0%</strong>
+        </div>
+
+      </section>
+
+      <section class="checklist-grid">
+
+        <article class="panel" data-checklist="ct">
+
+          <div class="panel-header">
+            <div>
+              <h2>Готовність КТ</h2>
+              <p>Перевірка апарата перед початком зміни</p>
+            </div>
+
+            <span class="badge">Кабінет №1</span>
+          </div>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>КТ-апарат увімкнений</strong>
+              <span>Система завантажена без помилок</span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Робочу станцію перевірено</strong>
+              <span>Доступні реконструкції та архів</span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>DICOM-передачу перевірено</strong>
+              <span>Тестова серія передається до Orthanc</span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Систему охолодження перевірено</strong>
+              <span>Температура та вентиляція у нормі</span>
+            </span>
+          </label>
+
+          <div class="progress-wrap">
+            <div class="progress-top">
+              <span>Виконання</span>
+              <strong class="panel-percent">0%</strong>
+            </div>
+
+            <div class="progress">
+              <div class="progress-bar"></div>
+            </div>
+          </div>
+
+          <button class="save-button" onclick="saveChecklist(this)">
+            Зберегти перевірку
+          </button>
+
+        </article>
+
+        <article class="panel" data-checklist="contrast">
+
+          <div class="panel-header">
+            <div>
+              <h2>Контрастні дослідження</h2>
+              <p>Безпека та готовність до введення контрасту</p>
+            </div>
+
+            <span class="badge">Перед процедурою</span>
+          </div>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Креатинін перевірено</strong>
+              <span>Лабораторний показник актуальний</span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Алергологічний анамнез зібрано</strong>
+              <span>Реакції на контраст уточнені</span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Венозний доступ перевірено</strong>
+              <span>Катетер встановлено направляючим відділенням</span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Інформовану згоду отримано</strong>
+              <span>Документ підписаний пацієнтом</span>
+            </span>
+          </label>
+
+          <div class="progress-wrap">
+            <div class="progress-top">
+              <span>Виконання</span>
+              <strong class="panel-percent">0%</strong>
+            </div>
+
+            <div class="progress">
+              <div class="progress-bar"></div>
+            </div>
+          </div>
+
+          <button class="save-button" onclick="saveChecklist(this)">
+            Зберегти перевірку
+          </button>
+
+        </article>
+
+        <article class="panel" data-checklist="xray">
+
+          <div class="panel-header">
+            <div>
+              <h2>Рентгенівський кабінет</h2>
+              <p>Щоденний контроль AMAX 5000</p>
+            </div>
+
+            <span class="badge">2 поверх</span>
+          </div>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Апарат пройшов самотестування</strong>
+              <span>Помилки системи відсутні</span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Стабілізатор працює</strong>
+              <span>Вхідна напруга відповідає нормі</span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Засоби захисту наявні</strong>
+              <span>Фартухи та коміри доступні</span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Журнал досліджень підготовлено</strong>
+              <span>Попередні записи перевірено</span>
+            </span>
+          </label>
+
+          <div class="progress-wrap">
+            <div class="progress-top">
+              <span>Виконання</span>
+              <strong class="panel-percent">0%</strong>
+            </div>
+
+            <div class="progress">
+              <div class="progress-bar"></div>
+            </div>
+          </div>
+
+          <button class="save-button" onclick="saveChecklist(this)">
+            Зберегти перевірку
+          </button>
+
+        </article>
+
+        <article class="panel" data-checklist="closing">
+
+          <div class="panel-header">
+            <div>
+              <h2>Завершення зміни</h2>
+              <p>Контроль після закінчення робочого дня</p>
+            </div>
+
+            <span class="badge">Кінець зміни</span>
+          </div>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Усі дослідження передано до архіву</strong>
+              <span>Відсутні незавантажені серії</span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Протоколи завершено</strong>
+              <span>Немає досліджень без висновку</span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Витратні матеріали перевірено</strong>
+              <span>Критичний залишок відсутній</span>
+            </span>
+          </label>
+
+          <label class="check-item">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>
+              <strong>Обладнання переведено у безпечний режим</strong>
+              <span>Робочі станції та апарати завершили роботу</span>
+            </span>
+          </label>
+
+          <div class="progress-wrap">
+            <div class="progress-top">
+              <span>Виконання</span>
+              <strong class="panel-percent">0%</strong>
+            </div>
+
+            <div class="progress">
+              <div class="progress-bar"></div>
+            </div>
+          </div>
+
+          <button class="save-button" onclick="saveChecklist(this)">
+            Зберегти перевірку
+          </button>
+
+        </article>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="message" id="message">
+    Чек-лист збережено
+  </div>
+
+  <script>
+    const storageKey = "radiologyosChecklists";
+
+    function updateProgress() {
+      const panels = [
+        ...document.querySelectorAll(".panel[data-checklist]")
+      ];
+
+      let total = 0;
+      let completed = 0;
+
+      panels.forEach((panel) => {
+        const checks = [
+          ...panel.querySelectorAll("input[type='checkbox']")
+        ];
+
+        const checked =
+          checks.filter(item => item.checked).length;
+
+        const percent =
+          Math.round((checked / checks.length) * 100);
+
+        panel.querySelector(".panel-percent").textContent =
+          percent + "%";
+
+        panel.querySelector(".progress-bar").style.width =
+          percent + "%";
+
+        total += checks.length;
+        completed += checked;
+      });
+
+      const overall =
+        total ? Math.round((completed / total) * 100) : 0;
+
+      document.getElementById("totalItems").textContent =
+        total;
+
+      document.getElementById("completedItems").textContent =
+        completed;
+
+      document.getElementById("remainingItems").textContent =
+        total - completed;
+
+      document.getElementById("overallProgress").textContent =
+        overall + "%";
+    }
+
+    function saveChecklist(button) {
+      const panel = button.closest(".panel");
+      const checklistName = panel.dataset.checklist;
+
+      const values = [
+        ...panel.querySelectorAll("input[type='checkbox']")
+      ].map(item => item.checked);
+
+      const saved =
+        JSON.parse(localStorage.getItem(storageKey) || "{}");
+
+      saved[checklistName] = values;
+
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify(saved)
+      );
+
+      showMessage("Чек-лист збережено");
+    }
+
+    function loadChecklists() {
+      const saved =
+        JSON.parse(localStorage.getItem(storageKey) || "{}");
+
+      document
+        .querySelectorAll(".panel[data-checklist]")
+        .forEach((panel) => {
+          const values = saved[panel.dataset.checklist];
+
+          if (!values) return;
+
+          panel
+            .querySelectorAll("input[type='checkbox']")
+            .forEach((item, index) => {
+              item.checked = Boolean(values[index]);
+            });
+        });
+
+      updateProgress();
+    }
+
+    function resetAll() {
+      const confirmed = confirm(
+        "Скинути всі позначки у чек-листах?"
+      );
+
+      if (!confirmed) return;
+
+      document
+        .querySelectorAll("input[type='checkbox']")
+        .forEach(item => {
+          item.checked = false;
+        });
+
+      localStorage.removeItem(storageKey);
+
+      updateProgress();
+      showMessage("Чек-листи скинуто");
+    }
+
+    function showMessage(text) {
+      const message =
+        document.getElementById("message");
+
+      message.textContent = text;
+      message.classList.add("show");
+
+      setTimeout(() => {
+        message.classList.remove("show");
+      }, 1800);
+    }
+
+    loadChecklists();
+  </script>
+
+</body>
+</html>
