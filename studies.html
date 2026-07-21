@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Дослідження — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+      color: #ffffff;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .new-button {
+      padding: 13px 20px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .statistics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(23, 32, 51, 0.04);
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 10px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 30px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 220px 220px;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font-size: 15px;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #1267d6;
+      outline: 3px solid rgba(18, 103, 214, 0.12);
+    }
+
+    .study-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .study-card {
+      display: grid;
+      grid-template-columns: 80px 1.5fr 1.3fr 160px 160px;
+      align-items: center;
+      gap: 18px;
+      padding: 18px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 13px;
+      box-shadow: 0 6px 20px rgba(23, 32, 51, 0.04);
+    }
+
+    .time {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1267d6;
+    }
+
+    .patient-name {
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .patient-id,
+    .study-meta {
+      color: #667085;
+      font-size: 13px;
+    }
+
+    .study-name {
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status-planned {
+      background: #eef2f6;
+      color: #475467;
+    }
+
+    .status-ready {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .status-reporting {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .status-complete {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .open-button,
+    .protocol-button {
+      padding: 9px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .open-button {
+      border: 1px solid #cdd8e5;
+      background: #ffffff;
+      color: #344054;
+    }
+
+    .protocol-button {
+      border: none;
+      background: #1267d6;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .empty {
+      display: none;
+      padding: 40px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 13px;
+      text-align: center;
+      color: #667085;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 620px;
+      padding: 26px;
+      background: #ffffff;
+      border-radius: 14px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .secondary {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      background: #edf2f7;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .primary {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1150px) {
+      .statistics {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .study-card {
+        grid-template-columns: 70px 1fr 1fr;
+      }
+
+      .study-status {
+        grid-column: 2;
+      }
+
+      .actions {
+        grid-column: 3;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .statistics,
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .study-card {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .study-status,
+      .actions {
+        grid-column: auto;
+      }
+
+      .actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Черга досліджень · 21 липня 2026
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html" class="active">Дослідження</a></li>
+        <li><a href="#">База знань</a></li>
+        <li><a href="#">Аналітика</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Дослідження</h1>
+          <p>Черга КТ та рентгенологічних досліджень відділення</p>
+        </div>
+
+        <button class="new-button" onclick="openModal()">
+          + Нове дослідження
+        </button>
+      </div>
+
+      <section class="statistics">
+        <div class="stat-card">
+          <span>Усього сьогодні</span>
+          <strong id="totalCount">8</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Заплановано</span>
+          <strong id="plannedCount">2</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Очікують опису</span>
+          <strong id="readyCount">2</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Завершено</span>
+          <strong id="completeCount">2</strong>
+        </div>
+      </section>
+
+      <div class="toolbar">
+        <input
+          id="search"
+          type="search"
+          placeholder="Пошук за пацієнтом, ID або дослідженням..."
+          oninput="filterStudies()"
+        >
+
+        <select id="modalityFilter" onchange="filterStudies()">
+          <option value="">Усі методи</option>
+          <option value="КТ">КТ</option>
+          <option value="Рентген">Рентген</option>
+        </select>
+
+        <select id="statusFilter" onchange="filterStudies()">
+          <option value="">Усі статуси</option>
+          <option value="Заплановано">Заплановано</option>
+          <option value="Готове до опису">Готове до опису</option>
+          <option value="На описі">На описі</option>
+          <option value="Завершено">Завершено</option>
+        </select>
+      </div>
+
+      <section class="study-list" id="studyList">
+
+        <article
+          class="study-card"
+          data-modality="КТ"
+          data-status="Готове до опису"
+        >
+          <div class="time">08:30</div>
+
+          <div>
+            <div class="patient-name">Іваненко Олександр Петрович</div>
+            <div class="patient-id">ID: R-000124 · 44 роки</div>
+          </div>
+
+          <div>
+            <div class="study-name">КТ головного мозку</div>
+            <div class="study-meta">Без контрастування · КТ №CT-260721-001</div>
+          </div>
+
+          <div class="study-status">
+            <span class="status status-ready">Готове до опису</span>
+          </div>
+
+          <div class="actions">
+            <button class="open-button" onclick="showStudy(this)">
+              Переглянути
+            </button>
+
+            <a class="protocol-button" href="protocols.html">
+              Описати
+            </a>
+          </div>
+        </article>
+
+        <article
+          class="study-card"
+          data-modality="КТ"
+          data-status="На описі"
+        >
+          <div class="time">09:00</div>
+
+          <div>
+            <div class="patient-name">Петренко Андрій Миколайович</div>
+            <div class="patient-id">ID: R-000123 · 50 років</div>
+          </div>
+
+          <div>
+            <div class="study-name">КТ органів грудної клітки</div>
+            <div class="study-meta">Без контрастування · КТ №CT-260721-002</div>
+          </div>
+
+          <div class="study-status">
+            <span class="status status-reporting">На описі</span>
+          </div>
+
+          <div class="actions">
+            <button class="open-button" onclick="showStudy(this)">
+              Переглянути
+            </button>
+
+            <a class="protocol-button" href="protocols.html">
+              Продовжити
+            </a>
+          </div>
+        </article>
+
+        <article
+          class="study-card"
+          data-modality="Рентген"
+          data-status="Заплановано"
+        >
+          <div class="time">09:30</div>
+
+          <div>
+            <div class="patient-name">Бондаренко Максим Ігорович</div>
+            <div class="patient-id">ID: R-000125 · 31 рік</div>
+          </div>
+
+          <div>
+            <div class="study-name">Рентгенографія ОГК</div>
+            <div class="study-meta">2 проєкції · RX №RX-260721-003</div>
+          </div>
+
+          <div class="study-status">
+            <span class="status status-planned">Заплановано</span>
+          </div>
+
+          <div class="actions">
+            <button class="open-button" onclick="showStudy(this)">
+              Переглянути
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="study-card"
+          data-modality="КТ"
+          data-status="Завершено"
+        >
+          <div class="time">10:00</div>
+
+          <div>
+            <div class="patient-name">Коваленко Марія Сергіївна</div>
+            <div class="patient-id">ID: R-000122 · 35 років</div>
+          </div>
+
+          <div>
+            <div class="study-name">КТ приносових пазух</div>
+            <div class="study-meta">Без контрастування · КТ №CT-260721-004</div>
+          </div>
+
+          <div class="study-status">
+            <span class="status status-complete">Завершено</span>
+          </div>
+
+          <div class="actions">
+            <button class="open-button" onclick="showStudy(this)">
+              Переглянути
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="study-card"
+          data-modality="КТ"
+          data-status="Готове до опису"
+        >
+          <div class="time">10:30</div>
+
+          <div>
+            <div class="patient-name">Шевченко Сергій Іванович</div>
+            <div class="patient-id">ID: R-000121 · 57 років</div>
+          </div>
+
+          <div>
+            <div class="study-name">КТ поперекового відділу хребта</div>
+            <div class="study-meta">Без контрастування · КТ №CT-260721-005</div>
+          </div>
+
+          <div class="study-status">
+            <span class="status status-ready">Готове до опису</span>
+          </div>
+
+          <div class="actions">
+            <button class="open-button" onclick="showStudy(this)">
+              Переглянути
+            </button>
+
+            <a class="protocol-button" href="protocols.html">
+              Описати
+            </a>
+          </div>
+        </article>
+
+        <article
+          class="study-card"
+          data-modality="Рентген"
+          data-status="Завершено"
+        >
+          <div class="time">11:00</div>
+
+          <div>
+            <div class="patient-name">Мельник Олена Василівна</div>
+            <div class="patient-id">ID: R-000120 · 42 роки</div>
+          </div>
+
+          <div>
+            <div class="study-name">Рентгенографія правого плеча</div>
+            <div class="study-meta">2 проєкції · RX №RX-260721-006</div>
+          </div>
+
+          <div class="study-status">
+            <span class="status status-complete">Завершено</span>
+          </div>
+
+          <div class="actions">
+            <button class="open-button" onclick="showStudy(this)">
+              Переглянути
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="study-card"
+          data-modality="КТ"
+          data-status="Заплановано"
+        >
+          <div class="time">11:30</div>
+
+          <div>
+            <div class="patient-name">Ткаченко Віктор Олексійович</div>
+            <div class="patient-id">ID: R-000126 · 61 рік</div>
+          </div>
+
+          <div>
+            <div class="study-name">КТ органів черевної порожнини</div>
+            <div class="study-meta">З контрастуванням · КТ №CT-260721-007</div>
+          </div>
+
+          <div class="study-status">
+            <span class="status status-planned">Заплановано</span>
+          </div>
+
+          <div class="actions">
+            <button class="open-button" onclick="showStudy(this)">
+              Переглянути
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="study-card"
+          data-modality="КТ"
+          data-status="На описі"
+        >
+          <div class="time">12:00</div>
+
+          <div>
+            <div class="patient-name">Сидоренко Наталія Іванівна</div>
+            <div class="patient-id">ID: R-000127 · 38 років</div>
+          </div>
+
+          <div>
+            <div class="study-name">КТ шийного відділу хребта</div>
+            <div class="study-meta">Без контрастування · КТ №CT-260721-008</div>
+          </div>
+
+          <div class="study-status">
+            <span class="status status-reporting">На описі</span>
+          </div>
+
+          <div class="actions">
+            <button class="open-button" onclick="showStudy(this)">
+              Переглянути
+            </button>
+
+            <a class="protocol-button" href="protocols.html">
+              Продовжити
+            </a>
+          </div>
+        </article>
+
+      </section>
+
+      <div class="empty" id="emptyMessage">
+        Досліджень за заданими параметрами не знайдено.
+      </div>
+
+    </main>
+  </div>
+
+  <div class="modal" id="studyModal">
+    <div class="modal-box">
+
+      <h2>Нове дослідження</h2>
+
+      <div class="field">
+        <label for="patientName">ПІБ пацієнта</label>
+        <input id="patientName" type="text" placeholder="Введіть ПІБ">
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="studyTime">Час</label>
+          <input id="studyTime" type="time">
+        </div>
+
+        <div class="field">
+          <label for="modality">Метод</label>
+          <select id="modality">
+            <option value="КТ">КТ</option>
+            <option value="Рентген">Рентген</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="studyType">Тип дослідження</label>
+
+        <select id="studyType">
+          <option>КТ головного мозку</option>
+          <option>КТ приносових пазух</option>
+          <option>КТ органів грудної клітки</option>
+          <option>КТ органів черевної порожнини</option>
+          <option>КТ хребта</option>
+          <option>Рентгенографія ОГК</option>
+          <option>Рентгенографія кінцівки</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="contrast">Контрастування</label>
+
+        <select id="contrast">
+          <option>Без контрастування</option>
+          <option>З внутрішньовенним контрастуванням</option>
+          <option>Не застосовується</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button class="secondary" onclick="closeModal()">
+          Скасувати
+        </button>
+
+        <button class="primary" onclick="addStudy()">
+          Додати до черги
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function openModal() {
+      document.getElementById("studyModal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("studyModal").classList.remove("open");
+    }
+
+    function addStudy() {
+      const patientName =
+        document.getElementById("patientName").value.trim();
+
+      const studyTime =
+        document.getElementById("studyTime").value;
+
+      const modality =
+        document.getElementById("modality").value;
+
+      const studyType =
+        document.getElementById("studyType").value;
+
+      const contrast =
+        document.getElementById("contrast").value;
+
+      if (!patientName || !studyTime) {
+        alert("Введіть ПІБ пацієнта та час дослідження.");
+        return;
+      }
+
+      const idNumber =
+        Math.floor(100000 + Math.random() * 900000);
+
+      const studyNumber =
+        Math.floor(100 + Math.random() * 900);
+
+      const card = document.createElement("article");
+
+      card.className = "study-card";
+      card.dataset.modality = modality;
+      card.dataset.status = "Заплановано";
+
+      card.innerHTML = `
+        <div class="time">${studyTime}</div>
+
+        <div>
+          <div class="patient-name">${patientName}</div>
+          <div class="patient-id">ID: R-${idNumber}</div>
+        </div>
+
+        <div>
+          <div class="study-name">${studyType}</div>
+          <div class="study-meta">
+            ${contrast} · №${studyNumber}
+          </div>
+        </div>
+
+        <div class="study-status">
+          <span class="status status-planned">
+            Заплановано
+          </span>
+        </div>
+
+        <div class="actions">
+          <button class="open-button" onclick="showStudy(this)">
+            Переглянути
+              </button>
+        </div>
+      `;
+
+      document.getElementById("studyList").appendChild(card);
+
+      document.getElementById("patientName").value = "";
+      document.getElementById("studyTime").value = "";
+
+      closeModal();
+      filterStudies();
+      updateStatistics();
+    }
+
+    function filterStudies() {
+      const searchValue =
+        document.getElementById("search").value.toLowerCase();
+
+      const modalityValue =
+        document.getElementById("modalityFilter").value;
+
+      const statusValue =
+        document.getElementById("statusFilter").value;
+
+      const cards =
+        document.querySelectorAll(".study-card");
+
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const cardText = card.innerText.toLowerCase();
+        const modality = card.dataset.modality;
+        const status = card.dataset.status;
+
+        const matchesSearch =
+          cardText.includes(searchValue);
+
+        const matchesModality =
+          !modalityValue || modality === modalityValue;
+
+        const matchesStatus =
+          !statusValue || status === statusValue;
+
+        const visible =
+          matchesSearch &&
+          matchesModality &&
+          matchesStatus;
+
+        card.style.display = visible ? "grid" : "none";
+
+        if (visible) {
+          visibleCount++;
+        }
+      });
+
+      document.getElementById("emptyMessage").style.display =
+        visibleCount === 0 ? "block" : "none";
+    }
+
+    function updateStatistics() {
+      const cards =
+        document.querySelectorAll(".study-card");
+
+      let planned = 0;
+      let ready = 0;
+      let complete = 0;
+
+      cards.forEach((card) => {
+        const status = card.dataset.status;
+
+        if (status === "Заплановано") planned++;
+        if (status === "Готове до опису") ready++;
+        if (status === "Завершено") complete++;
+      });
+
+      document.getElementById("totalCount").textContent =
+        cards.length;
+
+      document.getElementById("plannedCount").textContent =
+        planned;
+
+      document.getElementById("readyCount").textContent =
+        ready;
+
+      document.getElementById("completeCount").textContent =
+        complete;
+    }
+
+    function showStudy(button) {
+      const card = button.closest(".study-card");
+      const text = card.innerText;
+
+      alert("Картка дослідження:\n\n" + text);
+    }
+
+    document.getElementById("studyModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+
+    updateStatistics();
+  </script>
+
+</body>
+</html>
