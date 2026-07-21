@@ -2,9 +2,13 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Завдання — RadiologyOS</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Завдання персоналу — RadiologyOS</title>
 
   <style>
     * {
@@ -13,51 +17,91 @@
       padding: 0;
     }
 
+    :root {
+      --primary: #1267d6;
+      --primary-light: #eaf2fc;
+      --background: #f3f6fa;
+      --surface: #ffffff;
+      --sidebar: #172033;
+      --text: #172033;
+      --muted: #667085;
+      --border: #dfe7f1;
+      --success: #14804a;
+      --success-light: #e7f7ef;
+      --warning: #b26a00;
+      --warning-light: #fff4df;
+      --danger: #b42318;
+      --danger-light: #fdecec;
+    }
+
     body {
       min-height: 100vh;
       font-family: Arial, sans-serif;
-      background: #f3f6fa;
-      color: #172033;
+      background: var(--background);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
     }
 
     header {
-      height: 72px;
-      padding: 0 32px;
-      background: #ffffff;
-      border-bottom: 1px solid #dce4ee;
+      min-height: 72px;
+      padding: 13px 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
     }
 
     .logo {
-      color: #1267d6;
+      color: var(--primary);
       font-size: 24px;
       font-weight: 700;
       text-decoration: none;
     }
 
-    .header-info {
-      color: #667085;
-      font-size: 14px;
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .module-status {
+      padding: 7px 11px;
+      border-radius: 20px;
+      background: var(--success-light);
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     .layout {
-      display: grid;
-      grid-template-columns: 250px 1fr;
       min-height: calc(100vh - 72px);
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
     }
 
     aside {
       padding: 24px 16px;
-      background: #172033;
+      background: var(--sidebar);
     }
 
     aside h3 {
       padding: 0 12px;
       margin-bottom: 18px;
       color: #9fb0c7;
-      font-size: 14px;
+      font-size: 13px;
       text-transform: uppercase;
     }
 
@@ -67,8 +111,8 @@
 
     .menu a {
       display: block;
-      padding: 12px;
-      margin-bottom: 6px;
+      padding: 11px 12px;
+      margin-bottom: 5px;
       border-radius: 8px;
       color: #dce6f3;
       text-decoration: none;
@@ -76,11 +120,12 @@
 
     .menu a:hover,
     .menu a.active {
-      background: #1267d6;
+      background: var(--primary);
       color: #ffffff;
     }
 
     main {
+      min-width: 0;
       padding: 30px;
     }
 
@@ -88,7 +133,7 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 20px;
+      gap: 18px;
       margin-bottom: 24px;
     }
 
@@ -98,48 +143,70 @@
     }
 
     .page-top p {
-      color: #667085;
+      color: var(--muted);
     }
 
-    .add-button {
-      padding: 13px 18px;
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .primary-button,
+    .secondary-button {
+      padding: 12px 17px;
       border: none;
       border-radius: 9px;
-      background: #1267d6;
-      color: #ffffff;
-      cursor: pointer;
       font-weight: 700;
+    }
+
+    .primary-button {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .secondary-button {
+      background: var(--primary-light);
+      color: var(--primary);
     }
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 24px;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
     }
 
     .stat-card {
-      padding: 20px;
-      background: #ffffff;
-      border: 1px solid #dfe7f1;
+      padding: 17px;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 12px;
     }
 
     .stat-card span {
       display: block;
-      margin-bottom: 8px;
-      color: #667085;
-      font-size: 14px;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 13px;
     }
 
     .stat-card strong {
-      font-size: 28px;
+      font-size: 26px;
+    }
+
+    .danger-text {
+      color: var(--danger);
     }
 
     .toolbar {
       display: grid;
-      grid-template-columns: 1fr 220px 220px;
-      gap: 14px;
+      grid-template-columns:
+        minmax(220px, 1fr)
+        180px
+        180px
+        180px;
+      gap: 12px;
       margin-bottom: 20px;
     }
 
@@ -151,140 +218,188 @@
       border: 1px solid #cdd8e5;
       border-radius: 8px;
       background: #ffffff;
-      font: inherit;
+      color: var(--text);
     }
 
     textarea {
-      min-height: 90px;
+      min-height: 100px;
       resize: vertical;
     }
 
+    .board-wrap {
+      overflow-x: auto;
+      padding-bottom: 12px;
+    }
+
     .board {
+      min-width: 1580px;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      align-items: start;
+      grid-template-columns: repeat(6, minmax(240px, 1fr));
+      gap: 14px;
     }
 
     .column {
-      padding: 18px;
-      background: #e9eef5;
-      border-radius: 14px;
-      min-height: 420px;
+      min-height: 470px;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: #eef2f7;
     }
 
     .column-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      gap: 10px;
+      margin-bottom: 13px;
     }
 
     .column-header h2 {
-      font-size: 18px;
+      font-size: 15px;
     }
 
-    .count {
-      min-width: 28px;
-      padding: 5px 8px;
+    .column-count {
+      min-width: 26px;
+      height: 26px;
+      padding: 0 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 20px;
       background: #ffffff;
-      color: #667085;
-      text-align: center;
+      color: var(--muted);
       font-size: 12px;
       font-weight: 700;
     }
 
-    .task-card {
-      margin-bottom: 13px;
-      padding: 17px;
-      background: #ffffff;
-      border: 1px solid #dfe7f1;
-      border-radius: 11px;
-      box-shadow: 0 5px 18px rgba(23, 32, 51, 0.05);
+    .task-list {
+      display: grid;
+      gap: 10px;
     }
 
-    .task-card h3 {
-      margin-bottom: 8px;
-      font-size: 16px;
+    .task-card {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0 4px 14px rgba(23, 32, 51, 0.05);
+    }
+
+    .task-card.high {
+      border-left: 4px solid var(--warning);
+    }
+
+    .task-card.critical {
+      border-left: 4px solid var(--danger);
+    }
+
+    .task-card.overdue {
+      background: #fff8f7;
+    }
+
+    .task-title {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 700;
       line-height: 1.35;
     }
 
-    .task-card p {
-      margin-bottom: 13px;
-      color: #667085;
-      font-size: 13px;
-      line-height: 1.5;
+    .task-description {
+      margin-bottom: 10px;
+      color: #475467;
+      font-size: 12px;
+      line-height: 1.45;
     }
 
-    .task-meta {
+    .badges {
       display: flex;
       flex-wrap: wrap;
-      gap: 7px;
-      margin-bottom: 13px;
+      gap: 6px;
+      margin-bottom: 10px;
     }
 
     .badge {
       display: inline-block;
-      padding: 6px 9px;
+      padding: 5px 8px;
       border-radius: 20px;
+      background: #edf2f7;
+      color: #475467;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .badge.category {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .badge.critical {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .badge.high {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .task-info {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 11px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .task-info strong {
+      color: #344054;
+    }
+
+    .overdue-label {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+
+    .card-actions button {
+      padding: 8px;
+      border: none;
+      border-radius: 7px;
       font-size: 11px;
       font-weight: 700;
     }
 
-    .priority-high {
-      background: #fdecec;
-      color: #b42318;
+    .edit-button {
+      background: var(--primary-light);
+      color: var(--primary);
     }
 
-    .priority-medium {
-      background: #fff4d6;
-      color: #8a5b00;
+    .next-button {
+      background: var(--success-light);
+      color: var(--success);
     }
 
-    .priority-low {
-      background: #e7f7ef;
-      color: #14804a;
-    }
-
-    .person {
-      background: #eef5ff;
-      color: #1267d6;
-    }
-
-    .task-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .task-actions button {
-      flex: 1;
-      padding: 9px;
-      border: none;
-      border-radius: 7px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .move-button {
-      background: #eaf2fc;
-      color: #1267d6;
-    }
-
-    .delete-button {
-      background: #fdecec;
-      color: #b42318;
+    .empty {
+      padding: 25px 8px;
+      color: #98a2b3;
+      text-align: center;
+      font-size: 13px;
     }
 
     .modal {
       position: fixed;
       inset: 0;
-      z-index: 30;
+      z-index: 50;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: rgba(15, 23, 42, 0.55);
+      background: rgba(15, 23, 42, 0.58);
     }
 
     .modal.open {
@@ -293,10 +408,12 @@
 
     .modal-box {
       width: 100%;
-      max-width: 560px;
-      padding: 26px;
-      background: #ffffff;
+      max-width: 760px;
+      max-height: 94vh;
+      overflow-y: auto;
+      padding: 25px;
       border-radius: 14px;
+      background: #ffffff;
     }
 
     .modal-box h2 {
@@ -304,7 +421,7 @@
     }
 
     .field {
-      margin-bottom: 15px;
+      margin-bottom: 14px;
     }
 
     .field label {
@@ -317,42 +434,54 @@
     .row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 13px;
+    }
+
+    .three-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 13px;
     }
 
     .modal-actions {
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
+      gap: 9px;
       margin-top: 20px;
     }
 
-    .secondary,
-    .primary {
+    .cancel-button,
+    .save-button,
+    .delete-button {
       padding: 11px 17px;
       border: none;
       border-radius: 8px;
-      cursor: pointer;
       font-weight: 700;
     }
 
-    .secondary {
+    .cancel-button {
       background: #edf2f7;
       color: #344054;
     }
 
-    .primary {
-      background: #1267d6;
+    .save-button {
+      background: var(--primary);
       color: #ffffff;
     }
 
-    @media (max-width: 1100px) {
+    .delete-button {
+      margin-right: auto;
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    @media (max-width: 1250px) {
       .stats {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
       }
 
-      .board {
-        grid-template-columns: 1fr;
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
       }
     }
 
@@ -370,12 +499,12 @@
       }
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 680px) {
       header {
-        padding: 0 16px;
+        padding: 12px 16px;
       }
 
-      .header-info {
+      .module-status {
         display: none;
       }
 
@@ -385,7 +514,8 @@
 
       .stats,
       .toolbar,
-      .row {
+      .row,
+      .three-columns {
         grid-template-columns: 1fr;
       }
     }
@@ -395,73 +525,160 @@
 <body>
 
   <header>
-    <a class="logo" href="index.html">RadiologyOS</a>
+    <a class="logo" href="index.html">
+      RadiologyOS
+    </a>
 
-    <div class="header-info">
-      Завдання та контроль виконання
+    <div class="header-right">
+      <span
+        class="module-status"
+        id="moduleStatus"
+      >
+        Завдання підключаються...
+      </span>
+
+      <div id="currentUser"></div>
     </div>
   </header>
 
   <div class="layout">
 
     <aside>
-      <h3>Робоче середовище</h3>
+      <h3>Управління</h3>
 
       <ul class="menu">
-        <li><a href="index.html">Головна</a></li>
-        <li><a href="protocols.html">Протоколи</a></li>
-        <li><a href="patients.html">Пацієнти</a></li>
-        <li><a href="studies.html">Дослідження</a></li>
-        <li><a href="bookings-admin.html">Заявки</a></li>
-        <li><a href="archive.html">Архів</a></li>
-        <li><a href="ai.html">AI Assistant</a></li>
-        <li><a href="knowledge.html">База знань</a></li>
-        <li><a href="analytics.html">Аналітика</a></li>
-        <li><a href="reports.html">Звіти</a></li>
-        <li><a href="finance.html">Фінанси</a></li>
-        <li><a href="staff.html">Працівники</a></li>
-        <li><a href="schedule.html">Графік роботи</a></li>
-        <li><a href="tasks.html" class="active">Завдання</a></li>
-        <li><a href="equipment.html">Обладнання</a></li>
-        <li><a href="inventory.html">Склад</a></li>
-        <li><a href="quality.html">Якість</a></li>
-        <li><a href="settings.html">Налаштування</a></li>
+
+        <li data-permission="dashboard">
+          <a href="executive-dashboard.html">
+            Панель керівника
+          </a>
+        </li>
+
+        <li data-permission="tasks">
+          <a
+            href="tasks.html"
+            class="active"
+          >
+            Завдання
+          </a>
+        </li>
+
+        <li data-permission="crm">
+          <a href="crm.html">
+            CRM
+          </a>
+        </li>
+
+        <li data-permission="patients">
+          <a href="patients.html">
+            Пацієнти
+          </a>
+        </li>
+
+        <li data-permission="studies">
+          <a href="studies.html">
+            Дослідження
+          </a>
+        </li>
+
+        <li data-permission="equipment">
+          <a href="equipment.html">
+            Обладнання
+          </a>
+        </li>
+
+        <li data-permission="staff">
+          <a href="staff.html">
+            Персонал
+          </a>
+        </li>
+
+        <li data-permission="analytics">
+          <a href="analytics.html">
+            Аналітика
+          </a>
+        </li>
+
       </ul>
     </aside>
 
     <main>
 
       <div class="page-top">
+
         <div>
-          <h1>Завдання відділення</h1>
-          <p>Розподіл роботи та контроль виконання доручень</p>
+          <h1>Завдання персоналу</h1>
+
+          <p>
+            Доручення, контроль строків і взаємодія працівників
+          </p>
         </div>
 
-        <button class="add-button" onclick="openModal()">
-          + Нове завдання
-        </button>
+        <div class="top-actions">
+
+          <button
+            class="secondary-button"
+            type="button"
+            onclick="showMyTasks()"
+          >
+            Мої завдання
+          </button>
+
+          <button
+            class="secondary-button"
+            type="button"
+            onclick="exportTasks()"
+          >
+            Експорт
+          </button>
+
+          <button
+            class="primary-button"
+            type="button"
+            onclick="openTaskModal()"
+          >
+            + Нове завдання
+          </button>
+
+        </div>
       </div>
 
       <section class="stats">
 
         <div class="stat-card">
-          <span>Усього завдань</span>
-          <strong id="totalTasks">6</strong>
+          <span>Усього</span>
+          <strong id="totalCount">0</strong>
         </div>
 
         <div class="stat-card">
           <span>Нові</span>
-          <strong id="newTasks">2</strong>
+          <strong id="newCount">0</strong>
         </div>
 
         <div class="stat-card">
           <span>У роботі</span>
-          <strong id="progressTasks">2</strong>
+          <strong id="progressCount">0</strong>
         </div>
 
         <div class="stat-card">
-          <span>Виконано</span>
-          <strong id="doneTasks">2</strong>
+          <span>На перевірці</span>
+          <strong id="reviewCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Виконані</span>
+          <strong id="completedCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Прострочені</span>
+
+          <strong
+            id="overdueCount"
+            class="danger-text"
+          >
+            0
+          </strong>
         </div>
 
       </section>
@@ -471,474 +688,1347 @@
         <input
           id="searchInput"
           type="search"
-          placeholder="Пошук завдання..."
-          oninput="filterTasks()"
+          placeholder="Пошук за назвою, описом або виконавцем..."
+          oninput="renderBoard()"
         >
 
-        <select id="personFilter" onchange="filterTasks()">
-          <option value="">Усі відповідальні</option>
-          <option value="Адаменко Д.М.">Адаменко Д.М.</option>
-          <option value="Клімов Л.В.">Клімов Л.В.</option>
-          <option value="Адміністратор">Адміністратор</option>
-          <option value="Черговий лаборант">Черговий лаборант</option>
+        <select
+          id="categoryFilter"
+          onchange="renderBoard()"
+        >
+          <option value="">
+            Усі категорії
+          </option>
         </select>
 
-        <select id="priorityFilter" onchange="filterTasks()">
-          <option value="">Усі пріоритети</option>
-          <option value="Високий">Високий</option>
-          <option value="Середній">Середній</option>
-          <option value="Низький">Низький</option>
+        <select
+          id="priorityFilter"
+          onchange="renderBoard()"
+        >
+          <option value="">
+            Усі пріоритети
+          </option>
+        </select>
+
+        <select
+          id="employeeFilter"
+          onchange="renderBoard()"
+        >
+          <option value="">
+            Усі виконавці
+          </option>
         </select>
 
       </div>
 
-      <section class="board">
-
-        <div class="column" data-column="new">
-
-          <div class="column-header">
-            <h2>Нові</h2>
-            <span class="count" id="newCount">2</span>
-          </div>
-
-          <div class="task-list" id="newColumn">
-
-            <article
-              class="task-card"
-              data-person="Клімов Л.В."
-              data-priority="Високий"
-            >
-              <h3>Перевірити запас контрастної речовини</h3>
-
-              <p>
-                Звірити фактичний залишок із журналом та термінами придатності.
-              </p>
-
-              <div class="task-meta">
-                <span class="badge priority-high">Високий</span>
-                <span class="badge person">Клімов Л.В.</span>
-              </div>
-
-              <div class="task-actions">
-                <button class="move-button" onclick="moveTask(this)">
-                  У роботу
-                </button>
-
-                <button class="delete-button" onclick="deleteTask(this)">
-                  Видалити
-                </button>
-              </div>
-            </article>
-
-            <article
-              class="task-card"
-              data-person="Адміністратор"
-              data-priority="Середній"
-            >
-              <h3>Оновити список послуг і цін</h3>
-
-              <p>
-                Перевірити актуальність тарифів на сайті та сторінці запису.
-              </p>
-
-              <div class="task-meta">
-                <span class="badge priority-medium">Середній</span>
-                <span class="badge person">Адміністратор</span>
-              </div>
-
-              <div class="task-actions">
-                <button class="move-button" onclick="moveTask(this)">
-                  У роботу
-                </button>
-
-                <button class="delete-button" onclick="deleteTask(this)">
-                  Видалити
-                </button>
-              </div>
-            </article>
-
-          </div>
-        </div>
-
-        <div class="column" data-column="progress">
-
-          <div class="column-header">
-            <h2>У роботі</h2>
-            <span class="count" id="progressCount">2</span>
-          </div>
-
-          <div class="task-list" id="progressColumn">
-
-            <article
-              class="task-card"
-              data-person="Адаменко Д.М."
-              data-priority="Високий"
-            >
-              <h3>Перевірити протоколи КТ головного мозку</h3>
-
-              <p>
-                Оцінити повноту описів і виправити шаблони висновків.
-              </p>
-
-              <div class="task-meta">
-                <span class="badge priority-high">Високий</span>
-                <span class="badge person">Адаменко Д.М.</span>
-              </div>
-
-              <div class="task-actions">
-                <button class="move-button" onclick="moveTask(this)">
-                  Виконано
-                </button>
-
-                <button class="delete-button" onclick="deleteTask(this)">
-                  Видалити
-                </button>
-              </div>
-            </article>
-
-            <article
-              class="task-card"
-              data-person="Черговий лаборант"
-              data-priority="Середній"
-            >
-              <h3>Перевірити передачу DICOM до Orthanc</h3>
-
-              <p>
-                Виконати тестове дослідження та перевірити появу серії в архіві.
-              </p>
-
-              <div class="task-meta">
-                <span class="badge priority-medium">Середній</span>
-                <span class="badge person">Черговий лаборант</span>
-              </div>
-
-              <div class="task-actions">
-                <button class="move-button" onclick="moveTask(this)">
-                  Виконано
-                </button>
-
-                <button class="delete-button" onclick="deleteTask(this)">
-                  Видалити
-                </button>
-              </div>
-            </article>
-
-          </div>
-        </div>
-
-        <div class="column" data-column="done">
-
-          <div class="column-header">
-            <h2>Виконано</h2>
-            <span class="count" id="doneCount">2</span>
-          </div>
-
-          <div class="task-list" id="doneColumn">
-
-            <article
-              class="task-card"
-              data-person="Адміністратор"
-              data-priority="Низький"
-            >
-              <h3>Оновити контакти відділення</h3>
-
-              <p>
-                Контактну інформацію перевірено та внесено на сайт.
-              </p>
-
-              <div class="task-meta">
-                <span class="badge priority-low">Низький</span>
-                <span class="badge person">Адміністратор</span>
-              </div>
-
-              <div class="task-actions">
-                <button class="move-button" onclick="restoreTask(this)">
-                  Повернути
-                </button>
-
-                <button class="delete-button" onclick="deleteTask(this)">
-                  Видалити
-                </button>
-              </div>
-            </article>
-
-            <article
-              class="task-card"
-              data-person="Клімов Л.В."
-              data-priority="Середній"
-            >
-              <h3>Перевірити журнал КТ за місяць</h3>
-
-              <p>
-                Кількість досліджень звірено з електронним реєстром.
-              </p>
-
-              <div class="task-meta">
-                <span class="badge priority-medium">Середній</span>
-                <span class="badge person">Клімов Л.В.</span>
-              </div>
-
-              <div class="task-actions">
-                <button class="move-button" onclick="restoreTask(this)">
-                  Повернути
-                </button>
-
-                <button class="delete-button" onclick="deleteTask(this)">
-                  Видалити
-                </button>
-              </div>
-            </article>
-
-          </div>
-        </div>
-
-      </section>
+      <div class="board-wrap">
+        <section
+          class="board"
+          id="taskBoard"
+        ></section>
+      </div>
 
     </main>
   </div>
 
-  <div class="modal" id="taskModal">
+  <div
+    class="modal"
+    id="taskModal"
+  >
 
     <div class="modal-box">
 
-      <h2>Нове завдання</h2>
+      <h2 id="modalTitle">
+        Нове завдання
+      </h2>
+
+      <input
+        id="taskId"
+        type="hidden"
+      >
 
       <div class="field">
-        <label for="taskTitle">Назва</label>
-        <input id="taskTitle" type="text">
+        <label for="taskTitle">
+          Назва завдання
+        </label>
+
+        <input
+          id="taskTitle"
+          type="text"
+          placeholder="Що потрібно зробити?"
+        >
       </div>
 
       <div class="field">
-        <label for="taskDescription">Опис</label>
-        <textarea id="taskDescription"></textarea>
+        <label for="taskDescription">
+          Опис
+        </label>
+
+        <textarea
+          id="taskDescription"
+          placeholder="Детальний опис завдання"
+        ></textarea>
+      </div>
+
+      <div class="three-columns">
+
+        <div class="field">
+          <label for="taskCategory">
+            Категорія
+          </label>
+
+          <select id="taskCategory"></select>
+        </div>
+
+        <div class="field">
+          <label for="taskStatus">
+            Статус
+          </label>
+
+          <select id="taskStatus"></select>
+        </div>
+
+        <div class="field">
+          <label for="taskPriority">
+            Пріоритет
+          </label>
+
+          <select id="taskPriority"></select>
+        </div>
+
       </div>
 
       <div class="row">
-        <div class="field">
-          <label for="taskPerson">Відповідальний</label>
 
-          <select id="taskPerson">
-            <option>Адаменко Д.М.</option>
-            <option>Клімов Л.В.</option>
-            <option>Адміністратор</option>
-            <option>Черговий лаборант</option>
+        <div class="field">
+          <label for="createdBy">
+            Хто поставив
+          </label>
+
+          <input
+            id="createdBy"
+            type="text"
+          >
+        </div>
+
+        <div class="field">
+          <label for="assignedTo">
+            Виконавець
+          </label>
+
+          <input
+            id="assignedTo"
+            type="text"
+            list="employeeList"
+          >
+
+          <datalist id="employeeList"></datalist>
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label for="dueAt">
+          Строк виконання
+        </label>
+
+        <input
+          id="dueAt"
+          type="datetime-local"
+        >
+      </div>
+
+      <div class="row">
+
+        <div class="field">
+          <label for="patientId">
+            Пов’язаний пацієнт
+          </label>
+
+          <select id="patientId">
+            <option value="">
+              Не пов’язано
+            </option>
           </select>
         </div>
 
         <div class="field">
-          <label for="taskPriority">Пріоритет</label>
+          <label for="studyId">
+            Пов’язане дослідження
+          </label>
 
-          <select id="taskPriority">
-            <option>Високий</option>
-            <option selected>Середній</option>
-            <option>Низький</option>
+          <select id="studyId">
+            <option value="">
+              Не пов’язано
+            </option>
           </select>
         </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="field">
+          <label for="leadId">
+            CRM-звернення
+          </label>
+
+          <select id="leadId">
+            <option value="">
+              Не пов’язано
+            </option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="equipmentId">
+            Обладнання
+          </label>
+
+          <select id="equipmentId">
+            <option value="">
+              Не пов’язано
+            </option>
+          </select>
+        </div>
+
       </div>
 
       <div class="modal-actions">
-        <button class="secondary" onclick="closeModal()">
+
+        <button
+          class="delete-button"
+          id="deleteTaskButton"
+          type="button"
+          onclick="deleteTask()"
+          style="display:none"
+        >
+          Видалити
+        </button>
+
+        <button
+          class="cancel-button"
+          type="button"
+          onclick="closeTaskModal()"
+        >
           Скасувати
         </button>
 
-        <button class="primary" onclick="addTask()">
+        <button
+          class="save-button"
+          type="button"
+          onclick="saveTask()"
+        >
           Зберегти
         </button>
+
       </div>
 
     </div>
-
   </div>
 
+  <script src="radiologyos-auth.js"></script>
+  <script src="radiologyos-page-guard.js"></script>
+  <script src="radiologyos-data.js"></script>
+  <script src="radiologyos-crm.js"></script>
+  <script src="radiologyos-tasks.js"></script>
+
   <script>
-    function priorityClass(priority) {
-      if (priority === "Високий") return "priority-high";
-      if (priority === "Низький") return "priority-low";
+    const pageAllowed =
+      RadiologyGuard.initialize({
+        permission: "tasks",
+        userContainerId: "currentUser"
+      });
 
-      return "priority-medium";
+    if (!pageAllowed) {
+      throw new Error(
+        "Доступ до завдань заборонено"
+      );
     }
 
-    function openModal() {
-      document.getElementById("taskModal").classList.add("open");
+    const boardStatuses = [
+      "Нове",
+      "Прийнято",
+      "У роботі",
+      "Очікує",
+      "На перевірці",
+      "Виконано"
+    ];
+
+    let onlyMyTasks = false;
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
-    function closeModal() {
-      document.getElementById("taskModal").classList.remove("open");
+    function formatDate(value) {
+      if (!value) {
+        return "Строк не встановлено";
+      }
+
+      const date =
+        new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "Некоректна дата";
+      }
+
+      return date.toLocaleString(
+        "uk-UA",
+        {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
     }
 
-    function addTask() {
-      const title =
-        document.getElementById("taskTitle").value.trim();
+    function toInputDateTime(value) {
+      if (!value) {
+        return "";
+      }
 
-      const description =
-        document.getElementById("taskDescription").value.trim();
+      const date =
+        new Date(value);
 
-      const person =
-        document.getElementById("taskPerson").value;
+      if (Number.isNaN(date.getTime())) {
+        return "";
+      }
 
-      const priority =
-        document.getElementById("taskPriority").value;
+      const local =
+        new Date(
+          date.getTime() -
+          date.getTimezoneOffset() * 60000
+        );
 
-      if (!title) {
-        alert("Вкажіть назву завдання.");
+      return local
+        .toISOString()
+        .slice(0, 16);
+    }
+
+    function isTaskOverdue(task) {
+      return Boolean(
+        task.dueAt &&
+        task.status !== "Виконано" &&
+        task.status !== "Скасовано" &&
+        new Date(task.dueAt) < new Date()
+      );
+    }
+
+    function fillSelect(
+      id,
+      values,
+      keepFirst
+    ) {
+      const select =
+        document.getElementById(id);
+
+      if (!select) {
         return;
       }
 
-      const card = document.createElement("article");
+      const first =
+        keepFirst && select.options.length
+          ? select.options[0].outerHTML
+          : "";
 
-      card.className = "task-card";
-      card.dataset.person = person;
-      card.dataset.priority = priority;
-
-      card.innerHTML = `
-        <h3>${title}</h3>
-
-        <p>${description || "Опис не вказано."}</p>
-
-        <div class="task-meta">
-          <span class="badge ${priorityClass(priority)}">
-            ${priority}
-          </span>
-
-          <span class="badge person">
-            ${person}
-          </span>
-        </div>
-
-        <div class="task-actions">
-          <button class="move-button" onclick="moveTask(this)">
-            У роботу
-          </button>
-
-          <button class="delete-button" onclick="deleteTask(this)">
-            Видалити
-          </button>
-        </div>
-      `;
-
-      document.getElementById("newColumn").prepend(card);
-
-      document.getElementById("taskTitle").value = "";
-      document.getElementById("taskDescription").value = "";
-
-      updateStatistics();
-      closeModal();
+      select.innerHTML =
+        first +
+        values.map(
+          value => `
+            <option value="${escapeHtml(value)}">
+              ${escapeHtml(value)}
+            </option>
+          `
+        ).join("");
     }
 
-    function moveTask(button) {
-      const card = button.closest(".task-card");
-      const column = card.closest(".column").dataset.column;
+    function loadTaskSettings() {
+      const database =
+        RadiologyTasks.readDatabase();
 
-      if (column === "new") {
-        document.getElementById("progressColumn").prepend(card);
-        button.textContent = "Виконано";
-      } else if (column === "progress") {
-        document.getElementById("doneColumn").prepend(card);
-        button.textContent = "Повернути";
-        button.setAttribute("onclick", "restoreTask(this)");
+      fillSelect(
+        "taskCategory",
+        database.settings.categories,
+        false
+      );
+
+      fillSelect(
+        "categoryFilter",
+        database.settings.categories,
+        true
+      );
+
+      fillSelect(
+        "taskStatus",
+        database.settings.statuses,
+        false
+      );
+
+      fillSelect(
+        "taskPriority",
+        database.settings.priorities,
+        false
+      );
+
+      fillSelect(
+        "priorityFilter",
+        database.settings.priorities,
+        true
+      );
+    }
+
+    function loadEmployees() {
+      const employees = [];
+
+      try {
+        RadiologyOS
+          .getAll("staff")
+          .forEach((employee) => {
+            const name =
+              employee.fullName ||
+              employee.name;
+
+            if (
+              name &&
+              !employees.includes(name)
+            ) {
+              employees.push(name);
+            }
+          });
+      } catch (error) {
+        console.warn(
+          "Персонал не завантажений:",
+          error
+        );
       }
 
-      updateStatistics();
-      filterTasks();
+      RadiologyTasks
+        .getAllTasks()
+        .forEach((task) => {
+          if (
+            task.assignedTo &&
+            !employees.includes(
+              task.assignedTo
+            )
+          ) {
+            employees.push(
+              task.assignedTo
+            );
+          }
+        });
+
+      employees.sort(
+        (a, b) =>
+          a.localeCompare(b, "uk")
+      );
+
+      const datalist =
+        document.getElementById(
+          "employeeList"
+        );
+
+      datalist.innerHTML =
+        employees.map(
+          employee => `
+            <option
+              value="${escapeHtml(employee)}"
+            >
+          `
+        ).join("");
+
+      fillSelect(
+        "employeeFilter",
+        employees,
+        true
+      );
     }
 
-    function restoreTask(button) {
-      const card = button.closest(".task-card");
+    function loadRelatedEntities() {
+      const patientSelect =
+        document.getElementById(
+          "patientId"
+        );
 
-      document.getElementById("progressColumn").prepend(card);
+      const studySelect =
+        document.getElementById(
+          "studyId"
+        );
 
-      button.textContent = "Виконано";
-      button.setAttribute("onclick", "moveTask(this)");
+      const leadSelect =
+        document.getElementById(
+          "leadId"
+        );
 
-      updateStatistics();
-      filterTasks();
+      const equipmentSelect =
+        document.getElementById(
+          "equipmentId"
+        );
+
+      patientSelect.innerHTML =
+        `
+          <option value="">
+            Не пов’язано
+          </option>
+        `;
+
+      studySelect.innerHTML =
+        `
+          <option value="">
+            Не пов’язано
+          </option>
+        `;
+
+      leadSelect.innerHTML =
+        `
+          <option value="">
+            Не пов’язано
+          </option>
+        `;
+
+      equipmentSelect.innerHTML =
+        `
+          <option value="">
+            Не пов’язано
+          </option>
+        `;
+
+      try {
+        RadiologyOS
+          .getAll("patients")
+          .forEach((patient) => {
+            const name =
+              patient.fullName ||
+              patient.name ||
+              patient.id;
+
+            patientSelect.insertAdjacentHTML(
+              "beforeend",
+              `
+                <option value="${escapeHtml(patient.id)}">
+                  ${escapeHtml(name)} ·
+                  ${escapeHtml(patient.id)}
+                </option>
+              `
+            );
+          });
+      } catch (error) {
+        console.warn(
+          "Пацієнти не завантажені:",
+          error
+        );
+      }
+
+      try {
+        RadiologyOS
+          .getAll("studies")
+          .forEach((study) => {
+            const title = [
+              study.modality,
+              study.region,
+              study.patientName
+            ]
+              .filter(Boolean)
+              .join(" · ");
+
+            studySelect.insertAdjacentHTML(
+              "beforeend",
+              `
+                <option value="${escapeHtml(study.id)}">
+                  ${escapeHtml(
+                    title || study.id
+                  )} ·
+                  ${escapeHtml(study.id)}
+                </option>
+              `
+            );
+          });
+      } catch (error) {
+        console.warn(
+          "Дослідження не завантажені:",
+          error
+        );
+      }
+
+      try {
+        RadiologyCRM
+          .getAll("leads")
+          .forEach((lead) => {
+            leadSelect.insertAdjacentHTML(
+              "beforeend",
+              `
+                <option value="${escapeHtml(lead.id)}">
+                  ${escapeHtml(
+                    lead.fullName ||
+                    lead.id
+                  )} ·
+                  ${escapeHtml(
+                    lead.service ||
+                    "CRM-звернення"
+                  )}
+                </option>
+              `
+            );
+          });
+      } catch (error) {
+        console.warn(
+          "CRM-звернення не завантажені:",
+          error
+        );
+      }
+
+      try {
+        RadiologyOS
+          .getAll("equipment")
+          .forEach((equipment) => {
+            const name =
+              equipment.name ||
+              equipment.title ||
+              equipment.model ||
+              equipment.id;
+
+            equipmentSelect.insertAdjacentHTML(
+              "beforeend",
+              `
+                <option value="${escapeHtml(equipment.id)}">
+                  ${escapeHtml(name)} ·
+                  ${escapeHtml(equipment.id)}
+                </option>
+              `
+            );
+          });
+      } catch (error) {
+        console.warn(
+          "Обладнання не завантажене:",
+          error
+        );
+      }
     }
 
-    function deleteTask(button) {
-      const confirmed = confirm("Видалити це завдання?");
+    function clearTaskForm() {
+      const user =
+        RadiologyAuth.getCurrentUser();
 
-      if (!confirmed) return;
+      document.getElementById(
+        "modalTitle"
+      ).textContent =
+        "Нове завдання";
 
-      button.closest(".task-card").remove();
+      document.getElementById(
+        "taskId"
+      ).value = "";
 
-      updateStatistics();
+      document.getElementById(
+        "taskTitle"
+      ).value = "";
+
+      document.getElementById(
+        "taskDescription"
+      ).value = "";
+
+      document.getElementById(
+        "taskCategory"
+      ).value =
+        "Адміністративне";
+
+      document.getElementById(
+        "taskStatus"
+      ).value =
+        "Нове";
+
+      document.getElementById(
+        "taskPriority"
+      ).value =
+        "Звичайний";
+
+      document.getElementById(
+        "createdBy"
+      ).value =
+        user
+          ? user.fullName ||
+            user.name ||
+            user.username ||
+            ""
+          : "";
+
+      document.getElementById(
+        "assignedTo"
+      ).value = "";
+
+      document.getElementById(
+        "dueAt"
+      ).value = "";
+
+      document.getElementById(
+        "patientId"
+      ).value = "";
+
+      document.getElementById(
+        "studyId"
+      ).value = "";
+
+      document.getElementById(
+        "leadId"
+      ).value = "";
+
+      document.getElementById(
+        "equipmentId"
+      ).value = "";
+
+      document.getElementById(
+        "deleteTaskButton"
+      ).style.display =
+        "none";
+    }
+         function openTaskModal(id) {
+      loadTaskSettings();
+      loadEmployees();
+      loadRelatedEntities();
+      clearTaskForm();
+
+      if (id) {
+        const task =
+          RadiologyTasks.getTaskById(id);
+
+        if (!task) {
+          alert("Завдання не знайдено.");
+          return;
+        }
+
+        document.getElementById(
+          "modalTitle"
+        ).textContent =
+          "Редагування завдання";
+
+        document.getElementById(
+          "taskId"
+        ).value =
+          task.id;
+
+        document.getElementById(
+          "taskTitle"
+        ).value =
+          task.title || "";
+
+        document.getElementById(
+          "taskDescription"
+        ).value =
+          task.description || "";
+
+        document.getElementById(
+          "taskCategory"
+        ).value =
+          task.category || "Інше";
+
+        document.getElementById(
+          "taskStatus"
+        ).value =
+          task.status || "Нове";
+
+        document.getElementById(
+          "taskPriority"
+        ).value =
+          task.priority || "Звичайний";
+
+        document.getElementById(
+          "createdBy"
+        ).value =
+          task.createdBy || "";
+
+        document.getElementById(
+          "assignedTo"
+        ).value =
+          task.assignedTo || "";
+
+        document.getElementById(
+          "dueAt"
+        ).value =
+          toInputDateTime(task.dueAt);
+
+        document.getElementById(
+          "patientId"
+        ).value =
+          task.patientId || "";
+
+        document.getElementById(
+          "studyId"
+        ).value =
+          task.studyId || "";
+
+        document.getElementById(
+          "leadId"
+        ).value =
+          task.leadId || "";
+
+        document.getElementById(
+          "equipmentId"
+        ).value =
+          task.equipmentId || "";
+
+        document.getElementById(
+          "deleteTaskButton"
+        ).style.display =
+          "block";
+      }
+
+      document
+        .getElementById("taskModal")
+        .classList.add("open");
     }
 
-    function filterTasks() {
+    function closeTaskModal() {
+      document
+        .getElementById("taskModal")
+        .classList.remove("open");
+    }
+
+    function saveTask() {
+      const id =
+        document.getElementById(
+          "taskId"
+        ).value;
+
+      const title =
+        document.getElementById(
+          "taskTitle"
+        ).value.trim();
+
+      const assignedTo =
+        document.getElementById(
+          "assignedTo"
+        ).value.trim();
+
+      if (!title) {
+        alert(
+          "Вкажіть назву завдання."
+        );
+        return;
+      }
+
+      if (!assignedTo) {
+        alert(
+          "Вкажіть виконавця."
+        );
+        return;
+      }
+
+      const dueValue =
+        document.getElementById(
+          "dueAt"
+        ).value;
+
+      const data = {
+        title,
+
+        description:
+          document.getElementById(
+            "taskDescription"
+          ).value.trim(),
+
+        category:
+          document.getElementById(
+            "taskCategory"
+          ).value,
+
+        status:
+          document.getElementById(
+            "taskStatus"
+          ).value,
+
+        priority:
+          document.getElementById(
+            "taskPriority"
+          ).value,
+
+        createdBy:
+          document.getElementById(
+            "createdBy"
+          ).value.trim(),
+
+        assignedTo,
+
+        dueAt:
+          dueValue
+            ? new Date(
+                dueValue
+              ).toISOString()
+            : "",
+
+        patientId:
+          document.getElementById(
+            "patientId"
+          ).value || null,
+
+        studyId:
+          document.getElementById(
+            "studyId"
+          ).value || null,
+
+        leadId:
+          document.getElementById(
+            "leadId"
+          ).value || null,
+
+        equipmentId:
+          document.getElementById(
+            "equipmentId"
+          ).value || null
+      };
+
+      if (id) {
+        RadiologyTasks.updateTask(
+          id,
+          data
+        );
+      } else {
+        RadiologyTasks.createTask(
+          data
+        );
+      }
+
+      closeTaskModal();
+      renderBoard();
+      updateStatistics();
+      loadEmployees();
+    }
+
+    function deleteTask() {
+      const id =
+        document.getElementById(
+          "taskId"
+        ).value;
+
+      if (
+        !id ||
+        !confirm(
+          "Видалити це завдання?"
+        )
+      ) {
+        return;
+      }
+
+      RadiologyTasks.removeTask(id);
+
+      closeTaskModal();
+      renderBoard();
+      updateStatistics();
+      loadEmployees();
+    }
+
+    function moveTaskNext(id) {
+      const task =
+        RadiologyTasks.getTaskById(id);
+
+      if (!task) {
+        return;
+      }
+
+      const index =
+        boardStatuses.indexOf(
+          task.status
+        );
+
+      const nextIndex =
+        index < 0
+          ? 0
+          : Math.min(
+              index + 1,
+              boardStatuses.length - 1
+            );
+
+      RadiologyTasks.changeStatus(
+        id,
+        boardStatuses[nextIndex]
+      );
+    }
+
+    function showMyTasks() {
+      onlyMyTasks =
+        !onlyMyTasks;
+
+      const button =
+        event.currentTarget;
+
+      button.textContent =
+        onlyMyTasks
+          ? "Показати всі"
+          : "Мої завдання";
+
+      renderBoard();
+    }   
+        function renderBoard() {
       const search =
-        document.getElementById("searchInput").value.toLowerCase();
+        document.getElementById(
+          "searchInput"
+        ).value
+          .trim()
+          .toLowerCase();
 
-      const person =
-        document.getElementById("personFilter").value;
+      const category =
+        document.getElementById(
+          "categoryFilter"
+        ).value;
 
       const priority =
-         document.getElementById("priorityFilter").value;
+        document.getElementById(
+          "priorityFilter"
+        ).value;
 
-      document.querySelectorAll(".task-card").forEach((card) => {
-        const matchesSearch =
-          card.textContent.toLowerCase().includes(search);
+      const employee =
+        document.getElementById(
+          "employeeFilter"
+        ).value;
 
-        const matchesPerson =
-          !person || card.dataset.person === person;
+      const currentUser =
+        RadiologyAuth.getCurrentUser();
 
-        const matchesPriority =
-          !priority || card.dataset.priority === priority;
+      const currentUserName =
+        currentUser
+          ? currentUser.fullName ||
+            currentUser.name ||
+            currentUser.username ||
+            ""
+          : "";
 
-        card.style.display =
-          matchesSearch &&
-          matchesPerson &&
-          matchesPriority
-            ? ""
-            : "none";
-      });
+      const tasks =
+        RadiologyTasks
+          .getAllTasks()
+          .filter((task) => {
+            const haystack = [
+              task.title,
+              task.description,
+              task.assignedTo,
+              task.createdBy,
+              task.category
+            ]
+              .join(" ")
+              .toLowerCase();
+
+            const matchesSearch =
+              !search ||
+              haystack.includes(search);
+
+            const matchesCategory =
+              !category ||
+              task.category === category;
+
+            const matchesPriority =
+              !priority ||
+              task.priority === priority;
+
+            const matchesEmployee =
+              !employee ||
+              task.assignedTo === employee;
+
+            const matchesMyTasks =
+              !onlyMyTasks ||
+              task.assignedTo ===
+                currentUserName ||
+              (
+                task.collaborators || []
+              ).includes(currentUserName);
+
+            return (
+              matchesSearch &&
+              matchesCategory &&
+              matchesPriority &&
+              matchesEmployee &&
+              matchesMyTasks
+            );
+          });
+
+      const board =
+        document.getElementById(
+          "taskBoard"
+        );
+
+      board.innerHTML =
+        boardStatuses
+          .map((status) => {
+            const items =
+              tasks.filter(
+                task =>
+                  task.status === status
+              );
+
+            return `
+              <article class="column">
+
+                <div class="column-header">
+                  <h2>
+                    ${escapeHtml(status)}
+                  </h2>
+
+                  <span class="column-count">
+                    ${items.length}
+                  </span>
+                </div>
+
+                <div class="task-list">
+                  ${
+                    items.length
+                      ? items
+                          .map(renderTaskCard)
+                          .join("")
+                      : `
+                        <div class="empty">
+                          Завдань немає
+                        </div>
+                      `
+                  }
+                </div>
+
+              </article>
+            `;
+          })
+          .join("");
     }
 
-    function updateStatistics() {
-      const newCount =
-        document.querySelectorAll("#newColumn .task-card").length;
+    function renderTaskCard(task) {
+      const overdue =
+        isTaskOverdue(task);
 
-      const progressCount =
-        document.querySelectorAll(
-          "#progressColumn .task-card"
-        ).length;
+      const priorityClass =
+        task.priority === "Критичний"
+          ? "critical"
+          : task.priority === "Високий"
+            ? "high"
+            : "";
 
-      const doneCount =
-        document.querySelectorAll("#doneColumn .task-card").length;
+      const cardClasses = [
+        "task-card",
+        priorityClass,
+        overdue ? "overdue" : ""
+      ]
+        .filter(Boolean)
+        .join(" ");
 
-      const total =
-        newCount + progressCount + doneCount;
+      const priorityBadgeClass =
+        task.priority === "Критичний"
+          ? "critical"
+          : task.priority === "Високий"
+            ? "high"
+            : "";
 
-      document.getElementById("newCount").textContent =
-        newCount;
+      return `
+        <div class="${cardClasses}">
 
-      document.getElementById("progressCount").textContent =
-        progressCount;
+          <span class="task-title">
+            ${escapeHtml(task.title)}
+          </span>
 
-      document.getElementById("doneCount").textContent =
-        doneCount;
+          ${
+            task.description
+              ? `
+                <div class="task-description">
+                  ${escapeHtml(
+                    task.description
+                  )}
+                </div>
+              `
+              : ""
+          }
 
-      document.getElementById("totalTasks").textContent =
-        total;
+          <div class="badges">
 
-      document.getElementById("newTasks").textContent =
-        newCount;
+            <span class="badge category">
+              ${escapeHtml(
+                task.category || "Інше"
+              )}
+            </span>
 
-      document.getElementById("progressTasks").textContent =
-        progressCount;
+            <span
+              class="badge ${priorityBadgeClass}"
+            >
+              ${escapeHtml(
+                task.priority ||
+                "Звичайний"
+              )}
+            </span>
 
-      document.getElementById("doneTasks").textContent =
-        doneCount;
+            ${
+              overdue
+                ? `
+                  <span class="badge critical">
+                    Прострочено
+                  </span>
+                `
+                : ""
+            }
+
+          </div>
+
+          <div class="task-info">
+
+            <div>
+              Виконавець:
+              <strong>
+                ${escapeHtml(
+                  task.assignedTo ||
+                  "Не призначено"
+                )}
+              </strong>
+            </div>
+
+            <div>
+              Поставив:
+              <strong>
+                ${escapeHtml(
+                  task.createdBy ||
+                  "Не вказано"
+                )}
+              </strong>
+            </div>
+
+            <div
+              class="${
+                overdue
+                  ? "overdue-label"
+                  : ""
+              }"
+            >
+              Строк:
+              ${escapeHtml(
+                formatDate(task.dueAt)
+              )}
+            </div>
+
+          </div>
+
+          <div class="card-actions">
+
+            <button
+              class="edit-button"
+              type="button"
+              onclick="openTaskModal('${task.id}')"
+            >
+              Відкрити
+            </button>
+
+            <button
+              class="next-button"
+              type="button"
+              onclick="moveTaskNext('${task.id}')"
+            >
+              Далі →
+            </button>
+
+          </div>
+
+        </div>
+      `;
+    }
+        function updateStatistics() {
+      const statistics =
+        RadiologyTasks.getStatistics();
+
+      document.getElementById(
+        "totalCount"
+      ).textContent =
+        statistics.total;
+
+      document.getElementById(
+        "newCount"
+      ).textContent =
+        statistics.new;
+
+      document.getElementById(
+        "progressCount"
+      ).textContent =
+        statistics.inProgress;
+
+      document.getElementById(
+        "reviewCount"
+      ).textContent =
+        statistics.review;
+
+      document.getElementById(
+        "completedCount"
+      ).textContent =
+        statistics.completed;
+
+      document.getElementById(
+        "overdueCount"
+      ).textContent =
+        statistics.overdue;
+    }
+
+    function exportTasks() {
+      RadiologyTasks.exportDatabase();
+    }
+
+    function initializePage() {
+      if (
+        !window.RadiologyTasks ||
+        !window.RadiologyOS
+      ) {
+        document.getElementById(
+          "moduleStatus"
+        ).textContent =
+          "Модуль недоступний";
+
+        alert(
+          "Не вдалося підключити модуль завдань."
+        );
+
+        return;
+      }
+
+      document.getElementById(
+        "moduleStatus"
+      ).textContent =
+        "Завдання підключені";
+
+      loadTaskSettings();
+      loadEmployees();
+      loadRelatedEntities();
+      renderBoard();
+      updateStatistics();
     }
 
     document
       .getElementById("taskModal")
-      .addEventListener("click", function(event) {
-        if (event.target === this) {
-          closeModal();
+      .addEventListener(
+        "click",
+        function(event) {
+          if (event.target === this) {
+            closeTaskModal();
+          }
         }
-      });
+      );
 
-    updateStatistics();
+    window.addEventListener(
+      "radiologyos:tasks-changed",
+      function() {
+        renderBoard();
+        updateStatistics();
+        loadEmployees();
+      }
+    );
+
+    window.addEventListener(
+      "radiologyos:data-changed",
+      function() {
+        loadEmployees();
+        loadRelatedEntities();
+      }
+    );
+
+    window.addEventListener(
+      "radiologyos:crm-changed",
+      function() {
+        loadRelatedEntities();
+      }
+    );
+
+    initializePage();
   </script>
 
 </body>
