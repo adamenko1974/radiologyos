@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Обладнання — RadiologyOS</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: #1267d6;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .header-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+      color: #ffffff;
+    }
+
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      color: #9fb0c7;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    .page-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .page-top h1 {
+      margin-bottom: 7px;
+      font-size: 32px;
+    }
+
+    .page-top p {
+      color: #667085;
+    }
+
+    .add-button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      background: #1267d6;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .stat-card strong {
+      font-size: 28px;
+    }
+
+    .equipment-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .equipment-card {
+      padding: 22px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(23, 32, 51, 0.05);
+    }
+
+    .equipment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .equipment-header h2 {
+      margin-bottom: 5px;
+      font-size: 20px;
+    }
+
+    .equipment-type {
+      color: #667085;
+      font-size: 13px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status-work {
+      background: #e7f7ef;
+      color: #14804a;
+    }
+
+    .status-warning {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .status-stop {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .detail {
+      padding: 12px;
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .detail span {
+      display: block;
+      margin-bottom: 5px;
+      color: #667085;
+      font-size: 12px;
+    }
+
+    .detail strong {
+      font-size: 14px;
+    }
+
+    .equipment-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .equipment-actions button {
+      padding: 10px 13px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .service-button {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .incident-button {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .panel {
+      padding: 22px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(23, 32, 51, 0.05);
+    }
+
+    .panel h2 {
+      margin-bottom: 18px;
+      font-size: 21px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 850px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #667085;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .priority {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .priority-high {
+      background: #fdecec;
+      color: #b42318;
+    }
+
+    .priority-medium {
+      background: #fff4d6;
+      color: #8a5b00;
+    }
+
+    .priority-low {
+      background: #eaf2fc;
+      color: #1267d6;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 620px;
+      padding: 26px;
+      background: #ffffff;
+      border-radius: 14px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .secondary,
+    .primary {
+      padding: 11px 17px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .secondary {
+      background: #edf2f7;
+      color: #344054;
+    }
+
+    .primary {
+      background: #1267d6;
+      color: #ffffff;
+    }
+
+    @media (max-width: 1050px) {
+      .stats,
+      .equipment-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .page-top {
+        flex-direction: column;
+      }
+
+      .stats,
+      .equipment-grid,
+      .details,
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Обладнання та технічний контроль
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="protocols.html">Протоколи</a></li>
+        <li><a href="patients.html">Пацієнти</a></li>
+        <li><a href="studies.html">Дослідження</a></li>
+        <li><a href="bookings-admin.html">Заявки</a></li>
+        <li><a href="ai.html">AI Assistant</a></li>
+        <li><a href="knowledge.html">База знань</a></li>
+        <li><a href="analytics.html">Аналітика</a></li>
+        <li><a href="staff.html">Працівники</a></li>
+        <li><a href="equipment.html" class="active">Обладнання</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-top">
+        <div>
+          <h1>Обладнання</h1>
+          <p>Контроль стану апаратів, сервісу та технічних несправностей</p>
+        </div>
+
+        <button class="add-button" onclick="openModal()">
+          + Додати подію
+        </button>
+      </div>
+
+      <section class="stats">
+
+        <div class="stat-card">
+          <span>Усього одиниць</span>
+          <strong>4</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Працюють</span>
+          <strong>3</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Потребують уваги</span>
+          <strong>1</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Відкриті заявки</span>
+          <strong id="incidentCount">2</strong>
+        </div>
+
+      </section>
+
+      <section class="equipment-grid">
+
+        <article class="equipment-card">
+
+          <div class="equipment-header">
+            <div>
+              <h2>Siemens CT</h2>
+              <div class="equipment-type">Комп’ютерний томограф</div>
+            </div>
+
+            <span class="status status-work">Працює</span>
+          </div>
+
+          <div class="details">
+            <div class="detail">
+              <span>Кабінет</span>
+              <strong>№1</strong>
+            </div>
+
+            <div class="detail">
+              <span>Стан</span>
+              <strong>Штатний режим</strong>
+            </div>
+
+            <div class="detail">
+              <span>Останній сервіс</span>
+              <strong>10.07.2026</strong>
+            </div>
+
+            <div class="detail">
+              <span>Наступний сервіс</span>
+              <strong>10.10.2026</strong>
+            </div>
+          </div>
+
+          <div class="equipment-actions">
+            <button class="service-button" onclick="showMessage('Siemens CT')">
+              Сервісна історія
+            </button>
+
+            <button class="incident-button" onclick="openModal('Siemens CT')">
+              Повідомити проблему
+            </button>
+          </div>
+
+        </article>
+
+        <article class="equipment-card">
+
+          <div class="equipment-header">
+            <div>
+              <h2>AMAX 5000</h2>
+              <div class="equipment-type">Рентгенографічний комплекс</div>
+            </div>
+
+            <span class="status status-warning">Потребує контролю</span>
+          </div>
+
+          <div class="details">
+            <div class="detail">
+              <span>Кабінет</span>
+              <strong>№2</strong>
+            </div>
+
+            <div class="detail">
+              <span>Стан</span>
+              <strong>Контроль живлення</strong>
+            </div>
+
+            <div class="detail">
+              <span>Остання подія</span>
+              <strong>Помилка E09</strong>
+            </div>
+
+            <div class="detail">
+              <span>Захист</span>
+              <strong>Стабілізатор 90 кВт</strong>
+            </div>
+          </div>
+
+          <div class="equipment-actions">
+            <button class="service-button" onclick="showMessage('AMAX 5000')">
+              Сервісна історія
+            </button>
+
+            <button class="incident-button" onclick="openModal('AMAX 5000')">
+              Повідомити проблему
+            </button>
+          </div>
+
+        </article>
+
+        <article class="equipment-card">
+
+          <div class="equipment-header">
+            <div>
+              <h2>Orthanc Server</h2>
+              <div class="equipment-type">PACS / DICOM-сервер</div>
+            </div>
+
+            <span class="status status-work">Онлайн</span>
+          </div>
+
+          <div class="details">
+            <div class="detail">
+              <span>Стан мережі</span>
+              <strong>З’єднання активне</strong>
+            </div>
+
+            <div class="detail">
+              <span>DICOM</span>
+              <strong>Передача працює</strong>
+            </div>
+
+            <div class="detail">
+              <span>Остання перевірка</span>
+              <strong>21.07.2026</strong>
+            </div>
+
+            <div class="detail">
+              <span>Резервне копіювання</span>
+              <strong>Потребує налаштування</strong>
+            </div>
+          </div>
+
+          <div class="equipment-actions">
+            <button class="service-button" onclick="showMessage('Orthanc Server')">
+              Перевірити систему
+            </button>
+
+            <button class="incident-button" onclick="openModal('Orthanc Server')">
+              Повідомити проблему
+            </button>
+          </div>
+
+        </article>
+
+        <article class="equipment-card">
+
+          <div class="equipment-header">
+            <div>
+              <h2>Панорамний рентген</h2>
+              <div class="equipment-type">Стоматологічна система</div>
+            </div>
+
+            <span class="status status-work">Очікує запуску</span>
+          </div>
+
+          <div class="details">
+            <div class="detail">
+              <span>Комплектація</span>
+              <strong>Ноутбук і мережа готові</strong>
+            </div>
+
+            <div class="detail">
+              <span>Монтаж</span>
+              <strong>Очікується</strong>
+            </div>
+
+            <div class="detail">
+              <span>Строк виробництва</span>
+              <strong>50 днів</strong>
+            </div>
+
+            <div class="detail">
+              <span>Відповідальний</span>
+              <strong>Уточнюється</strong>
+            </div>
+          </div>
+
+          <div class="equipment-actions">
+            <button class="service-button" onclick="showMessage('Панорамний рентген')">
+              Переглянути план
+            </button>
+
+            <button class="incident-button" onclick="openModal('Панорамний рентген')">
+              Додати примітку
+            </button>
+          </div>
+
+        </article>
+
+      </section>
+
+      <section class="panel">
+
+        <h2>Журнал технічних подій</h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Обладнання</th>
+                <th>Подія</th>
+                <th>Пріоритет</th>
+                <th>Статус</th>
+              </tr>
+            </thead>
+
+            <tbody id="incidentTable">
+
+              <tr>
+                <td>20.07.2026</td>
+                <td>AMAX 5000</td>
+                <td>Контроль після помилки живлення E09</td>
+                <td>
+                  <span class="priority priority-high">Високий</span>
+                </td>
+                <td>В роботі</td>
+              </tr>
+
+              <tr>
+                <td>18.07.2026</td>
+                <td>Orthanc Server</td>
+                <td>Перевірка DICOM-порту та передачі зображень</td>
+                <td>
+                  <span class="priority priority-medium">Середній</span>
+                </td>
+                <td>Заплановано</td>
+              </tr>
+
+              <tr>
+                <td>10.07.2026</td>
+                <td>Siemens CT</td>
+                <td>Планова технічна перевірка</td>
+                <td>
+                  <span class="priority priority-low">Низький</span>
+                </td>
+                <td>Завершено</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <div class="modal" id="incidentModal">
+
+    <div class="modal-box">
+
+      <h2>Нова технічна подія</h2>
+
+      <div class="field">
+        <label for="equipmentName">Обладнання</label>
+
+        <select id="equipmentName">
+          <option>Siemens CT</option>
+          <option>AMAX 5000</option>
+          <option>Orthanc Server</option>
+          <option>Панорамний рентген</option>
+          <option>Інше</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="incidentDate">Дата</label>
+          <input id="incidentDate" type="date">
+        </div>
+
+        <div class="field">
+          <label for="priority">Пріоритет</label>
+
+          <select id="priority">
+            <option>Низький</option>
+            <option selected>Середній</option>
+            <option>Високий</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="incidentText">Опис події</label>
+
+        <textarea
+          id="incidentText"
+          placeholder="Опишіть несправність, технічну роботу або примітку..."
+        ></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="secondary" onclick="closeModal()">
+          Скасувати
+        </button>
+
+        <button class="primary" onclick="addIncident()">
+          Зберегти
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function openModal(equipment) {
+      document.getElementById("incidentModal").classList.add("open");
+
+      if (equipment) {
+        document.getElementById("equipmentName").value = equipment;
+      }
+
+      if (!document.getElementById("incidentDate").value) {
+        document.getElementById("incidentDate").value =
+          new Date().toISOString().split("T")[0];
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("incidentModal").classList.remove("open");
+    }
+
+    function getPriorityClass(priority) {
+      if (priority === "Високий") {
+        return "priority-high";
+      }
+
+      if (priority === "Середній") {
+        return "priority-medium";
+      }
+
+      return "priority-low";
+    }
+
+    function addIncident() {
+      const equipment =
+        document.getElementById("equipmentName").value;
+
+      const date =
+        document.getElementById("incidentDate").value;
+
+      const priority =
+        document.getElementById("priority").value;
+
+      const text =
+        document.getElementById("incidentText").value.trim();
+
+      if (!date || !text) {
+        alert("Вкажіть дату та опис події.");
+        return;
+      }
+
+      const formattedDate =
+        date.split("-").reverse().join(".");
+
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${formattedDate}</td>
+        <td>${equipment}</td>
+        <td>${text}</td>
+        <td>
+          <span class="priority ${getPriorityClass(priority)}">
+            ${priority}
+          </span>
+        </td>
+        <td>Відкрито</td>
+      `;
+
+      document.getElementById("incidentTable").prepend(row);
+
+      const countElement =
+        document.getElementById("incidentCount");
+
+      countElement.textContent =
+        Number(countElement.textContent) + 1;
+
+      document.getElementById("incidentText").value = "";
+
+      closeModal();
+    }
+
+    function showMessage(name) {
+      alert(
+        "Детальна сервісна історія для «" +
+        name +
+        "» буде підключена до бази даних."
+      );
+    }
+
+    document.getElementById("incidentModal")
+      .addEventListener("click", function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+  </script>
+
+</body>
+</html>
