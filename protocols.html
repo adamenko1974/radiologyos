@@ -1,580 +1,596 @@
-from pathlib import Path
-
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RadiologyOS — Конструктор КТ головного мозку</title>
-  <meta name="description" content="Структурований конструктор протоколів КТ головного мозку." />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Конструктор протоколів — RadiologyOS</title>
+
   <style>
-    :root {
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --text: #172033;
-      --muted: #667085;
-      --line: #dfe6ef;
-      --primary: #1565c0;
-      --primary-dark: #0d47a1;
-      --success: #138a5b;
-      --danger: #b42318;
-      --soft: #eaf2ff;
-      --shadow: 0 8px 28px rgba(16, 24, 40, 0.06);
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    * { box-sizing: border-box; }
-
     body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      color: #172033;
     }
 
     header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      height: 72px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #dce4ee;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 16px;
-      padding: 18px 5%;
-      background: rgba(255,255,255,.96);
-      border-bottom: 1px solid var(--line);
-      backdrop-filter: blur(10px);
+      justify-content: space-between;
     }
 
-    .brand {
+    .logo {
+      color: #1267d6;
       font-size: 24px;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .status {
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: var(--soft);
-      color: var(--primary);
       font-weight: 700;
-      font-size: 13px;
+      text-decoration: none;
     }
 
-    main {
-      width: min(1180px, 92%);
-      margin: 28px auto 56px;
-    }
-
-    .hero {
-      margin-bottom: 22px;
-    }
-
-    .hero h1 {
-      margin: 0 0 10px;
-      font-size: clamp(30px, 5vw, 48px);
-      line-height: 1.1;
-    }
-
-    .hero p {
-      margin: 0;
-      max-width: 850px;
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 17px;
-    }
-
-    .notice {
-      margin-top: 16px;
-      padding: 14px 16px;
-      border: 1px solid #b8d3ff;
-      background: #f0f6ff;
-      border-radius: 12px;
-      color: #264a7f;
-      line-height: 1.5;
+    .header-info {
+      color: #667085;
+      font-size: 14px;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
-      gap: 22px;
-      align-items: start;
+      grid-template-columns: 250px 1fr;
+      min-height: calc(100vh - 72px);
     }
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
+    aside {
+      padding: 24px 16px;
+      background: #172033;
+      color: #ffffff;
     }
 
-    .card-header {
-      padding: 18px 20px;
-      border-bottom: 1px solid var(--line);
-      background: #fbfcfe;
+    aside h3 {
+      padding: 0 12px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      color: #9fb0c7;
+      text-transform: uppercase;
     }
 
-    .card-header h2 {
-      margin: 0;
-      font-size: 20px;
+    .menu {
+      list-style: none;
     }
 
-    .card-body {
-      padding: 20px;
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      color: #dce6f3;
+      text-decoration: none;
     }
 
-    .section-title {
-      margin: 24px 0 12px;
-      padding-top: 20px;
-      border-top: 1px solid var(--line);
-      font-size: 17px;
+    .menu a:hover,
+    .menu a.active {
+      background: #1267d6;
+      color: #ffffff;
     }
 
-    .section-title:first-child {
-      margin-top: 0;
-      padding-top: 0;
-      border-top: 0;
+    main {
+      padding: 30px;
     }
 
-    .grid {
+    .page-header {
+      margin-bottom: 24px;
+    }
+
+    .page-header h1 {
+      margin-bottom: 8px;
+      font-size: 32px;
+    }
+
+    .page-header p {
+      color: #667085;
+    }
+
+    .workspace {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 14px;
+      grid-template-columns: minmax(320px, 1fr) minmax(360px, 1fr);
+      gap: 24px;
+    }
+
+    .panel {
+      padding: 24px;
+      background: #ffffff;
+      border: 1px solid #dfe7f1;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(23, 32, 51, 0.05);
+    }
+
+    .panel h2 {
+      margin-bottom: 20px;
+      font-size: 21px;
     }
 
     .field {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
+      margin-bottom: 18px;
     }
 
-    .field.full {
-      grid-column: 1 / -1;
-    }
-
-    label {
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      color: #344054;
       font-size: 14px;
       font-weight: 700;
-      color: #344054;
     }
 
-    select, input, textarea {
+    select,
+    input,
+    textarea {
       width: 100%;
-      border: 1px solid #cfd8e3;
-      border-radius: 10px;
-      background: #fff;
-      color: var(--text);
+      padding: 12px 13px;
+      border: 1px solid #cdd8e5;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #172033;
+      font-family: inherit;
       font-size: 15px;
-      padding: 11px 12px;
-      outline: none;
     }
 
-    select:focus, input:focus, textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(21,101,192,.12);
+    select:focus,
+    input:focus,
+    textarea:focus {
+      border-color: #1267d6;
+      outline: 3px solid rgba(18, 103, 214, 0.12);
     }
 
     textarea {
+      min-height: 125px;
       resize: vertical;
-      min-height: 90px;
-      line-height: 1.5;
     }
 
-    .output textarea {
-      min-height: 330px;
-      font-family: "Courier New", monospace;
-      font-size: 14px;
-      background: #fbfcfe;
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
     }
 
     .actions {
       display: flex;
+      gap: 12px;
+      margin-top: 22px;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
     }
 
-    button, .link-button {
-      border: 0;
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 15px;
-      font-weight: 800;
+    button {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      font-weight: 700;
+      font-size: 14px;
     }
 
     .primary {
-      background: var(--primary);
-      color: #fff;
+      background: #1267d6;
+      color: #ffffff;
     }
-
-    .primary:hover { background: var(--primary-dark); }
 
     .secondary {
-      background: #fff;
-      color: var(--text);
-      border: 1px solid #cfd8e3;
-    }
-
-    .danger {
-      background: #fff;
-      color: var(--danger);
-      border: 1px solid #f1b4ae;
+      background: #eaf2fc;
+      color: #1267d6;
     }
 
     .success {
-      background: var(--success);
-      color: #fff;
+      background: #14804a;
+      color: #ffffff;
     }
 
-    .small {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .toast {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      display: none;
-      padding: 12px 16px;
+    .report {
+      min-height: 500px;
+      padding: 24px;
+      border: 1px solid #d9e2ec;
       border-radius: 10px;
-      background: #101828;
-      color: white;
-      box-shadow: var(--shadow);
-      z-index: 20;
+      background: #fbfcfe;
+      line-height: 1.7;
     }
 
-    footer {
+    .report h3 {
+      margin-bottom: 18px;
       text-align: center;
-      color: var(--muted);
-      padding: 26px;
+    }
+
+    .report-section {
+      margin-bottom: 20px;
+    }
+
+    .report-section strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .status {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 7px 11px;
+      border-radius: 20px;
+      background: #fff4d6;
+      color: #8a5b00;
       font-size: 13px;
+      font-weight: 700;
     }
 
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
-      .output { position: static; }
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      main {
+        padding: 20px;
+      }
     }
 
-    @media (max-width: 640px) {
-      header { padding: 14px 4%; }
-      main { width: 94%; margin-top: 18px; }
-      .grid { grid-template-columns: 1fr; }
-      .field.full { grid-column: auto; }
-      .actions button, .actions .link-button { width: 100%; }
-      .card-body { padding: 16px; }
+    @media (max-width: 600px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      main {
+        padding: 14px;
+      }
+
+      .panel {
+        padding: 17px;
+      }
     }
   </style>
 </head>
+
 <body>
+
   <header>
-    <div class="brand">RadiologyOS</div>
-    <div class="status">КТ головного мозку · v0.2</div>
+    <a class="logo" href="index.html">RadiologyOS</a>
+
+    <div class="header-info">
+      Protocol Builder · Перша демонстраційна версія
+    </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <h1>Конструктор протоколу КТ головного мозку</h1>
-      <p>
-        Оберіть необхідні характеристики — система сформує структурований опис і короткий висновок.
-        Перед використанням результат обов’язково перевіряє лікар-рентгенолог.
-      </p>
-      <div class="notice">
-        На цьому етапі форма не зберігає дані пацієнта. Не вводьте ПІБ, дату народження, номер історії хвороби чи інші персональні дані.
+  <div class="layout">
+
+    <aside>
+      <h3>Робоче середовище</h3>
+
+      <ul class="menu">
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="#" class="active">Протоколи</a></li>
+        <li><a href="#">Пацієнти</a></li>
+        <li><a href="#">Дослідження</a></li>
+        <li><a href="#">База знань</a></li>
+        <li><a href="#">Аналітика</a></li>
+      </ul>
+    </aside>
+
+    <main>
+
+      <div class="page-header">
+        <h1>Конструктор протоколу</h1>
+
+        <p>
+          КТ головного мозку без внутрішньовенного контрастування
+        </p>
       </div>
-    </section>
 
-    <div class="layout">
-      <section class="card">
-        <div class="card-header">
+      <div class="workspace">
+
+        <section class="panel">
           <h2>Параметри дослідження</h2>
-        </div>
 
-        <div class="card-body">
-          <h3 class="section-title">Техніка</h3>
-          <div class="grid">
-            <div class="field">
-              <label for="contrast">Контрастування</label>
-              <select id="contrast">
-                <option value="без внутрішньовенного контрастування">Без контрастування</option>
-                <option value="з внутрішньовенним контрастуванням">З контрастуванням</option>
-              </select>
-            </div>
+          <div class="field">
+            <label for="examType">Тип дослідження</label>
 
-            <div class="field">
-              <label for="quality">Якість дослідження</label>
-              <select id="quality">
-                <option value="Дослідження діагностичної якості.">Діагностична якість</option>
-                <option value="Якість дослідження частково знижена внаслідок рухових артефактів.">Рухові артефакти</option>
-                <option value="Якість дослідження обмежена артефактами від металевих конструкцій.">Металеві артефакти</option>
-              </select>
-            </div>
+            <select id="examType">
+              <option>КТ головного мозку</option>
+              <option>КТ приносових пазух</option>
+              <option>КТ органів грудної клітки</option>
+              <option>КТ органів черевної порожнини</option>
+            </select>
           </div>
 
-          <h3 class="section-title">Речовина головного мозку</h3>
-          <div class="grid">
-            <div class="field">
-              <label for="brain">Структура речовини мозку</label>
-              <select id="brain">
-                <option value="Речовина головного мозку диференційована, співвідношення сірої та білої речовини збережене.">Норма</option>
-                <option value="Визначаються дифузні атрофічні зміни речовини головного мозку.">Дифузна атрофія</option>
-                <option value="Визначаються помірні дифузні атрофічні зміни речовини головного мозку.">Помірна атрофія</option>
-                <option value="Визначаються виражені дифузні атрофічні зміни речовини головного мозку.">Виражена атрофія</option>
-              </select>
-            </div>
+          <div class="field">
+            <label for="contrast">Контрастування</label>
 
-            <div class="field">
-              <label for="focal">Вогнищеві зміни</label>
-              <select id="focal">
-                <option value="Вогнищевих змін щільності речовини головного мозку не виявлено.">Не виявлено</option>
-                <option value="Визначається гіподенсивне вогнище ішемічного характеру.">Ішемічне вогнище</option>
-                <option value="Визначаються множинні гіподенсивні вогнища судинного генезу.">Множинні судинні вогнища</option>
-                <option value="Визначаються кістозно-атрофічні зміни.">Кістозно-атрофічні зміни</option>
-                <option value="Визначається об’ємне утворення.">Об’ємне утворення</option>
-              </select>
-            </div>
-
-            <div class="field full">
-              <label for="focalDetails">Уточнення локалізації, розмірів, щільності</label>
-              <input id="focalDetails" type="text" placeholder="Напр.: у правій тім’яній частці, розмірами ..., щільністю ... HU" />
-            </div>
+            <select id="contrast">
+              <option>Без внутрішньовенного контрастування</option>
+              <option>З внутрішньовенним контрастуванням</option>
+              <option>КТ-ангіографія</option>
+            </select>
           </div>
 
-          <h3 class="section-title">Крововиливи та оболонки</h3>
-          <div class="grid">
-            <div class="field">
-              <label for="hemorrhage">Крововилив</label>
-              <select id="hemorrhage">
-                <option value="Ознак гострого внутрішньочерепного крововиливу не виявлено.">Не виявлено</option>
-                <option value="Визначається внутрішньомозковий крововилив.">Внутрішньомозковий</option>
-                <option value="Визначається субдуральна гематома.">Субдуральна гематома</option>
-                <option value="Визначається епідуральна гематома.">Епідуральна гематома</option>
-                <option value="Визначається субарахноїдальний крововилив.">Субарахноїдальний крововилив</option>
-              </select>
-            </div>
+          <div class="field">
+            <label for="brain">Речовина головного мозку</label>
 
-            <div class="field">
-              <label for="extraaxial">Додаткові позамозкові зміни</label>
-              <select id="extraaxial">
-                <option value="">Немає</option>
-                <option value="Визначається гігрома.">Гігрома</option>
-                <option value="Визначається пневмоцефалія.">Пневмоцефалія</option>
-                <option value="Визначаються післяопераційні зміни.">Післяопераційні зміни</option>
-              </select>
-            </div>
-
-            <div class="field full">
-              <label for="hemDetails">Уточнення крововиливу/позамозкових змін</label>
-              <input id="hemDetails" type="text" placeholder="Локалізація, товщина, об’єм, мас-ефект тощо" />
-            </div>
+            <select id="brain">
+              <option>Без видимих вогнищевих змін</option>
+              <option>Ішемічні зміни</option>
+              <option>Геморагічні зміни</option>
+              <option>Кістозно-атрофічні зміни</option>
+              <option>Післяопераційні зміни</option>
+            </select>
           </div>
 
-          <h3 class="section-title">Лікворна система</h3>
-          <div class="grid">
+          <div class="row">
             <div class="field">
               <label for="ventricles">Шлуночкова система</label>
+
               <select id="ventricles">
-                <option value="Шлуночкова система не розширена, симетрична.">Не розширена</option>
-                <option value="Шлуночкова система помірно розширена.">Помірно розширена</option>
-                <option value="Шлуночкова система розширена.">Розширена</option>
-                <option value="Визначається асиметрія бічних шлуночків.">Асиметрія</option>
-                <option value="Визначаються ознаки оклюзійної гідроцефалії.">Оклюзійна гідроцефалія</option>
+                <option>Не розширена</option>
+                <option>Помірно розширена</option>
+                <option>Розширена</option>
+                <option>Асиметрична</option>
+                <option>Компримована</option>
               </select>
             </div>
 
             <div class="field">
               <label for="midline">Серединні структури</label>
+
               <select id="midline">
-                <option value="Серединні структури не зміщені.">Не зміщені</option>
-                <option value="Серединні структури зміщені вправо.">Зміщені вправо</option>
-                <option value="Серединні структури зміщені вліво.">Зміщені вліво</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="sulci">Субарахноїдальні простори</label>
-              <select id="sulci">
-                <option value="Субарахноїдальні простори конвекситальної поверхні не розширені.">Не розширені</option>
-                <option value="Субарахноїдальні простори конвекситальної поверхні помірно розширені.">Помірно розширені</option>
-                <option value="Субарахноїдальні простори конвекситальної поверхні розширені.">Розширені</option>
-                <option value="Субарахноїдальні простори локально звужені.">Локально звужені</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="cisterns">Базальні цистерни</label>
-              <select id="cisterns">
-                <option value="Базальні цистерни простежуються, не деформовані.">Без змін</option>
-                <option value="Базальні цистерни частково компримовані.">Частково компримовані</option>
-                <option value="Базальні цистерни не простежуються.">Не простежуються</option>
+                <option>Не зміщені</option>
+                <option>Зміщені вправо</option>
+                <option>Зміщені вліво</option>
               </select>
             </div>
           </div>
 
-          <h3 class="section-title">Кістки та додаткові структури</h3>
-          <div class="grid">
+          <div class="row">
             <div class="field">
-              <label for="bones">Кістки черепа</label>
-              <select id="bones">
-                <option value="Кістки склепіння та основи черепа без ознак гострого травматичного ушкодження.">Без гострих змін</option>
-                <option value="Визначається перелом кісток черепа.">Перелом</option>
-                <option value="Визначаються післятрепанаційні зміни.">Післятрепанаційні зміни</option>
-                <option value="Визначаються металеві сторонні тіла.">Металеві сторонні тіла</option>
-              </select>
+              <label for="shift">Зміщення, мм</label>
+
+              <input
+                id="shift"
+                type="number"
+                min="0"
+                step="1"
+                value="0"
+              >
             </div>
 
             <div class="field">
-              <label for="sinuses">Приносові пазухи</label>
-              <select id="sinuses">
-                <option value="Приносові пазухи пневматизовані.">Без змін</option>
-                <option value="Визначається потовщення слизової оболонки приносових пазух.">Потовщення слизової</option>
-                <option value="Визначається рідинний вміст у приносових пазухах.">Рідинний вміст</option>
-                <option value="Визначається ретенційна кіста приносової пазухи.">Ретенційна кіста</option>
-              </select>
-            </div>
+              <label for="spaces">Лікворні простори</label>
 
-            <div class="field">
-              <label for="mastoids">Соскоподібні відростки</label>
-              <select id="mastoids">
-                <option value="Комірки соскоподібних відростків пневматизовані.">Без змін</option>
-                <option value="Пневматизація комірок соскоподібних відростків знижена.">Знижена пневматизація</option>
-                <option value="Визначається вміст у комірках соскоподібного відростка.">Вміст у комірках</option>
+              <select id="spaces">
+                <option>Не розширені</option>
+                <option>Помірно розширені</option>
+                <option>Розширені</option>
+                <option>Звужені</option>
               </select>
-            </div>
-
-            <div class="field">
-              <label for="orbits">Орбіти</label>
-              <select id="orbits">
-                <option value="Структури орбіт без видимих патологічних змін.">Без змін</option>
-                <option value="Визначаються патологічні зміни структур орбіт.">Є зміни</option>
-              </select>
-            </div>
-
-            <div class="field full">
-              <label for="additional">Додатковий опис</label>
-              <textarea id="additional" placeholder="Додайте важливі знахідки, які не представлені у списках"></textarea>
             </div>
           </div>
 
-          <h3 class="section-title">Висновок</h3>
-          <div class="grid">
-            <div class="field">
-              <label for="conclusionType">Основний висновок</label>
-              <select id="conclusionType">
-                <option value="КТ-ознак гострої внутрішньочерепної патології не виявлено.">Норма / без гострої патології</option>
-                <option value="КТ-ознаки ішемічного ураження головного мозку.">Ішемічне ураження</option>
-                <option value="КТ-ознаки внутрішньочерепного крововиливу.">Внутрішньочерепний крововилив</option>
-                <option value="КТ-ознаки об’ємного утворення головного мозку.">Об’ємне утворення</option>
-                <option value="КТ-ознаки ліквородинамічних порушень.">Ліквородинамічні порушення</option>
-                <option value="КТ-ознаки післяопераційних змін.">Післяопераційні зміни</option>
-                <option value="КТ-ознаки травматичних змін.">Травматичні зміни</option>
-              </select>
+          <div class="field">
+            <label for="bones">Кістки черепа</label>
+
+            <select id="bones">
+              <option>Травматичних змін не виявлено</option>
+              <option>Перелом кісток черепа</option>
+              <option>Трепанаційний дефект</option>
+              <option>Післяопераційні зміни</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="sinuses">Приносові пазухи</label>
+
+            <select id="sinuses">
+              <option>Пневматизація збережена</option>
+              <option>Ознаки синуситу</option>
+              <option>Ретенційна кіста</option>
+              <option>Поліпозні зміни</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="additional">Додатковий опис</label>
+
+            <textarea
+              id="additional"
+              placeholder="Введіть додаткові знахідки..."
+            ></textarea>
+          </div>
+
+          <div class="actions">
+            <button class="primary" onclick="generateReport()">
+              Сформувати протокол
+            </button>
+
+            <button class="secondary" onclick="resetForm()">
+              Очистити
+            </button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <span class="status">Чернетка</span>
+
+          <h2>Попередній перегляд</h2>
+
+          <div class="report" id="report">
+            <h3>КТ головного мозку</h3>
+
+            <div class="report-section">
+              <strong>Методика:</strong>
+
+              <p>
+                Дослідження виконано без внутрішньовенного
+                контрастування.
+              </p>
             </div>
 
-            <div class="field">
-              <label for="chronic">Супутні хронічні зміни</label>
-              <select id="chronic">
-                <option value="">Не додавати</option>
-                <option value="Дифузні атрофічні зміни головного мозку.">Атрофічні зміни</option>
-                <option value="КТ-ознаки церебральної мікроангіопатії.">Мікроангіопатія</option>
-                <option value="Кістозно-атрофічні зміни головного мозку.">Кістозно-атрофічні зміни</option>
-              </select>
+            <div class="report-section">
+              <strong>Опис:</strong>
+
+              <p>
+                Речовина головного мозку без видимих
+                вогнищевих змін.
+              </p>
+
+              <p>
+                Шлуночкова система не розширена.
+                Серединні структури не зміщені.
+              </p>
+
+              <p>
+                Зовнішні лікворні простори не розширені.
+              </p>
+
+              <p>
+                Травматичних змін кісток черепа не виявлено.
+                Пневматизація приносових пазух збережена.
+              </p>
             </div>
 
-            <div class="field full">
-              <label for="conclusionExtra">Додатковий текст висновку</label>
-              <input id="conclusionExtra" type="text" placeholder="Додаткові діагностичні формулювання" />
+            <div class="report-section">
+              <strong>Висновок:</strong>
+
+              <p>
+                КТ-ознак гострої внутрішньочерепної патології
+                не виявлено.
+              </p>
             </div>
           </div>
 
           <div class="actions">
-            <button class="primary" type="button" onclick="generateProtocol()">Сформувати протокол</button>
-            <button class="secondary" type="button" onclick="loadNormalTemplate()">Заповнити норму</button>
-            <button class="danger" type="button" onclick="clearForm()">Очистити</button>
+            <button class="secondary" onclick="copyReport()">
+              Копіювати текст
+            </button>
+
+            <button class="success">
+              Підписати протокол
+            </button>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="card output">
-        <div class="card-header">
-          <h2>Готовий протокол</h2>
-        </div>
-        <div class="card-body">
-          <textarea id="result" placeholder="Після натискання «Сформувати протокол» тут з’явиться готовий текст"></textarea>
-
-          <div class="actions">
-            <button class="success" type="button" onclick="copyProtocol()">Копіювати</button>
-            <button class="secondary" type="button" onclick="downloadProtocol()">Завантажити TXT</button>
-            <a class="link-button secondary" href="index.html">На головну</a>
-          </div>
-
-          <p class="small">
-            Це допоміжний інструмент. Остаточний протокол і висновок формує та підписує лікар-рентгенолог після перевірки всіх зображень і клінічних даних.
-          </p>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <div id="toast" class="toast">Скопійовано</div>
-
-  <footer>© 2026 RadiologyOS</footer>
+      </div>
+    </main>
+  </div>
 
   <script>
-    function value(id) {
-      return document.getElementById(id).value.trim();
+    function generateReport() {
+      const examType = document.getElementById("examType").value;
+      const contrast = document.getElementById("contrast").value;
+      const brain = document.getElementById("brain").value;
+      const ventricles = document.getElementById("ventricles").value;
+      const midline = document.getElementById("midline").value;
+      const shift = document.getElementById("shift").value;
+      const spaces = document.getElementById("spaces").value;
+      const bones = document.getElementById("bones").value;
+      const sinuses = document.getElementById("sinuses").value;
+      const additional = document.getElementById("additional").value;
+
+      let midlineText = midline;
+
+      if (midline !== "Не зміщені" && Number(shift) > 0) {
+        midlineText += " на " + shift + " мм";
+      }
+
+      let conclusion =
+        "КТ-ознак гострої внутрішньочерепної патології не виявлено.";
+
+      if (brain !== "Без видимих вогнищевих змін") {
+        conclusion = brain + ".";
+      }
+
+      const additionalText = additional
+        ? `<p>${additional}</p>`
+        : "";
+
+      document.getElementById("report").innerHTML = `
+        <h3>${examType}</h3>
+
+        <div class="report-section">
+          <strong>Методика:</strong>
+          <p>Дослідження виконано: ${contrast.toLowerCase()}.</p>
+        </div>
+
+        <div class="report-section">
+          <strong>Опис:</strong>
+
+          <p>Речовина головного мозку: ${brain.toLowerCase()}.</p>
+
+          <p>
+            Шлуночкова система: ${ventricles.toLowerCase()}.
+            Серединні структури: ${midlineText.toLowerCase()}.
+          </p>
+
+          <p>
+            Зовнішні лікворні простори:
+            ${spaces.toLowerCase()}.
+          </p>
+
+          <p>
+            Кістки черепа: ${bones.toLowerCase()}.
+            Приносові пазухи: ${sinuses.toLowerCase()}.
+          </p>
+
+          ${additionalText}
+        </div>
+
+        <div class="report-section">
+          <strong>Висновок:</strong>
+          <p>${conclusion}</p>
+        </div>
+      `;
     }
 
-    function sentenceWithDetails(baseId, detailsId) {
-      const base = value(baseId);
-      const details = value(detailsId);
-      if (!details) return base;
-      const cleanBase = base.replace(/\.$/, "");
-      return cleanBase + ": " + details.replace(/\.$/, "") + ".";
+    function resetForm() {
+      document.querySelectorAll("select").forEach((select) => {
+        select.selectedIndex = 0;
+      });
+
+      document.querySelectorAll("input").forEach((input) => {
+        input.value = 0;
+      });
+
+      document.getElementById("additional").value = "";
+
+      generateReport();
     }
 
-    function generateProtocol() {
-      const lines = [];
+    function copyReport() {
+      const reportText =
+        document.getElementById("report").innerText;
 
-      lines.push("КТ ГОЛОВНОГО МОЗКУ");
-      lines.push("");
-      lines.push("Дослідження виконано " + value("contrast") + ".");
-      lines.push(value("quality"));
-      lines.push("");
-      lines.push(value("brain"));
-      lines.push(sentenceWithDetails("focal", "focalDetails"));
-      lines.push(sentenceWithDetails("hemorrhage", "hemDetails"));
+      navigator.clipboard.writeText(reportText)
+        .then(() => {
+          alert("Протокол скопійовано.");
+        })
+        .catch(() => {
+          alert("Не вдалося скопіювати текст.");
+        });
+    }
+  </script>
 
-      if (value("extraaxial")) {
-        lines.push(value("extraaxial"));
-      }
-
-      lines.push(value("ventricles"));
-      lines.push(value("midline"));
-      lines.push(value("sulci"));
-      lines.push(value("cisterns"));
-      lines.push(value("bones"));
-      lines.push(value("sinuses"));
-      lines.push(value("mastoids"));
-      lines.push(value("orbits"));
-
-      if (value("additional")) {
-        lines.push(value("additional").replace(/\s+$/,""));
-      }
-
-      const conclusion = [];
-      conclusion.push(value("conclusionType"));
-
-      if (value("chronic")) {
-        conclusion.push(value("chronic"));
-      }
-
-      if (value("conclusionExtra")) {
-        let extra = value("c
+</body>
+</html>
